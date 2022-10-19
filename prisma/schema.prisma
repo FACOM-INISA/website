@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Municipio {
+  id                        Int    @id
+  nome                      String
+  microrregiao_id           Int
+  microrregiao_nome         String
+  mesorregiao_id            Int
+  mesorregiao_nome          String
+  regiao_imediata_id        Int
+  regiao_imediata_nome      String
+  regiao_intermediaria_id   Int
+  regiao_intermediaria_nome String
+  uf_id                     Int
+  uf_sigla                  String
+  uf_nome                   String
+
+  @@map("municipios")
+}
