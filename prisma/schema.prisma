@@ -25,6 +25,7 @@ model Municipio {
   uf_sigla                  String
   uf_nome                   String
   partos                    Parto[]
+  predicoes                 Predicao[]
 
   @@map("municipios")
 }
@@ -40,5 +41,24 @@ model Parto {
   municipio_id              Int
 
   @@map("partos")
+}
 
+model Predicao {
+  id                        Int         @id @default(autoincrement())
+
+  // Colocar o tipo de parto que a predição se refere (normal, cesária, total)
+  tipo_parto                String
+
+  lower                     Int
+  upper                     Int
+  pred                      Int
+
+  // Mês da predição relativo ao mês atual
+  // eg.: Mês atual = Maio, prox_mes = 1 = Junho, prox_mes = 3 = Setembro
+  prox_mes                  Int
+
+  municipio                 Municipio   @relation(fields: [municipio_id], references: [id])
+  municipio_id              Int
+
+  @@map("predicoes")
 }
