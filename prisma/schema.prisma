@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Municipio {
-  id                        Int         @id
+  id                        Int     @id
   nome                      String
   microrregiao_id           Int
   microrregiao_nome         String
@@ -30,15 +30,14 @@ model Municipio {
 }
 
 model Parto {
-  id                        Int         @id @default(autoincrement())
-  ano                       Int
-  mes                       Int
-  parto_normais             Int
-  parto_cesaria             Int
-  parto_total               Int
-  municipio                 Municipio   @relation(fields: [municipio_id], references: [id])
-  municipio_id              Int
+  ano           Int
+  mes           Int
+  parto_normais Int
+  parto_cesaria Int
+  parto_total   Int
+  municipio     Municipio @relation(fields: [municipio_id], references: [id])
+  municipio_id  Int
 
+  @@id([ano, mes, municipio_id], name: "id")
   @@map("partos")
-
 }
