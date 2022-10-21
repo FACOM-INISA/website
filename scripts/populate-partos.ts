@@ -15,7 +15,7 @@ export async function test(csv: string) {
     const prisma = new PrismaClient();
     await prisma.$connect()
     fs.createReadStream(csv)
-        .pipe(parse({ delimiter: ';', from_line: 2 }))
+        .pipe(parse({ delimiter: ',', from_line: 2 }))
         .on('data', (row) => {
             consola.log("Creating parto for: \n  ano:", row[0],
                 "\n  mes:", row[1], "\n  município id: ", row[5]);
