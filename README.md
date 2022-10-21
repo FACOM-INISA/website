@@ -48,6 +48,28 @@ Para cada uma das dependências do sistema é importatne listar também a versã
 - [Node.js](https://nodejs.org/) (versão 16)
 - ...
 
+---
+
+- [R](https://www.r-project.org/) (vesão 4.2 ou superior) com os seguintes pacotes:
+  
+  - compiler
+  
+  - forecast
+  
+  - fpp2
+  
+  - acp
+  
+  - tscount
+  
+  - ggplot2
+  
+  - car
+
+---
+
+
+
 ## Instalação / Implantação
 
 Nesta seção você deverá trazer um passo a passo do que é necessário para a implantação do sistema desenvolvido.
