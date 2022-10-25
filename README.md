@@ -101,7 +101,7 @@ Use esta seção para mostrar os primeiros passos para usar a aplicação. Lembr
 Este sistema foi desenvolvido pela seguinte equipe:
 
 - [José Pedro Cândido Lopes Peres](https://github.com/PeterYouseph) (peteryouseph@gmail.com)
-- [Leonardo Kazuyoshi Takahashi da Silva](https://github.com/leonardo-kazu) (leonardo.kazuyoshi@ufms.br)
+- [Leonardo Kazuyoshi Takahashi da Silva](https://github.com/leonardo-kazu) (lkazu@duck.com)
 - [Letícia Yurie Kokubu](https://github.com/leyurie) (leticia.yuurie@gmail.com)
 
 Orientado pelo professor [Hudson Silva Borges](https://github.com/hsborges) e proposto por Nathan Aratani.
