@@ -47,11 +47,8 @@ Para cada uma das dependências do sistema é importatne listar também a versã
 - [Prisma](https://www.prisma.io)
 - [React](https://reactjs.org) (versão 18.2.0)
 - [TypeScript](https://www.typescriptlang.org) (versão 4.8.4)
-
----
-
 - [R](https://www.r-project.org/) (vesão 4.2 ou superior) com os seguintes pacotes:
-  
+
   - compiler
   
   - forecast
