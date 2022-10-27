@@ -45,7 +45,6 @@ model Parto {
 }
 
 model Predicao {
-  id                        Int         @id @default(autoincrement())
 
   // Colocar o tipo de parto que a predição se refere (normal, cesária, total)
   tipo_parto                String
@@ -56,10 +55,12 @@ model Predicao {
 
   // Mês da predição relativo ao mês atual
   // eg.: Mês atual = Maio, prox_mes = 1 = Junho, prox_mes = 3 = Setembro
-  prox_mes                  Int
+  ano                       Int
+  mes                       Int
 
   municipio                 Municipio   @relation(fields: [municipio_id], references: [id])
   municipio_id              Int
 
+  @@id([tipo_parto,ano, mes, municipio_id], name: "id")
   @@map("predicoes")
 }

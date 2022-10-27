@@ -11,7 +11,8 @@
     "prepare": "husky install",
     "commit": "cz",
     "populate": "ts-node-transpile-only scripts/populate-database.ts",
-    "populate-parto": "ts-node-transpile-only scripts/populate-partos.ts "
+    "populate-parto": "ts-node-transpile-only scripts/populate-partos.ts ",
+    "process": "ts-node-transpile-only scripts/process-municipio.ts "
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
