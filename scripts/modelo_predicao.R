@@ -3,9 +3,9 @@
 ################################################################################
 #!/usr/bin/env Rscript
 
-rm(list=ls(all=TRUE))
+rm(list = ls(all = TRUE))
 
-args <- commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 
 set.seed(19)
 library(compiler)
@@ -41,10 +41,10 @@ dpy <- sqrt(var(Y))
 ##### Modelagem #########################################
 #########################################################
 
-D <- data.frame(df[1:180,])
+D <- data.frame(df)
 attach(D)
 
-YP <- D$df.1.180...
+YP <- D$Y
 n <- length(YP)
 m <- length(Y) - n
 
@@ -52,25 +52,14 @@ m <- length(Y) - n
 
 mod_nbinom <- tsglm(YP, model = list(past_obs = 1, past_mean=1), distr = "nbinom", link = "log")
 
-
-##### Valores estimados
-
-TP <- seq(1, length(YP))
-EST <- data.frame(TP, YP)
-EST <- fortify(EST)
-EST$fitted <- fitted(mod_nbinom)
-EST <- cbind(EST,
-             sapply(c(lower=0.025, upper=0.975), function (p)
-               qnbinom(p, mu = fitted(mod_nbinom), size = mod_nbinom$distrcoefs)))
-
 ##### Valores preditos
 
-TP1 <- seq((n+1),(n+m))
-YP1 <- Y[(n+1):(n+m)]
+TP1 <- seq((n + 1),(n + m))
+YP1 <- Y[(n + 1):(n + m)]
 Y.pred <- data.frame(TP1, YP1)
 Y.pred <- fortify(Y.pred)
 
-pred <- predict(mod_nbinom, n.ahead = 9)
+pred <- predict(mod_nbinom, n.ahead = 6)
 Int.pred <- pred$interval
 x.pred <- pred$pred
 
