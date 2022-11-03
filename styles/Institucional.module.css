@@ -1,0 +1,33 @@
+.container {
+    color: var(--branco);
+}
+
+.header {
+    background-color: var(--azul-uf);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10rem 0 10rem;
+}
+
+.logo {
+    background-color: brown;
+}
+
+.inisa h1 {
+    margin-bottom: 0px;
+}
+
+.inisa p {
+    margin-top: 0px;
+}
+
+.description {
+    font-weight: 700;
+    display: flex;
+    justify-items: space-between;
+}
+
+.description p {
+    padding-left: 4rem;
+}
