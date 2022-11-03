@@ -12,6 +12,7 @@
     "commit": "cz",
     "populate": "ts-node-transpile-only scripts/populate-database.ts",
     "populate-parto": "ts-node-transpile-only scripts/populate-partos.ts ",
+    "populate-municipio": "ts-node-transpile-only scripts/populate-municipio.ts ",
     "process": "ts-node-transpile-only scripts/process-municipio.ts "
   },
   "dependencies": {
