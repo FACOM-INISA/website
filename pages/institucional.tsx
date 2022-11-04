@@ -2,10 +2,11 @@ import type { NextPage } from 'next';
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image'
-import logo from 'images/ufms.png';
+import landing from 'images/residencia-medica.png';
+import access from 'images/access.png';
 import styles from '../styles/Institucional.module.css';
-
 import HeaderComponent from './header';
+import { Button } from '@mui/material';
 
 const Institucional: NextPage = () => {
   return (
@@ -18,6 +19,30 @@ const Institucional: NextPage = () => {
 
       {/* header */}
       <HeaderComponent></HeaderComponent>
+
+      {/* body */}
+      <div className={styles.body}>
+        <div className={styles.body_container_top}>
+          <div className={styles.img_container}>
+            <span>
+              <Image src={landing} alt="UFMS Logo" width={550} height={550} />
+            </span>
+          </div>
+
+          <div className={styles.ppsus}>
+            <h1>Painel de Monitoramento para a Gestão do Sistema Único de Saúde</h1>
+            <h1>PPSUS - MS</h1>
+            <Button>
+              Acessar Painel
+              <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
+            </Button>
+          </div>
+        </div>
+
+        <div className={styles.body_container_center}>
+
+        </div>
+      </div>
 
       {/* footer */}
       <div className={styles.footer}></div>
