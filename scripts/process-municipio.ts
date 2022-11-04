@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import consola, { Consola } from 'consola';
+import consola from 'consola';
 import { execSync } from 'node:child_process';
 import fs from 'fs';
 import { parse } from 'csv-parse';
@@ -71,63 +71,68 @@ export async function processing(args: Array<string>) {
 
   // A partir do csv criado pelo rScript popula as predicoes
   let rows: any[] = [];
-  fs.createReadStream(temp_output)
-    .pipe(parse({ delimiter: ',', from_line: 2 }))
-    .on('data', (row) => {
-      rows.push(row);
-      consola.log('Preparing to insert predicao...');
-    })
-    .on('error', (err) => {
-      consola.error(err);
-    })
-    .on('end', async () => {
-      for (let row of rows) {
-        mes++;
-        if (mes > 12) {
-          mes = 1;
-          ano++;
-        };
-        consola.log('Creating predicao for mes =', mes, ' ano =', ano);
-        await prisma.predicao.upsert({
-          where: {
-            id: {
+  await new Promise<void>((resolve, reject) => {
+
+    fs.createReadStream(temp_output)
+      .pipe(parse({ delimiter: ',', from_line: 2 }))
+      .on('data', (row) => {
+        rows.push(row);
+        consola.log('Preparing to insert predicao...');
+      })
+      .on('error', (err) => {
+        consola.error(err);
+        reject()
+      })
+      .on('end', async () => {
+        for (let row of rows) {
+          mes++;
+          if (mes > 12) {
+            mes = 1;
+            ano++;
+          };
+          consola.log('Creating predicao for mes =', mes, ' ano =', ano);
+          await prisma.predicao.upsert({
+            where: {
+              id: {
+                ano: ano,
+                mes: mes,
+                tipo_parto: tipo_parto,
+                municipio_id: municipio_id
+              }
+            },
+            update: {
+              lower: Math.round(row[1]),
+              upper: Math.round(row[2]),
+              pred: Math.round(row[3]),
+            },
+            create: {
               ano: ano,
               mes: mes,
               tipo_parto: tipo_parto,
-              municipio_id: municipio_id
+              municipio_id: municipio_id,
+              lower: Math.round(row[1]),
+              upper: Math.round(row[2]),
+              pred: Math.round(row[3]),
             }
-          },
-          update: {
-            lower: Math.round(row[1]),
-            upper: Math.round(row[2]),
-            pred: Math.round(row[3]),
-          },
-          create: {
-            ano: ano,
-            mes: mes,
-            tipo_parto: tipo_parto,
-            municipio_id: municipio_id,
-            lower: Math.round(row[1]),
-            upper: Math.round(row[2]),
-            pred: Math.round(row[3]),
+          });
+        };
+        await prisma.$disconnect();
+
+        // Deletando os arquivos criados
+        fs.unlink(temp_input, err => {
+          if (err) {
+            throw err;
           }
         });
-      };
-
-      // Deletando os arquivos criados
-      fs.unlink(temp_input, err => {
-        if (err) {
-          throw err;
-        }
+        fs.unlink(temp_output, err => {
+          if (err) {
+            throw err;
+          }
+        });
+        resolve();
       });
-      fs.unlink(temp_output, err => {
-        if (err) {
-          throw err;
-        }
-      });
-    });
+  });
 
-  await prisma.$disconnect();
 }
 
 if (require.main === module) processing(process.argv.slice(2));
