@@ -31,3 +31,29 @@ Comando `yarn` associado:
 ```shell
 yarn populate-parto ~/*.csv
 ```
+
+## process-municipio
+
+Utilizado para processar certo município, ou seja, fazer a predição dos partos de certo município de acordo com o tipo de parto, recebe como argumento o id de um munícipio e o tipo de parto, sendo eles:
+
+- normal
+- cesaria
+- total
+
+Comando `yarn` associado:
+
+```shell
+yarn process <id_municipio> <tipo_de_parto>
+```
+
+## populate-municipio
+
+Utilizado para ao mesmo tempo que povoar o banco de dados de um município, também fazer as predições de todos os tipos de parto, funciona a partir da chamada de ambos **`populate-partos`** e **`process-municipio`** .
+
+Com isso ele recebe o id de um munícipio e um `csv` contendo as informações de partos do mesmo.
+
+Comando `yarn` associado: 
+
+```shell
+yarn populate-municipio <id_municipio> ~/*.csv
+```
