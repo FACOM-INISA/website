@@ -13,9 +13,9 @@
     "populate": "ts-node-transpile-only scripts/populate-database.ts"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
-    "@mui/material": "^5.10.10",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.13",
     "@prisma/client": "^4.5.0",
     "axios": "^1.1.3",
     "bluebird": "^3.7.2",
@@ -47,5 +47,21 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "description": "<p align=\"center\">\r   <img src=\"\" height=\"175px\" />\r   <br/>\r   <small>Logo ou screenshot da aplicação</small>\r </p>",
+  "main": "commitlint.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FACOM-INISA/website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FACOM-INISA/website/issues"
+  },
+  "homepage": "https://github.com/FACOM-INISA/website#readme"
 }

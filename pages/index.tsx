@@ -2,6 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
+import Navbar from '../comps/Navbar';
+import Footer from '../comps/Footer';
 
 const Home: NextPage = () => {
   return (
@@ -14,7 +16,15 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
+<<<<<<< Updated upstream
           Welcome to <a href="https://nextjs.org">Next.js!</a>
+=======
+<<<<<<< Updated upstream
+          Welcome to <Link href="institucional">Inisa</Link>
+=======
+          Bem-vindo to <a href="https://nextjs.org">Next.js!</a>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         </h1>
 
         <p className={styles.description}>
@@ -42,23 +52,10 @@ const Home: NextPage = () => {
             className={styles.card}
           >
             <h2>Deploy &rarr;</h2>
-            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
+            <p>Instantly</p>
           </a>
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 };
