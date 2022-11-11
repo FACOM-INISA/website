@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     await prisma.$disconnect();
     // res.redirect('/');
-    res.status(200).json({ 200: 'okay' })
+    res.status(201).json({ 201: 'okay' })
   } catch (err) {
     await prisma.$disconnect();
     res.status(400).json(err)
