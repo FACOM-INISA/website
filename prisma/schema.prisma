@@ -64,3 +64,12 @@ model Predicao {
   @@id([tipo_parto,ano, mes, municipio_id], name: "id")
   @@map("predicoes")
 }
+
+model Usuario {
+  email       String  @id
+  hash        String
+  nome        String
+  authorized  Boolean @default(false)
+
+  @@map("usuarios")
+}
