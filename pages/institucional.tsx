@@ -4,9 +4,12 @@ import Head from 'next/head';
 import Image from 'next/image'
 import landing from 'images/residencia-medica.png';
 import access from 'images/access.png';
+import plataforma from 'images/pag-analise-de-dados.png';
 import styles from '../styles/Institucional.module.css';
-import HeaderComponent from './header';
+import HeaderComponent from '../components/header';
+import CardComponent from '../components/card';
 import { Button } from '@mui/material';
+import ParceiroComponent from '../components/parceiros';
 
 const Institucional: NextPage = () => {
   return (
@@ -38,14 +41,41 @@ const Institucional: NextPage = () => {
             </Button>
           </div>
         </div>
+      </div>
 
-        <div className={styles.body_container_center}>
+      <div className={styles.body_center}>
+        <h1>Conheça a Plataforma</h1>
+        <div className={styles.body_center_container}>
+          <h2>O Sistema Previsional para Gestão de Saúde Pública do Mato Grosso do Sul (SISPREG - MS) é uma plataforma aberta que tem como objetivo, 
+            auxiliar nas decisões dos gestores de saúde de MS. Baseando-se na disponibilização de dados estaticamente obtidos por meio de modelos elaborados 
+            em conjunto do Instituto de Matemática (INMA) da UFMS. </h2>
+          <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
+        </div>            
+      </div>
 
+      <div className={styles.body_integrantes}>
+        <h1>Nossos Integrantes</h1>
+        <div className={styles.cardscomp}>
+          <CardComponent></CardComponent>
+          <CardComponent></CardComponent>
+          <CardComponent></CardComponent>
+          <CardComponent></CardComponent>
+        </div>
+      </div>
+
+      <div className={styles.body_integrantes}>
+        <h1>Instituições Parceiras</h1>
+        <div className={styles.cardscomp}>
+          <ParceiroComponent></ParceiroComponent>
+          <ParceiroComponent></ParceiroComponent>
+          <ParceiroComponent></ParceiroComponent>
         </div>
       </div>
 
       {/* footer */}
-      <div className={styles.footer}></div>
+      <div className={styles.footer}>
+        
+      </div>
     </div>
     
   );

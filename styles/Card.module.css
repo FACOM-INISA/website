@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+.cards {
+    height: 570px;
+    width: 370px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Lato';
+}
+
+.portfolios {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 70%;
+}

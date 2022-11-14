@@ -2,7 +2,9 @@ import type { NextPage } from 'next';
 import React from 'react';
 import Image from 'next/image'
 import logo from 'images/ufms.png';
-import styles from '../styles/Institucional.module.css';
+import { navLinks } from "../utils/data";
+import Link from "next/link";
+import styles from '../styles/Header.module.css';
 
 const HeaderComponent: NextPage = () => {
     return (
@@ -21,9 +23,19 @@ const HeaderComponent: NextPage = () => {
         </div>
   
         <div className={styles.description}>
-          <p>O PROJETO</p>
-          <p>SOBRE NÓS</p>
-          <p>MAIS INFORMAÇÕES</p>
+          {/*
+          <nav>
+            {navLinks.map((link, index) => {
+              return (
+                <ul>
+                  <Link href={link.path}>
+                    <li key={index}>{link.name}</li>
+                  </Link>
+                </ul>
+              );
+            })}
+          </nav> 
+          */}
         </div>
       </div>
     );

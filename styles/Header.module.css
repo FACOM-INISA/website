@@ -1,0 +1,42 @@
+.header {
+    background-color: var(--azul-uf);
+    color: var(--branco);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10rem 0 10rem;
+}
+
+.header_container {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0 1rem 0;
+}
+
+.header_container h1 {
+    margin-bottom: 0px;
+}
+
+.header_container p {
+    margin-top: 0px;
+}
+
+.logo {
+    padding-top: 5px;
+}
+
+.header_container span {
+    background-color: #FEFEFE;
+    width: 3px;
+    border-radius: 5px;
+    margin: 0 30px 0 30px;
+}
+
+.description {
+    font-weight: 700;
+    display: flex;
+}
+
+.description p {
+    padding-left: 4rem;
+}
