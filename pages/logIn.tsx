@@ -66,28 +66,8 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="nome"
-                label="Nome Completo"
-                name="nome"
-                autoComplete="nome"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
                 id="email"
-                label="E-mail"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="RGA ou SIAPE"
+                label="RGA, SIAPE ou E-mail"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -97,17 +77,7 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Senha (No minímo 8 caracteres"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Confirme sua Senha"
+                label="Senha"
                 type="password"
                 id="password"
                 autoComplete="current-password"

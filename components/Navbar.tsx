@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+/* import type { NextPage } from 'next';
 import React from 'react';
 import Image from 'next/image';
 import logo from 'images/ufms.png';
@@ -30,3 +30,4 @@ const HeaderComponent: NextPage = () => {
 };
 
 export default HeaderComponent;
+ */

@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+/* import type { NextPage } from 'next';
 import MyApp from '../pages/_app';
 import React from 'react';
 import Style from '../styles/components/Footer.module.css';
@@ -32,3 +32,4 @@ const FooterComponent: NextPage = () => {
 };
 
 export default FooterComponent;
+ */
