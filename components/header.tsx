@@ -4,7 +4,7 @@ import Image from 'next/image'
 import logo from 'images/ufms.png';
 import { navLinks } from "../utils/data";
 import Link from "next/link";
-import styles from '../styles/Header.module.css';
+import styles from '../styles/components/Header.module.css';
 
 const HeaderComponent: NextPage = () => {
     return (
@@ -23,19 +23,19 @@ const HeaderComponent: NextPage = () => {
         </div>
   
         <div className={styles.description}>
-          {/*
           <nav>
-            {navLinks.map((link, index) => {
+            {/*
+            {navLinks.map((link) => {
               return (
                 <ul>
                   <Link href={link.path}>
-                    <li key={index}>{link.name}</li>
+                    <li key={link.index}>{link.name}</li>
                   </Link>
                 </ul>
               );
             })}
-          </nav> 
           */}
+          </nav> 
         </div>
       </div>
     );

@@ -96,9 +96,7 @@
     padding: 1rem 10rem 4.5rem 10rem;
 }
 
-.cardscomp {
+.cards_integrantes {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding-top: 1rem;
 }

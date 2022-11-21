@@ -7,9 +7,10 @@ import access from 'images/access.png';
 import plataforma from 'images/pag-analise-de-dados.png';
 import styles from '../styles/Institucional.module.css';
 import HeaderComponent from '../components/header';
-import CardComponent from '../components/card';
+import IntegranteComponent from '../components/integrantes';
 import { Button } from '@mui/material';
 import ParceiroComponent from '../components/parceiros';
+import FooterComponent from '../components/footer';
 
 const Institucional: NextPage = () => {
   return (
@@ -55,27 +56,21 @@ const Institucional: NextPage = () => {
 
       <div className={styles.body_integrantes}>
         <h1>Nossos Integrantes</h1>
-        <div className={styles.cardscomp}>
-          <CardComponent></CardComponent>
-          <CardComponent></CardComponent>
-          <CardComponent></CardComponent>
-          <CardComponent></CardComponent>
+        <div className={styles.cards_integrantes}>
+          <IntegranteComponent></IntegranteComponent>
         </div>
       </div>
 
       <div className={styles.body_integrantes}>
         <h1>Instituições Parceiras</h1>
-        <div className={styles.cardscomp}>
-          <ParceiroComponent></ParceiroComponent>
-          <ParceiroComponent></ParceiroComponent>
+        <div>
           <ParceiroComponent></ParceiroComponent>
         </div>
       </div>
 
       {/* footer */}
-      <div className={styles.footer}>
-        
-      </div>
+      <FooterComponent></FooterComponent>
+
     </div>
     
   );

@@ -1,29 +1,61 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import Image from 'next/image'
-import Card from '@mui/material/Card';
-import { CardMedia, CardActionArea } from '@mui/material';
-import styles from '../styles/Parceiros.module.css';
-import fundect from '../images/fundect.png';
-import ufms from '../images/uf.png';
-import sus from '../images/sus.png';
+import { Card, CardMedia, CardActionArea } from '@mui/material';
+import styles from '../styles/components/Parceiros.module.css';
+interface CardItem {
+    id: number;
+    img: string;
+    name: string;
+    url: string;
+}
+
+const cardItems: CardItem[] = [
+    {
+        id: 1,
+        img: 'https://www.ufms.br/wp-content/uploads/2021/01/LOGO-FUNDECT-COLORIDA-2.png',
+        name: 'Fundect',
+        url: 'https://www.fundect.ms.gov.br',
+    },
+    {
+        id: 2,
+        img: 'https://www.fundect.ms.gov.br/wp-content/webpc-passthru.php?src=http://www.fundect.ms.gov.br/wp-content/uploads/2019/06/ufms_logo_positivo_assinatura_vertical_rgb.png&nocache=1',
+        name: 'UFMS',
+        url: 'https://www.ufms.br',
+    },
+    {
+        id: 3,
+        img: 'https://opendatasus.saude.gov.br/uploads/group/2022-01-11-181122.577845logoms.png',
+        name: 'SUS',
+        url: 'https://www.gov.br/pt-br/servicos/acessar-a-plataforma-movel-de-servicos-digitais-do-ministerio-da-saude',
+    }
+];
+
 
 const ParceiroComponent: NextPage = () => {
     return (
-        <Card className={styles.parceiros}>
-            <CardActionArea 
-            className={styles.cardactionarea}
-            href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj229baiq77AhVijZUCHVqQBjIQFnoECBMQAQ&url=https%3A%2F%2Fwww.fundect.ms.gov.br%2F&usg=AOvVaw2UQ_EY60TyY4PYMqK-6hs7">
-                <CardMedia>
-                    <Image src={fundect}
-                        alt = "Lattes Logo"
-                        width={250}
-                        height={250}
-                        objectFit="contain"
+        <div className={styles.cards_container}>
+            {cardItems.map((card) => (
+                <Card className={styles.parceiros} key={card.id}>
+                    <CardActionArea 
+                        href = {card.url}
+                        style={{
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
+                    >
+                    <CardMedia
+                        style={{
+                            width: "auto",
+                            maxHeight: "8rem"
+                        }}
+                        component="img"
+                        image={card.img}
+                        alt = {card.name}
                     />
-                </CardMedia>
-            </CardActionArea>
-        </Card>
+                    </CardActionArea>
+                </Card>
+            ))}
+        </div>
     );
 };
 
