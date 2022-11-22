@@ -16,7 +16,7 @@ import Image from 'next/image';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import ppsusLogo from 'images/PPSUS - MS.png';
-
+import loginPage from './logIn'
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -33,7 +33,7 @@ export default function SignInSide() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square >
           <Box
             sx={{
               my: 8,
@@ -49,9 +49,18 @@ export default function SignInSide() {
                 src={ppsusLogo}
                 alt="PPSUS - MS"
                 width={500}
-                height={50}
+                height={45}
                 objectFit="contain"
               ></Image>
+              <Box
+            sx={{
+              my: 2,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          ></Box>
               <Image
                 id="logo-areaAdministrativa"
                 src={areaAdministrativa}
@@ -63,6 +72,7 @@ export default function SignInSide() {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
+                InputLabelProps={{required: false}}
                 margin="normal"
                 required
                 fullWidth
@@ -73,6 +83,7 @@ export default function SignInSide() {
                 autoFocus
               />
               <TextField
+                InputLabelProps={{required: false}}
                 margin="normal"
                 required
                 fullWidth
@@ -83,26 +94,29 @@ export default function SignInSide() {
                 autoFocus
               />
               <TextField
+                InputLabelProps={{required: false}}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
                 label="RGA ou SIAPE"
-                name="email"
+                name="rga"
                 autoComplete="email"
                 autoFocus
               />
               <TextField
+                InputLabelProps={{required: false}}
                 margin="normal"
                 required
                 fullWidth
                 name="password"
-                label="Senha (No minímo 8 caracteres"
+                label="Senha (No minímo 8 caracteres)"
                 type="password"
                 id="password"
                 autoComplete="current-password"
               />
               <TextField
+                InputLabelProps={{required: false}}
                 margin="normal"
                 required
                 fullWidth
@@ -112,32 +126,44 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
-              <Grid2 container>
-                <Grid2>
+              <Grid container>
+                <Grid>
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" size="small" />}
-                    label="Lembre-se do meu acesso"
+                    label="Lembre-se do meu acesso" 
                   />
-                </Grid2>
-                <Grid2>
-                  <Link href="#" variant="body2">
+                  <Link href="#" variant="body2" underline='hover' color={'gray'} >
                     Esqueceu sua senha?
                   </Link>
-                </Grid2>
-              </Grid2>
-
+                </Grid>
+              </Grid>
               <Button
                 type="submit"
-                size="small"
+                size='large'
+                
                 fullWidth
                 variant="contained"
+                
                 sx={{ mt: 3, mb: 2 }}
               >
-                <span>Acessar</span>
+                <Typography fontStyle={'bold'} fontFamily={'sans-serif'} fontWeight={'600'} textTransform = {'none'}>
+                  Criar Conta
+                </Typography>
               </Button>
-              <Link href="#" variant="body2">
-                {'Ainda não possui um cadastro?  Crie aqui'}
+              <Grid container spacing={1} alignItems="center" justifyContent={'center'} >
+                <Grid item>
+                <Typography color={'gray'} fontWeight ={500}>
+                Já possui um cadastro?
+              </Typography>
+                </Grid>
+              <Grid item >
+              <Link href='./logIn' variant="body1"  underline='hover' fontWeight={550}>
+                {'Acesse aqui'}
               </Link>
+              </Grid>
+      
+              
+              </Grid>
             </Box>
           </Box>
         </Grid>

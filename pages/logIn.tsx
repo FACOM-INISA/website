@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import EmailIcon from '@mui/icons-material/Email';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,10 +17,13 @@ import Image from 'next/image';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import ppsusLogo from 'images/PPSUS - MS.png';
+import { iconButtonClasses, InputAdornment, SvgIcon } from '@mui/material';
+import Cadastro from './signIn';
+import { url } from 'inspector';
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function loginSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -49,9 +53,18 @@ export default function SignInSide() {
                 src={ppsusLogo}
                 alt="PPSUS - MS"
                 width={500}
-                height={50}
+                height={45}
                 objectFit="contain"
               ></Image>
+              <Box
+            sx={{
+              my: 2,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          ></Box>
               <Image
                 id="logo-areaAdministrativa"
                 src={areaAdministrativa}
@@ -61,18 +74,24 @@ export default function SignInSide() {
                 objectFit="contain"
               ></Image>
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" fontFamily={'Roboto'}  noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
+                inputProps={{startAdornment: (<InputAdornment position = "start">
+                
+                </InputAdornment>)}}
+                InputLabelProps = {{required: false}}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
+                
                 label="RGA, SIAPE ou E-mail"
                 name="email"
                 autoComplete="email"
                 autoFocus
               />
               <TextField
+                InputLabelProps = {{required: false}}
                 margin="normal"
                 required
                 fullWidth
@@ -82,32 +101,47 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
-              <Grid2 container>
-                <Grid2>
+              <Grid container>
+                <Grid>
+                  
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" size="small" />}
-                    label="Lembre-se do meu acesso"
+                    label="Lembre-se do meu acesso" 
                   />
-                </Grid2>
-                <Grid2>
-                  <Link href="#" variant="body2">
+                  <Link href="#" variant="body2" underline='hover' color={'gray'}>
                     Esqueceu sua senha?
                   </Link>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
 
               <Button
                 type="submit"
-                size="small"
+                size='large'
+                
                 fullWidth
                 variant="contained"
+                
                 sx={{ mt: 3, mb: 2 }}
               >
-                <span>Acessar</span>
+                <Typography fontStyle={'bold'} fontFamily={'sans-serif'} fontWeight={'600'} textTransform = {'none'}>
+                  Acessar
+                </Typography>
               </Button>
-              <Link href="#" variant="body2">
-                {'Ainda não possui um cadastro?  Crie aqui'}
+              <Grid container spacing={1} alignItems="center" justifyContent={'center'}>
+                <Grid item>
+                <Typography color={'gray'} fontWeight ={500}>
+                Ainda não possui um cadastro?
+              </Typography>
+                </Grid>
+              <Grid item >
+              <Link href='./signIn' variant="body1"  underline='hover' fontWeight={550}>
+                {'Crie aqui'}
               </Link>
+              </Grid>
+      
+              
+              </Grid>
+              
             </Box>
           </Box>
         </Grid>
@@ -127,6 +161,8 @@ export default function SignInSide() {
           }}
         />
       </Grid>
+      
     </ThemeProvider>
+    
   );
 }
