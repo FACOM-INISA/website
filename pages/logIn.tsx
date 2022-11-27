@@ -1,25 +1,21 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+import { InputAdornment } from '@mui/material';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import EmailIcon from '@mui/icons-material/Email';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import CssBaseline from '@mui/material/CssBaseline';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import PersonIcon from '@mui/icons-material/Person';
+import LockIcon from '@mui/icons-material/Lock';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import backgroundImg from 'images/loginPageImage.png';
+import ppsusLogo from 'images/PPSUS - MS.png';
 import areaAdministrativa from 'images/Área administrativa - Logo.png';
 import Image from 'next/image';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import ppsusLogo from 'images/PPSUS - MS.png';
-import { iconButtonClasses, InputAdornment, SvgIcon } from '@mui/material';
-import Cadastro from './signIn';
-import { url } from 'inspector';
+import * as React from 'react';
 
 const theme = createTheme();
 
@@ -76,9 +72,15 @@ export default function loginSide() {
             </Typography>
             <Box component="form" fontFamily={'Roboto'}  noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
-                inputProps={{startAdornment: (<InputAdornment position = "start">
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position = "start">
+                      <PersonIcon/>
+
+                    </InputAdornment>
+                    ),
+                }}
                 
-                </InputAdornment>)}}
                 InputLabelProps = {{required: false}}
                 margin="normal"
                 required
@@ -91,6 +93,14 @@ export default function loginSide() {
                 autoFocus
               />
               <TextField
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position = "start">
+                    <LockIcon/>
+
+                  </InputAdornment>
+                  ),
+              }}
                 InputLabelProps = {{required: false}}
                 margin="normal"
                 required
@@ -152,7 +162,7 @@ export default function loginSide() {
           md={7}
           sx={{
             backgroundImage:
-              'url(https://lh3.googleusercontent.com/p/AF1QipOlora7AbKkUOoqPGcta18dzPtCib_FD2XJ_Ek9=s680-w680-h510)',
+            'url(https://corregedoria.ufms.br/files/2021/04/UFMS.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
