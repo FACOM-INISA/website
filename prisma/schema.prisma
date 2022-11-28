@@ -70,6 +70,7 @@ model Usuario {
   hash        String
   nome        String
   authorized  Boolean @default(false)
+  admin       Boolean @default(false)
 
   @@map("usuarios")
 }

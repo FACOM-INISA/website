@@ -59,8 +59,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return
   }
 
-  const predicoes_normal = predicoes.filter((element) => { if (element.tipo_parto == 'normal') return element })
   const predicoes_cesaria = predicoes.filter((element) => { if (element.tipo_parto == 'cesaria') return element })
+  const predicoes_normal = predicoes.filter((element) => { if (element.tipo_parto == 'normal') return element })
   const predicoes_total = predicoes.filter((element) => { if (element.tipo_parto == 'total') return element })
 
 
