@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Municipio {
-  id                        Int    @id
+  id                        Int     @id
   nome                      String
   microrregiao_id           Int
   microrregiao_nome         String
@@ -24,6 +24,52 @@ model Municipio {
   uf_id                     Int
   uf_sigla                  String
   uf_nome                   String
+  partos                    Parto[]
+  predicoes                 Predicao[]
 
   @@map("municipios")
+}
+
+model Parto {
+  ano           Int
+  mes           Int
+  parto_normais Int
+  parto_cesaria Int
+  parto_total   Int
+  municipio     Municipio @relation(fields: [municipio_id], references: [id])
+  municipio_id  Int
+
+  @@id([ano, mes, municipio_id], name: "id")
+  @@map("partos")
+
+}
+
+model Predicao {
+
+  // Colocar o tipo de parto que a predição se refere (normal, cesária, total)
+  tipo_parto                String
+
+  lower                     Int
+  upper                     Int
+  pred                      Int
+
+  // Mês da predição relativo ao mês atual
+  // eg.: Mês atual = Maio, prox_mes = 1 = Junho, prox_mes = 3 = Setembro
+  ano                       Int
+  mes                       Int
+
+  municipio                 Municipio   @relation(fields: [municipio_id], references: [id])
+  municipio_id              Int
+
+  @@id([tipo_parto,ano, mes, municipio_id], name: "id")
+  @@map("predicoes")
+}
+
+model Usuario {
+  email       String  @id
+  hash        String
+  nome        String
+  authorized  Boolean @default(false)
+
+  @@map("usuarios")
 }
