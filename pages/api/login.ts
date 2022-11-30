@@ -1,3 +1,14 @@
+/*
+Api para fazer login do usuário recebe um post com as seguintes
+caracteristicas:
+  usercode: Código ou email
+  password: Senha do usuário
+
+Faz a verificação se é um email ou um código depois pesquisa no
+banco de dados pelo o usuário, salva a sessão e retorna para onde
+redirecionar o usuário.
+*/
+
 import { User } from './user';
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { sessionOptions } from '../../lib/session';
@@ -9,10 +20,13 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   const { usercode, password } = await req.body;
   const prisma = new PrismaClient();
   let checker = 'email';
+
   if (usercode.match(/(\d{7})/) || usercode.match(/(\d{12})/) && !usercode.match(/@.*/)) {
     checker = 'codigo';
   }
+
   await prisma.$connect();
+
   try {
     const data = await prisma.usuario.findUniqueOrThrow({
       where: {
@@ -21,6 +35,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     });
     const hash = data.hash;
     const valid = await bcrypt.compare(password, hash);
+
     if (valid) {
       const user: User = {
         isLoggedIn: true,
@@ -33,6 +48,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       await prisma.$disconnect()
       res.status(200).send({ user });
     }
+
   } catch (error) {
     // TODO: MAKE BETTER ERROR HANDLING
     await prisma.$disconnect()
@@ -43,6 +59,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     } else {
       res.status(400).json({ 400: error })
     }
+
   }
 
 

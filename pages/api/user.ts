@@ -1,3 +1,7 @@
+/*
+Endpoint do SWR para retornar o usuário
+*/
+
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { sessionOptions } from '../../lib/session'

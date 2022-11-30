@@ -3,7 +3,7 @@ O script recebe um form que possui as seguintes características:
   senha: string
   nome : string
   email: string
-  code: string
+  code : string
 Tenta adicionar o usuario para no banco de dados, se algum erro acontecer      |
 retorna 400 e o err, caso bem sucedido retorna '200: ok'.
 

@@ -1,3 +1,8 @@
+/*
+Script para guardar a sessão do usuário
+*/
+
+
 import type { IronSessionOptions } from 'iron-session';
 import type { User } from '../pages/api/user';
 
