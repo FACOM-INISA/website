@@ -1,20 +1,22 @@
 import { User } from './user';
-
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { sessionOptions } from '../../lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
-import { PrismaClient } from '@prisma/client';
-import { NotFoundError } from '@prisma/client/runtime';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
-  const { email, password } = await req.body;
+  const { usercode, password } = await req.body;
   const prisma = new PrismaClient();
-  await prisma.$connect()
+  let checker = 'email';
+  if (usercode.match(/(\d{7})/) || usercode.match(/(\d{12})/) && !usercode.match(/@.*/)) {
+    checker = 'codigo';
+  }
+  await prisma.$connect();
   try {
     const data = await prisma.usuario.findUniqueOrThrow({
       where: {
-        email: email
+        [checker]: usercode
       }
     });
     const hash = data.hash;
@@ -33,10 +35,13 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     }
   } catch (error) {
     // TODO: MAKE BETTER ERROR HANDLING
-    if (error instanceof NotFoundError) {
-      res.status(401).send({ 401: 'user not found' })
+    await prisma.$disconnect()
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code == 'P2025')
+        res.status(404).send({ message: 'USER NOT FOUND' })
     } else {
-      res.status(400).send({ 400: error })
+      res.status(400).json({ 400: error })
     }
   }
 

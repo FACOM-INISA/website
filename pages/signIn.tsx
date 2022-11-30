@@ -16,15 +16,34 @@ import areaAdministrativa from '../public/images/Área administrativa - Logo.png
 import Image from 'next/image';
 import * as React from 'react';
 import { InputAdornment } from '@mui/material';
+import { useRouter } from 'next/router';
 const theme = createTheme();
 
 export default function SignInSide() {
+  const router = useRouter();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const body = {
       email: data.get('email'),
-      password: data.get('password'),
+      senha: data.get('password'),
+      code: data.get('code'),
+      name: data.get('nome'),
+    };
+
+    fetch('api/cadastro', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(body),
+    }).then(async (response) => {
+      const message = await response.json();
+      if (response.status == 307) {
+        router.push(message.message);
+      } else {
+        alert(message.message);
+      }
     });
   };
 
@@ -120,7 +139,7 @@ export default function SignInSide() {
                 fullWidth
                 id="email"
                 label="RGA ou SIAPE"
-                name="rga"
+                name="code"
                 autoComplete="email"
                 autoFocus
               />

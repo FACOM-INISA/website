@@ -5,6 +5,15 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
+  const handleSubmit = (event: any) => {
+    fetch('api/logout')
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.isLoggedIn);
+      });
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -21,6 +30,7 @@ const Home: NextPage = () => {
 
         <p className={styles.description}>
           Página da Index &rarr; <code className={styles.code}>pages/index.tsx</code>
+          <button onClick={handleSubmit}>LOGOUT</button>
         </p>
 
         <div className={styles.grid}>

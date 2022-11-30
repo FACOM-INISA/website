@@ -16,17 +16,36 @@ import ppsusLogo from '../public/images/PPSUS - MS.png';
 import areaAdministrativa from '../public/images/Área administrativa - Logo.png';
 import Image from 'next/image';
 import * as React from 'react';
+import fetchJson from '../lib/fetchJson';
+import useUser from '../lib/useUser';
 
 const theme = createTheme();
 
-export default function loginSide() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export default function LoginSide() {
+  const { mutateUser } = useUser({
+    redirectTo: '/',
+    redirectIfFound: true,
+  });
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    const body = {
+      usercode: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    try {
+      mutateUser(
+        await fetchJson('api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        }),
+        false
+      );
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
