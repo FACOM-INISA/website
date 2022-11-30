@@ -12,8 +12,8 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import ppsusLogo from 'images/PPSUS - MS.png';
-import areaAdministrativa from 'images/Área administrativa - Logo.png';
+import ppsusLogo from 'public/images/PPSUS - MS.png';
+import areaAdministrativa from 'public/images/Área administrativa - Logo.png';
 import Image from 'next/image';
 import * as React from 'react';
 
@@ -53,14 +53,14 @@ export default function loginSide() {
                 objectFit="contain"
               ></Image>
               <Box
-            sx={{
-              my: 2,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          ></Box>
+                sx={{
+                  my: 2,
+                  mx: 4,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              ></Box>
               <Image
                 id="logo-areaAdministrativa"
                 src={areaAdministrativa}
@@ -70,38 +70,40 @@ export default function loginSide() {
                 objectFit="contain"
               ></Image>
             </Typography>
-            <Box component="form" fontFamily={'Roboto'}  noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              fontFamily={'Roboto'}
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
               <TextField
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position = "start">
-                      <PersonIcon/>
-
+                    <InputAdornment position="start">
+                      <PersonIcon />
                     </InputAdornment>
-                    ),
+                  ),
                 }}
-                
-                InputLabelProps = {{required: false}}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
-                
                 label="RGA, SIAPE ou E-mail"
                 name="email"
                 autoComplete="email"
                 autoFocus
               />
               <TextField
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position = "start">
-                    <LockIcon/>
-
-                  </InputAdornment>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon />
+                    </InputAdornment>
                   ),
-              }}
-                InputLabelProps = {{required: false}}
+                }}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
@@ -113,12 +115,11 @@ export default function loginSide() {
               />
               <Grid container>
                 <Grid>
-                  
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" size="small" />}
-                    label="Lembre-se do meu acesso" 
+                    label="Lembre-se do meu acesso"
                   />
-                  <Link href="#" variant="body2" underline='hover' color={'gray'}>
+                  <Link href="#" variant="body2" underline="hover" color={'gray'}>
                     Esqueceu sua senha?
                   </Link>
                 </Grid>
@@ -126,32 +127,32 @@ export default function loginSide() {
 
               <Button
                 type="submit"
-                size='large'
-                
+                size="large"
                 fullWidth
                 variant="contained"
-                
                 sx={{ mt: 3, mb: 2 }}
               >
-                <Typography fontStyle={'bold'} fontFamily={'sans-serif'} fontWeight={'600'} textTransform = {'none'}>
+                <Typography
+                  fontStyle={'bold'}
+                  fontFamily={'sans-serif'}
+                  fontWeight={'600'}
+                  textTransform={'none'}
+                >
                   Acessar
                 </Typography>
               </Button>
               <Grid container spacing={1} alignItems="center" justifyContent={'center'}>
                 <Grid item>
-                <Typography color={'gray'} fontWeight ={500}>
-                Ainda não possui um cadastro?
-              </Typography>
+                  <Typography color={'gray'} fontWeight={500}>
+                    Ainda não possui um cadastro?
+                  </Typography>
                 </Grid>
-              <Grid item >
-              <Link href='./signIn' variant="body1"  underline='hover' fontWeight={550}>
-                {'Crie aqui'}
-              </Link>
+                <Grid item>
+                  <Link href="./signIn" variant="body1" underline="hover" fontWeight={550}>
+                    {'Crie aqui'}
+                  </Link>
+                </Grid>
               </Grid>
-      
-              
-              </Grid>
-              
             </Box>
           </Box>
         </Grid>
@@ -161,8 +162,7 @@ export default function loginSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:
-            'url(https://corregedoria.ufms.br/files/2021/04/UFMS.jpg)',
+            backgroundImage: 'url(https://corregedoria.ufms.br/files/2021/04/UFMS.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -171,8 +171,6 @@ export default function loginSide() {
           }}
         />
       </Grid>
-      
     </ThemeProvider>
-    
   );
 }

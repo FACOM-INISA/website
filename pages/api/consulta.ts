@@ -1,9 +1,9 @@
 /*
-  API para requisitar os dados da predição de todos os tipos de partos junto com 
+  API para requisitar os dados da predição de todos os tipos de partos junto com
   os dados históricos.
-  
-  Retorna um JSON contendo um vetor de todos os partos ordenados por ano e mês 
-  ascendentemente e depois um objeto contendo 3 objetos, um para cada predição também 
+
+  Retorna um JSON contendo um vetor de todos os partos ordenados por ano e mês
+  ascendentemente e depois um objeto contendo 3 objetos, um para cada predição também
   ordenandos ascendentemente e sendo um vetor.
 */
 
