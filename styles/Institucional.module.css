@@ -1,9 +1,12 @@
 .body {
     color: black;
     display: block;
+    background-image: url("../public/images/retangulo.png");
+    background-repeat: no-repeat;
+    background-position: right;
 }
 
-.body_container_top {
+.landing {
     display: flex;
     flex-direction: row;
     height: 25%;
@@ -65,7 +68,7 @@
     text-transform: none;
 }
 
-.body_center {
+.plataforma {
     background-color: #AFAFAF;
     text-align: center;
     font-size: larger;
@@ -73,30 +76,37 @@
     padding: 1rem 10rem 4.5rem 10rem;
 }
 
-.body_center_container {
-    text-align: left;
+.plataforma_container {
+    text-align:justify;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.body_center_container h2 {
+.plataforma_container h2 {
     width: 50%;
 }
 
-.body_center_container Image {
+.plataforma_container Image {
     max-width: 100%;
     height: auto;
 }
 
-.body_integrantes {
+.integrantes {
     font-size: larger;
     font-weight: 900;
     text-align: center;
-    padding: 1rem 10rem 4.5rem 10rem;
+    padding: 1rem 10rem 2rem 10rem;
 }
 
 .cards_integrantes {
     display: flex;
     flex-direction: row;
+}
+
+.parcerias {
+    font-size: larger;
+    font-weight: 900;
+    text-align: center;
+    padding: 1rem 10rem 4rem 10rem;
 }

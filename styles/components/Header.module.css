@@ -8,35 +8,61 @@
 }
 
 .header_container {
+    width: 17vw;
     display: flex;
     flex-direction: row;
-    margin: 1rem 0 1rem 0;
-}
-
-.header_container h1 {
-    margin-bottom: 0px;
-}
-
-.header_container p {
-    margin-top: 0px;
-}
-
-.logo {
-    padding-top: 5px;
+    justify-content: space-evenly;
 }
 
 .header_container span {
     background-color: #FEFEFE;
     width: 3px;
+    height: 90px;
     border-radius: 5px;
-    margin: 0 30px 0 30px;
+    margin: 15px 25px 0 25px;
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0 1rem 0;
+}
+
+.logo h1 {
+    margin-bottom: 0px;
+}
+
+.logo p {
+    margin-top: 0px;
+}
+
+.divider {
+    align-self: center;
+}
+
+.divider span {
+    background-color: #FEFEFE;
+}
+
+.inisa {
+    align-self: center;
+}
+
+.inisa h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.inisa p {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .description {
     font-weight: 700;
+    width: 27vw;
     display: flex;
-}
-
-.description p {
-    padding-left: 4rem;
+    column-gap: 10px;
+    justify-content: space-between;
+    scroll-behavior: smooth;
 }
