@@ -3,6 +3,7 @@ O script recebe um form que possui as seguintes características:
   senha: string
   nome : string
   email: string
+  code : string
 Tenta adicionar o usuario para no banco de dados, se algum erro acontecer      |
 retorna 400 e o err, caso bem sucedido retorna '200: ok'.
 
@@ -16,8 +17,13 @@ import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let body = req.body;
-  if (!body.name && !body.email && !body.senha) {
-    res.status(400).send("Incorrect data sent");
+  if (!body.name && !body.email && !body.senha && !body.code
+    ||
+    body.code.length != 7 && body.code.length != 12
+    ||
+    !body.code.match(/(\d{7})/) && !body.code.match(/(\d{12})/)
+    || body.senha.length < 8) {
+    res.status(400).send({ message: "Incorrect data sent" });
     return;
   }
   const prisma = new PrismaClient();
@@ -28,16 +34,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await prisma.usuario.create({
       data: {
         email: body.email,
-        nome: body.nome,
+        nome: body.name,
+        codigo: body.code,
         hash: hash
       }
     });
     await prisma.$disconnect();
-    // res.redirect('/');
-    res.status(201).json({ 201: 'okay' });
+    res.status(307).json({ message: '/logIn' });
+    // res.status(201).json({ 201: 'okay' });
 
   } catch (err) {
     await prisma.$disconnect();
-    res.status(400).json(err);
+    res.status(400).json({ message: err });
   }
 }

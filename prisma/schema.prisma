@@ -66,10 +66,12 @@ model Predicao {
 }
 
 model Usuario {
-  email       String  @id
+  email       String  @unique @id
+  codigo      String     @unique
   hash        String
   nome        String
   authorized  Boolean @default(false)
+  admin       Boolean @default(false)
 
   @@map("usuarios")
 }

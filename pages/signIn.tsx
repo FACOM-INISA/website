@@ -11,20 +11,39 @@ import LockPersonIcon from '@mui/icons-material/LockPerson';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import ppsusLogo from 'images/PPSUS - MS.png';
-import areaAdministrativa from 'images/Área administrativa - Logo.png';
+import ppsusLogo from '../public/images/PPSUS - MS.png';
+import areaAdministrativa from '../public/images/Área administrativa - Logo.png';
 import Image from 'next/image';
 import * as React from 'react';
 import { InputAdornment } from '@mui/material';
+import { useRouter } from 'next/router';
 const theme = createTheme();
 
 export default function SignInSide() {
+  const router = useRouter();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const body = {
       email: data.get('email'),
-      password: data.get('password'),
+      senha: data.get('password'),
+      code: data.get('code'),
+      name: data.get('nome'),
+    };
+
+    fetch('api/cadastro', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(body),
+    }).then(async (response) => {
+      const message = await response.json();
+      if (response.status == 307) {
+        router.push(message.message);
+      } else {
+        alert(message.message);
+      }
     });
   };
 
@@ -32,7 +51,7 @@ export default function SignInSide() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square >
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -52,14 +71,14 @@ export default function SignInSide() {
                 objectFit="contain"
               ></Image>
               <Box
-            sx={{
-              my: 2,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          ></Box>
+                sx={{
+                  my: 2,
+                  mx: 4,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              ></Box>
               <Image
                 id="logo-areaAdministrativa"
                 src={areaAdministrativa}
@@ -71,15 +90,14 @@ export default function SignInSide() {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position = "start">
-                    <PersonIcon/>
-
-                  </InputAdornment>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon />
+                    </InputAdornment>
                   ),
-              }}
-                InputLabelProps={{required: false}}
+                }}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
@@ -90,15 +108,14 @@ export default function SignInSide() {
                 autoFocus
               />
               <TextField
-               InputProps={{
-                startAdornment: (
-                  <InputAdornment position = "start">
-                    <EmailIcon/>
-
-                  </InputAdornment>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
                   ),
-              }}
-                InputLabelProps={{required: false}}
+                }}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
@@ -109,34 +126,32 @@ export default function SignInSide() {
                 autoFocus
               />
               <TextField
-               InputProps={{
-                startAdornment: (
-                  <InputAdornment position = "start">
-                    <PasswordIcon/>
-
-                  </InputAdornment>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PasswordIcon />
+                    </InputAdornment>
                   ),
-              }}
-                InputLabelProps={{required: false}}
+                }}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
                 label="RGA ou SIAPE"
-                name="rga"
+                name="code"
                 autoComplete="email"
                 autoFocus
               />
               <TextField
-               InputProps={{
-                startAdornment: (
-                  <InputAdornment position = "start">
-                    <LockPersonIcon/>
-
-                  </InputAdornment>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockPersonIcon />
+                    </InputAdornment>
                   ),
-              }}
-                InputLabelProps={{required: false}}
+                }}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
@@ -147,15 +162,14 @@ export default function SignInSide() {
                 autoComplete="current-password"
               />
               <TextField
-               InputProps={{
-                startAdornment: (
-                  <InputAdornment position = "start">
-                    <LockPersonIcon/>
-
-                  </InputAdornment>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockPersonIcon />
+                    </InputAdornment>
                   ),
-              }}
-                InputLabelProps={{required: false}}
+                }}
+                InputLabelProps={{ required: false }}
                 margin="normal"
                 required
                 fullWidth
@@ -165,33 +179,34 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
-              
+
               <Button
                 type="submit"
-                size='large'
-                
+                size="large"
                 fullWidth
                 variant="contained"
-                
                 sx={{ mt: 3, mb: 2 }}
               >
-                <Typography fontStyle={'bold'} fontFamily={'sans-serif'} fontWeight={'600'} textTransform = {'none'}>
+                <Typography
+                  fontStyle={'bold'}
+                  fontFamily={'sans-serif'}
+                  fontWeight={'600'}
+                  textTransform={'none'}
+                >
                   Criar Conta
                 </Typography>
               </Button>
-              <Grid container spacing={1} alignItems="center" justifyContent={'center'} >
+              <Grid container spacing={1} alignItems="center" justifyContent={'center'}>
                 <Grid item>
-                <Typography color={'gray'} fontWeight ={500}>
-                Já possui um cadastro?
-              </Typography>
+                  <Typography color={'gray'} fontWeight={500}>
+                    Já possui um cadastro?
+                  </Typography>
                 </Grid>
-              <Grid item >
-              <Link href='./logIn' variant="body1"  underline='hover' fontWeight={550}>
-                {'Acesse aqui'}
-              </Link>
-              </Grid>
-      
-              
+                <Grid item>
+                  <Link href="./logIn" variant="body1" underline="hover" fontWeight={550}>
+                    {'Acesse aqui'}
+                  </Link>
+                </Grid>
               </Grid>
             </Box>
           </Box>
@@ -202,8 +217,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:
-              'url(https://corregedoria.ufms.br/files/2021/04/UFMS.jpg)',
+            backgroundImage: 'url(https://corregedoria.ufms.br/files/2021/04/UFMS.jpg)',
 
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
