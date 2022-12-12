@@ -18,7 +18,7 @@ interface CardItem {
 const cardItems: CardItem[] = [
     {
         id: 1,
-        img: '../public/images/leticia.jpeg',
+        img: 'https://media.licdn.com/dms/image/C4E03AQGXsLmfbsyI7w/profile-displayphoto-shrink_800_800/0/1517635728863?e=2147483647&v=beta&t=bRUOwsQRW-KeJdPO6fpF0_xNsuIfbT_m-iotT16n6Xc',
         name: 'Nathan Aratani',
         desc: 'Docente pesquisador e Coordenador no Instituto Integrado de Saúde',
         linkedin: 'https://br.linkedin.com/in/nathan-aratani-838360b4',
@@ -26,7 +26,7 @@ const cardItems: CardItem[] = [
     },
     {
         id: 2,
-        img: '../public/images/leticia.jpeg',
+        img: 'https://avatars.githubusercontent.com/u/2676029?v=4',
         name: 'Hudson Borges',
         desc: 'Docente pesquisador na Faculdade de Computação',
         linkedin: 'https://www.fundect.ms.gov.br',
@@ -34,7 +34,7 @@ const cardItems: CardItem[] = [
     },
     {
         id: 3,
-        img: '../public/images/leticia.jpeg',
+        img: 'https://media.licdn.com/dms/image/C4D03AQEbR8o5UsUI_Q/profile-displayphoto-shrink_800_800/0/1657842424516?e=2147483647&v=beta&t=wfixpLea3mbWAGxsV7I2SiD-az5T5zf8VCtZZOaZZXE',
         name: 'José Pedro',
         desc: 'Estudante de Engenharia de Computação',
         linkedin: 'https://br.linkedin.com/in/josélp',
@@ -42,7 +42,7 @@ const cardItems: CardItem[] = [
     },
     {
         id: 4,
-        img: '../public/images/leticia.jpeg',
+        img: 'https://media-exp1.licdn.com/dms/image/D4D03AQGnV-H3ix7LMA/profile-displayphoto-shrink_800_800/0/1665173752285?e=2147483647&v=beta&t=NWwEo-K8LHKXqR5QP16fiRH82s7uEiUi9DNrpcwAPj0',
         name: 'Leonardo Kazu',
         desc: 'Estudante de Ciência da Computação',
         linkedin: 'https://br.linkedin.com/in/leonardo-kazuyoshi-takahashi-da-silva-0122b0224?trk=people-guest_people_search-card',
@@ -50,7 +50,7 @@ const cardItems: CardItem[] = [
     },
     {
         id: 5,
-        img: '../public/images/leticia.jpeg',
+        img: 'https://avatars.githubusercontent.com/u/62127280?v=4',
         name: 'Letícia Yurie',
         desc: 'Estudante de Engenharia de Software',
         linkedin: 'https://br.linkedin.com/in/leticiayurie',

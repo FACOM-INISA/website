@@ -56,7 +56,7 @@ const Institucional: NextPage = () => {
           <div className={styles.ppsus}>
             <h1>Painel de Monitoramento para a Gestão do Sistema Único de Saúde</h1>
             <h1>PPSUS - MS</h1>
-            <Button>
+            <Button className={styles.botao} href='sistemadedados'>
               Acessar Painel
               <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
             </Button>
