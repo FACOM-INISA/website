@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     fetch('api/logout')
       .then((response) => {
         return response.json();
@@ -13,6 +13,18 @@ const Home: NextPage = () => {
       .then((data) => {
         alert(data.isLoggedIn);
       });
+  };
+
+  const handleFile = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const file = new File([event.currentTarget.file.files[0]], 'dados.csv', { type: 'text/csv' });
+    let formData = new FormData();
+    formData.append('csv', file);
+    fetch('api/update', {
+      method: 'POST',
+      body: formData,
+    });
+    console.log(file);
   };
   return (
     <div className={styles.container}>
@@ -32,6 +44,11 @@ const Home: NextPage = () => {
           Página da Index &rarr; <code className={styles.code}>pages/index.tsx</code>
           <button onClick={handleSubmit}>LOGOUT</button>
         </p>
+
+        <form onSubmit={handleFile}>
+          <input type="file" name="file" id="file" />
+          <input type="submit" value="Submit" />
+        </form>
 
         <div className={styles.grid}>
           <a href="./signIn" className={styles.card}>
