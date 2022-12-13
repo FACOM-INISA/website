@@ -1,37 +1,47 @@
 import type { NextPage } from 'next';
 import React from 'react';
 import HeaderComponent from '../components/header';
-import List from '@mui/material/List';
-import Collapse from '@mui/material/Collapse';
-import styles from '../styles/components/SistemaDeDados.module.css';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
-import { Button, Card, CardHeader, Grid, ListItem, ListItemIcon, ListItemButton, ListItemText, Paper, TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Button, Card, CardHeader, Collapse, Grid, IconButton, List, ListItem, ListItemIcon, ListItemButton, ListItemText, Paper, TextField, FormControlLabel, FormControl, FormGroup } from '@mui/material';
 import Checkbox from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import IconButton from "@mui/material/IconButton";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import SearchIcon from '@mui/icons-material/Search';
+import styles from '../styles/components/SistemaDeDados.module.css';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+    palette: {
+        primary:{
+            main: '#077FA8',
+        }
+    },
+
+    typography: {
+        fontFamily: 'Lato',
+    }
+});
 
 const interHeader = [
     {
       id: 1,
       name: 'Sistema de Dados',
-      path: '/sistemadedados',
-      icon: 'default'
+      path: 'sistemadedados',
+      icon: ''
     },
     {
       id: 2,
       name: 'Mais Informações',
       path: 'maisinfos',
-      icon: 'default'
+      icon: ''
     },
     {
       id: 3,
       name: 'Área Adminsitrativa',
       path: 'adm',
-      icon: './public/images/adm-icon.svg'
+      icon: '/public/images/adm-icon.svg'
     }
 ]
 
@@ -150,6 +160,20 @@ const SistemaDeDados: NextPage = () => {
         setChecked(newChecked);
     };
 
+    const [state, setState] = React.useState({
+        partos: false,
+        normais: false,
+        sensiveis: false,
+        internacoes: false,
+        mortalidade: false
+    });
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setState({ ...state, [event.target.name]: event.target.checked })
+    };
+
+    const { partos, normais, sensiveis, internacoes, mortalidade } = state;
+
     const [expandedR, setExpandedR] = React.useState(true);
     const handleExpandClickR = () => { setExpandedR(!expandedR) };
     const [expandedD, setExpandedD] = React.useState(true);
@@ -157,79 +181,136 @@ const SistemaDeDados: NextPage = () => {
 
     return (
         <div className={styles.sistema}>
-            <HeaderComponent elements={interHeader}></HeaderComponent>
+            <ThemeProvider theme={theme}>
+                <HeaderComponent elements={interHeader}></HeaderComponent>
 
-            <div className={styles.main}>
-                <div className={styles.sidebar}>
-                    <Grid className={styles.grid} alignItems="center">
-                        <Paper elevation={3}>
-                            <Card style={{ display: "flex", flexDirection: "column" }}>
-                                <CardHeader title='Filtro por Região'
-                                    action={
-                                        <IconButton onClick={handleExpandClickR} aria-expanded={expandedR} aria-label="show more">
-                                            {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                        </IconButton>
-                                    }
-                                />
-                            </Card>
-                            <Collapse in={expandedR} className={styles.collapse}>
-                                <Autocomplete
-                                    className={styles.busca}
-                                    popupIcon={ <SearchIcon/> }
-                                    options={options.sort((a,b) => -b.firstLetter.localeCompare(a.firstLetter))}
-                                    groupBy={(option) => option.firstLetter}
-                                    getOptionLabel={(option) => option.name}
-                                    sx={{ width: '90%', bgColor: '#D4D5D6', [`& .${autocompleteClasses.popupIndicator}`]: {
-                                        transform: "none"} }} 
-                                    renderInput={(params) => 
-                                        <TextField {...params} label="Buscar por município"/>}
-                                />
+                <div className={styles.main}>
+                    <div className={styles.sidebar}>
+                        <Grid className={styles.grid} alignItems="center">
+                            <Paper elevation={3}>
+                                <Card style={{ display: "flex", flexDirection: "column" }}>
+                                    <CardHeader title='Filtro por Região'
+                                        action={
+                                            <IconButton onClick={handleExpandClickR} aria-expanded={expandedR} aria-label="show more">
+                                                {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                            </IconButton>
+                                        }
+                                    />
+                                </Card>
+                                <Collapse in={expandedR} className={styles.collapse}>
+                                    <Autocomplete
+                                        className={styles.busca}
+                                        popupIcon={ <SearchIcon/> }
+                                        options={options.sort((a,b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                        groupBy={(option) => option.firstLetter}
+                                        getOptionLabel={(option) => option.name}
+                                        sx={{ width: '90%', bgColor: '#D4D5D6', [`& .${autocompleteClasses.popupIndicator}`]: {
+                                            transform: "none"} }} 
+                                        renderInput={(params) => 
+                                            <TextField {...params} label="Buscar por município"/>}
+                                    />
 
-                                <div className={styles.botoes}>
-                                    <Button variant="contained">Limpar</Button>
-                                    <Button variant="contained">Buscar</Button>
-                                </div>
-                            </Collapse>
-                        </Paper>
-                    </Grid>
-    
-                    {/* Segundo Card */}
-                    <Grid className={styles.grid} alignItems="center">
-                        <Paper elevation={3}>
-                            <Card style={{ display: "flex", flexDirection: "column" }}>
-                                <CardHeader className={styles.cardHeader}
-                                    title='Filtro de Dados'
-                                    action={
-                                        <IconButton onClick={handleExpandClickD} aria-expanded={expandedD} aria-label="show more">
-                                            {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                        </IconButton>
-                                    }
-                                />
-                            </Card>
-                            <Collapse in={expandedD} className={styles.collapse}>
-                                <List className={styles.list} dense component="div" role="list">
-                                    {dados.map((dado) => {
-                                        const labelId = `checkbox-list-label-${dado.id}`;
-                                        return (
-                                            <ListItem key={dado.id} role='listitem'>
-                                                <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
-                                                    <ListItemIcon>
-                                                        <Checkbox 
-                                                        checked={checked.indexOf(dado.id) !== -1}
-                                                        tabIndex={-1}
-                                                        disableRipple
-                                                        inputProps={{ "aria-labelledby": labelId }}
-                                                        />
-                                                    </ListItemIcon>
-                                                    <ListItemText key={dado.id}>{dado.name}</ListItemText>
-                                                </ListItemButton>
-                                            </ListItem>
-                                        )
-                                    })}
-                                </List>
-                            </Collapse>
-                        </Paper>
-                    </Grid>
+                                    <div className={styles.botoes}>
+                                        <Button variant="contained">Limpar</Button>
+                                        <Button variant="contained">Buscar</Button>
+                                    </div>
+                                </Collapse>
+                            </Paper>
+                        </Grid>
+        
+                        {/* Segundo Card */}
+                        <Grid className={styles.grid} alignItems="center">
+                            <Paper elevation={3}>
+                                <Card style={{ display: "flex", flexDirection: "column" }}>
+                                    <CardHeader className={styles.cardHeader}
+                                        title='Filtro de Dados'
+                                        action={
+                                            <IconButton onClick={handleExpandClickD} aria-expanded={expandedD} aria-label="show more">
+                                                {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                            </IconButton>
+                                        }
+                                    />
+                                </Card>
+                                <Collapse in={expandedD} className={styles.collapse}>
+                                    <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
+                                        <FormGroup sx={{ ml: 1 }}>
+                                            <FormControlLabel sx={{ pb: 1 }}
+                                                control={
+                                                    <Checkbox 
+                                                    checked={partos}
+                                                    onChange={handleChange}
+                                                    name='partos'
+                                                    />
+                                                }
+                                                label='Partos'
+                                            />
+                                            <FormControlLabel sx={{ pb: 1 }}
+                                                control={
+                                                    <Checkbox 
+                                                    checked={normais}
+                                                    onChange={handleChange}
+                                                    name='normais'
+                                                    />
+                                                }
+                                                label='Partos Normais'
+                                            />
+                                            <FormControlLabel sx={{ pb: 1 }}
+                                                control={
+                                                    <Checkbox 
+                                                    checked={sensiveis}
+                                                    onChange={handleChange}
+                                                    name='sensiveis'
+                                                    />
+                                                }
+                                                label='Partos Sensíveis'
+                                            />
+                                            <FormControlLabel sx={{ pb: 1 }}
+                                                control={
+                                                    <Checkbox
+                                                    checked={internacoes}
+                                                    onChange={handleChange}
+                                                    name='internacoes'
+                                                    />
+                                                }
+                                                label='Intervenções Evitadas'
+                                            />
+                                            <FormControlLabel sx={{ pb: 1 }}
+                                                control={
+                                                    <Checkbox 
+                                                    checked={mortalidade}
+                                                    onChange={handleChange}
+                                                    name='mortalidade'
+                                                    />
+                                                }
+                                                label='Taxa de Mortalidade Materna'
+                                            />
+                                        </FormGroup>
+                                    </FormControl>
+                                    {/* 
+                                    <List className={styles.list} dense component="div" role="list">
+                                        {dados.map((dado) => {
+                                            const labelId = `checkbox-list-label-${dado.id}`;
+                                            return (
+                                                <ListItem key={dado.id} role='listitem'>
+                                                    <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
+                                                        <ListItemIcon>
+                                                            <Checkbox 
+                                                            checked={checked.indexOf(dado.id) !== -1}
+                                                            tabIndex={-1}
+                                                            disableRipple
+                                                            inputProps={{ "aria-labelledby": labelId }}
+                                                            />
+                                                        </ListItemIcon>
+                                                        <ListItemText key={dado.id}>{dado.name}</ListItemText>
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )
+                                        })}
+                                    </List>
+                                    */}
+                                </Collapse>
+                            </Paper>
+                        </Grid>
                 </div>
 
                 <Autocomplete
@@ -239,7 +320,7 @@ const SistemaDeDados: NextPage = () => {
                     getOptionLabel={(dado) => dado.name}
                     renderOption={(props, dado, { selected }) => (
                         <li {...props}>
-                            <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ margin: 8 }} checked={selected}/>
+                            {/* <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ margin: 8 }} checked={selected}/> */}
                              {dado.name}
                         </li>
                     )}
@@ -249,12 +330,9 @@ const SistemaDeDados: NextPage = () => {
                     )}
                 />
             </div>
+            </ThemeProvider>
         </div>
     );
 }
 
 export default SistemaDeDados;
-
-function setState(arg0: any) {
-    throw new Error('Function not implemented.');
-}

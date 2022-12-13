@@ -3,14 +3,14 @@ import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Button } from '@mui/material';
-import landing from '../public/images/residencia-medica.png';
-import access from '../public/images/access.png';
-import plataforma from '../public/images/pag-analise-de-dados.png';
-import styles from '../styles/Institucional.module.css';
 import HeaderComponent from '../components/header';
 import IntegranteComponent from '../components/integrantes';
 import ParceiroComponent from '../components/parceiros';
 import FooterComponent from '../components/footer';
+import access from '../public/images/access.png';
+import landing from '../public/images/residencia-medica.png';
+import plataforma from '../public/images/pag-analise-de-dados.png';
+import styles from '../styles/Institucional.module.css';
 import type{ ElementProps } from '../components/header';
 import maisinfos from './maisinfos'
 
@@ -28,7 +28,7 @@ const instHeader = [
   {
     id: 3,
     name: 'MAIS INFORMAÇÕES',
-    path: '/maisinfos'
+    path: 'maisinfos'
   }
 ]
 

@@ -15,10 +15,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to 
-          <Link href="sistemadedados">Dados</Link>
-          <Link href="maisinfos">Mais infos</Link>
-          <Link href="institucional">PPSUS</Link>
+          Welcome to <Link href="institucional">PPSUS</Link>
         </h1>
 
         <p className={styles.description}>
@@ -26,13 +23,13 @@ const Home: NextPage = () => {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
+          <a href="sistemadedados" className={styles.card}>
+            <h2>Análise de Dados &rarr;</h2>
             <p>Find in-depth information about Next.js features and API.</p>
           </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
+          <a href="maisinfos" className={styles.card}>
+            <h2>Mais informações &rarr;</h2>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
 

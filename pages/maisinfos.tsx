@@ -3,27 +3,30 @@ import React from 'react';
 import Image from 'next/image'
 import HeaderComponent from '../components/header';
 import Divider from '@mui/material/Divider';
-import seta from '../public/images/arrow.png'
-import formula from '../public/images/formula.svg'
 import divider from '../public/images/divider.svg'
+import formula from '../public/images/formula.svg'
 import icon from '../public/images/adm-icon.svg'
+import seta from '../public/images/arrow.png'
 import styles from '../styles/components/MaisInfos.module.css';
 
 const interHeader = [
     {
       id: 1,
       name: 'Sistema de Dados',
-      path: '#1'
+      path: 'sistemadedados',
+      icon: ''
     },
     {
       id: 2,
       name: 'Mais Informações',
-      path: '#2'
+      path: 'maisinfos',
+      icon: ''
     },
     {
       id: 3,
       name: 'Área Adminsitrativa',
-      path: '/adm'
+      path: 'adm',
+      icon: '/public/images/adm-icon.svg'
     }
   ]
 

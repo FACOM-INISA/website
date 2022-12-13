@@ -50,10 +50,10 @@ const cardItems: CardItem[] = [
     },
     {
         id: 5,
-        img: 'https://avatars.githubusercontent.com/u/62127280?v=4',
+        img: 'https://media-exp1.licdn.com/dms/image/C4D03AQGqtC9rnwtBhA/profile-displayphoto-shrink_200_200/0/1649345833817?e=1676505600&v=beta&t=o4WZuF1aGWV5df_qikWdKV06orRdHgQdy2bIXyfDaH4',
         name: 'Letícia Yurie',
         desc: 'Estudante de Engenharia de Software',
-        linkedin: 'https://br.linkedin.com/in/leticiayurie',
+        linkedin: 'https://www.linkedin.com/in/leticiayurie',
         lattes: 'https://lattes.cnpq.br'
     }
 ];
