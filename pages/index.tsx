@@ -17,14 +17,24 @@ const Home: NextPage = () => {
 
   const handleFile = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const file = new File([event.currentTarget.file.files[0]], 'dados.csv', { type: 'text/csv' });
-    let formData = new FormData();
-    formData.append('csv', file);
-    fetch('api/update', {
-      method: 'POST',
-      body: formData,
-    });
-    console.log(file);
+    if (event.currentTarget.file.files[0] != undefined) {
+      console.log(event.currentTarget.file.files[0]);
+      const file = new File(
+        [event.currentTarget.file.files[0]],
+        event.currentTarget.idmunicipio.value + '.csv',
+        { type: 'text/csv' }
+      );
+      let formData = new FormData();
+      formData.append('csv', file);
+      formData.append('idmunicipio', event.currentTarget.idmunicipio.value);
+      fetch('api/update', {
+        method: 'POST',
+        body: formData,
+      });
+    } else {
+      alert('Insira um arquivo');
+    }
+    // console.log(file);
   };
   return (
     <div className={styles.container}>
@@ -47,6 +57,7 @@ const Home: NextPage = () => {
 
         <form onSubmit={handleFile}>
           <input type="file" name="file" id="file" />
+          <input type="number" name="idmunicipio" id="idmunicipio" />
           <input type="submit" value="Submit" />
         </form>
 
