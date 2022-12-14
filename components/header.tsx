@@ -2,9 +2,6 @@ import type { NextPage } from 'next';
 import React from 'react';
 import Image from 'next/image'
 import Link from "next/link";
-import SvgIcon from '@mui/material/SvgIcon';
-import Icon from '@mui/material/Icon';
-import IconButton from '@mui/material/IconButton';
 import Elements from '../utils/homeinterface';
 import logo from '../public/images/ufms.png';
 import styles from '../styles/components/Header.module.css';
@@ -34,9 +31,7 @@ export const HeaderComponent: React.FC<ElementProps> = ({elements}: ElementProps
             <div className={styles.description}>
                 {element.map((item) => {
                     return (
-                        <Link key={item.id} href={item.path}>
-                            <a>{item.name} <Image className={styles.icone} src={item.icon} alt='ícone' height={25} width={25}/> </a>
-                        </Link>
+                        <Link key={item.id} href={item.path}>{item.name}</Link>
                     )
                 })}
             </div>

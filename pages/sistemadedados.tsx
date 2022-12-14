@@ -29,20 +29,17 @@ const interHeader = [
     {
       id: 1,
       name: 'Sistema de Dados',
-      path: 'sistemadedados',
-      icon: ''
+      path: 'sistemadedados'
     },
     {
       id: 2,
       name: 'Mais Informações',
-      path: 'maisinfos',
-      icon: ''
+      path: 'maisinfos'
     },
     {
       id: 3,
       name: 'Área Adminsitrativa',
-      path: 'adm',
-      icon: '/public/images/adm-icon.svg'
+      path: 'adm'
     }
 ]
 
