@@ -24,6 +24,11 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
+          Welcome to 
+          <Link href="institucional">PPSUS</Link>
+          <Link href="sistemadedados">Dados</Link>
+          <Link href="maisinfos">Mais Infos</Link>
+
           Página Index do Projeto, acesse o cadastro &rarr;{' '}
           <Link href="./signIn">Página de cadastro</Link>
         </h1>

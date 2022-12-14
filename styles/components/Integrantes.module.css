@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+.cards_container {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+    padding-top: 1rem;
+}
+
+.cards {
+    height: 400px;
+    width: 280px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    transition: all .2s ease-in-out;
+    margin: 0 15px 0 15px;
+}
+
+.cards:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.25);
+}
+
+.profile {
+    border-radius: 50px;
+}
+
+.portfolios {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 70%;
+}

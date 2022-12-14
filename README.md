@@ -47,6 +47,7 @@ Para cada uma das dependências do sistema é importatne listar também a versã
   - Se necessário, você pode deixar alguma observação ou instrução necessária.
 - [Prisma](https://www.prisma.io)
 - [React](https://reactjs.org) (versão 18.2.0)
+- [Next.js](https://nextjs.org) (versão 17.0.2)
 - [TypeScript](https://www.typescriptlang.org) (versão 4.8.4)
 - [R](https://www.r-project.org/) (vesão 4.2 ou superior) com os seguintes pacotes:
 
