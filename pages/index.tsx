@@ -5,6 +5,15 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
+  const handleSubmit = (event: any) => {
+    fetch('api/logout')
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.isLoggedIn);
+      });
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -15,22 +24,29 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <Link href="institucional">PPSUS</Link>
+          Welcome to 
+          <Link href="institucional">PPSUS</Link>
+          <Link href="sistemadedados">Dados</Link>
+          <Link href="maisinfos">Mais Infos</Link>
+
+          Página Index do Projeto, acesse o cadastro &rarr;{' '}
+          <Link href="./signIn">Página de cadastro</Link>
         </h1>
 
         <p className={styles.description}>
-          Get started by editing <code className={styles.code}>pages/index.tsx</code>
+          Página da Index &rarr; <code className={styles.code}>pages/index.tsx</code>
+          <button onClick={handleSubmit}>LOGOUT</button>
         </p>
 
         <div className={styles.grid}>
-          <a href="sistemadedados" className={styles.card}>
-            <h2>Análise de Dados &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
+          <a href="./signIn" className={styles.card}>
+            <h2>Página de cadastro &rarr;</h2>
+            <p>Clique aqui para acessar a página de cadastro</p>
           </a>
 
-          <a href="maisinfos" className={styles.card}>
-            <h2>Mais informações &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+          <a href="./logIn" className={styles.card}>
+            <h2>Página de login &rarr;</h2>
+            <p>Clique aqui para acessar a página de login</p>
           </a>
 
           <a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>

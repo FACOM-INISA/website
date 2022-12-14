@@ -11,6 +11,7 @@ Este repositório tem como objetivo armazenar os códigos do Projeto Inisa, uma 
 - [Descrição do projeto](#descri%C3%A7%C3%A3o-do-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Requisitos](#requisitos)
+- [Variáveis de Ambiente](#variáveis-de-ambiente)
 - [Instalação](#instala%C3%A7%C3%A3o--implanta%C3%A7%C3%A3o)
 - [Primeiros passos](#primeiros-passos)
 - [Autores e histórico](#autores-e-hist%C3%B3rico)
@@ -48,6 +49,29 @@ Para cada uma das dependências do sistema é importatne listar também a versã
 - [React](https://reactjs.org) (versão 18.2.0)
 - [Next.js](https://nextjs.org) (versão 17.0.2)
 - [TypeScript](https://www.typescriptlang.org) (versão 4.8.4)
+- [R](https://www.r-project.org/) (vesão 4.2 ou superior) com os seguintes pacotes:
+
+  - compiler
+  
+  - forecast
+  
+  - fpp2
+  
+  - acp
+  
+  - tscount
+  
+  - ggplot2
+  
+  - car
+
+---
+
+## Variáveis de Ambiente
+
+Para correta utilização da aplicação são necessários as seguintes váriaveis de ambiente:
+
+- SECRET_PASSWORD: uma string de 32 caracteres alfanuméricos
 
 ## Instalação / Implantação
 
@@ -83,7 +107,7 @@ Use esta seção para mostrar os primeiros passos para usar a aplicação. Lembr
 Este sistema foi desenvolvido pela seguinte equipe:
 
 - [José Pedro Cândido Lopes Peres](https://github.com/PeterYouseph) (peteryouseph@gmail.com)
-- [Leonardo Kazuyoshi Takahashi da Silva](https://github.com/leonardo-kazu) (leonardo.kazuyoshi@ufms.br)
+- [Leonardo Kazuyoshi Takahashi da Silva](https://github.com/leonardo-kazu) (lkazu@duck.com)
 - [Letícia Yurie Kokubu](https://github.com/leyurie) (leticia.yuurie@gmail.com)
 
 Orientado pelo professor [Hudson Silva Borges](https://github.com/hsborges) e proposto por Nathan Aratani.
