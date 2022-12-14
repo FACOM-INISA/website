@@ -3,14 +3,15 @@ import React from 'react';
 import HeaderComponent from '../components/header';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import { Button, Card, CardHeader, Collapse, Grid, IconButton, List, ListItem, ListItemIcon, ListItemButton, ListItemText, Paper, TextField, FormControlLabel, FormControl, FormGroup } from '@mui/material';
-import Checkbox from '@mui/icons-material/CheckBox';
+import Checkbox from '@mui/material/Checkbox';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SearchIcon from '@mui/icons-material/Search';
 import styles from '../styles/components/SistemaDeDados.module.css';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, makeStyles, ThemeProvider } from '@mui/material/styles';
+import { withStyles } from '@mui/material/styles';
 
 const theme = createTheme({
     palette: {
@@ -146,7 +147,7 @@ const SistemaDeDados: NextPage = () => {
         };
     });
 
-    {/* Segundo Filtro */}
+    
     const [checked, setChecked] = React.useState([0]);
     const handleToggle = (value: number) => () => {
         const currentIndex = checked.indexOf(value);
@@ -159,20 +160,6 @@ const SistemaDeDados: NextPage = () => {
         }
         setChecked(newChecked);
     };
-
-    const [state, setState] = React.useState({
-        partos: false,
-        normais: false,
-        sensiveis: false,
-        internacoes: false,
-        mortalidade: false
-    });
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({ ...state, [event.target.name]: event.target.checked })
-    };
-
-    const { partos, normais, sensiveis, internacoes, mortalidade } = state;
 
     const [expandedR, setExpandedR] = React.useState(true);
     const handleExpandClickR = () => { setExpandedR(!expandedR) };
@@ -189,9 +176,9 @@ const SistemaDeDados: NextPage = () => {
                         <Grid className={styles.grid} alignItems="center">
                             <Paper elevation={3}>
                                 <Card style={{ display: "flex", flexDirection: "column" }}>
-                                    <CardHeader title='Filtro por Região'
+                                    <CardHeader title={<span style={{ textAlign: 'center', color: '#077FA8' }}>Filtro por Região</span>}
                                         action={
-                                            <IconButton onClick={handleExpandClickR} aria-expanded={expandedR} aria-label="show more">
+                                            <IconButton onClick={handleExpandClickR} aria-expanded={expandedR} aria-label="show more" style={{ color: '#077FA8' }}>
                                                 {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                             </IconButton>
                                         }
@@ -200,7 +187,7 @@ const SistemaDeDados: NextPage = () => {
                                 <Collapse in={expandedR} className={styles.collapse}>
                                     <Autocomplete
                                         className={styles.busca}
-                                        popupIcon={ <SearchIcon/> }
+                                        popupIcon={ <SearchIcon style={{ color: '#077FA8' }}/> }
                                         options={options.sort((a,b) => -b.firstLetter.localeCompare(a.firstLetter))}
                                         groupBy={(option) => option.firstLetter}
                                         getOptionLabel={(option) => option.name}
@@ -223,70 +210,15 @@ const SistemaDeDados: NextPage = () => {
                             <Paper elevation={3}>
                                 <Card style={{ display: "flex", flexDirection: "column" }}>
                                     <CardHeader className={styles.cardHeader}
-                                        title='Filtro de Dados'
+                                        title={<span style={{ textAlign: 'center', color: '#077FA8' }}>Filtro de Dados</span>}
                                         action={
-                                            <IconButton onClick={handleExpandClickD} aria-expanded={expandedD} aria-label="show more">
+                                            <IconButton onClick={handleExpandClickD} aria-expanded={expandedD} aria-label="show more" style={{ color: '#077FA8' }}>
                                                 {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                             </IconButton>
                                         }
                                     />
                                 </Card>
                                 <Collapse in={expandedD} className={styles.collapse}>
-                                    <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
-                                        <FormGroup sx={{ ml: 1 }}>
-                                            <FormControlLabel sx={{ pb: 1 }}
-                                                control={
-                                                    <Checkbox 
-                                                    checked={partos}
-                                                    onChange={handleChange}
-                                                    name='partos'
-                                                    />
-                                                }
-                                                label='Partos'
-                                            />
-                                            <FormControlLabel sx={{ pb: 1 }}
-                                                control={
-                                                    <Checkbox 
-                                                    checked={normais}
-                                                    onChange={handleChange}
-                                                    name='normais'
-                                                    />
-                                                }
-                                                label='Partos Normais'
-                                            />
-                                            <FormControlLabel sx={{ pb: 1 }}
-                                                control={
-                                                    <Checkbox 
-                                                    checked={sensiveis}
-                                                    onChange={handleChange}
-                                                    name='sensiveis'
-                                                    />
-                                                }
-                                                label='Partos Sensíveis'
-                                            />
-                                            <FormControlLabel sx={{ pb: 1 }}
-                                                control={
-                                                    <Checkbox
-                                                    checked={internacoes}
-                                                    onChange={handleChange}
-                                                    name='internacoes'
-                                                    />
-                                                }
-                                                label='Intervenções Evitadas'
-                                            />
-                                            <FormControlLabel sx={{ pb: 1 }}
-                                                control={
-                                                    <Checkbox 
-                                                    checked={mortalidade}
-                                                    onChange={handleChange}
-                                                    name='mortalidade'
-                                                    />
-                                                }
-                                                label='Taxa de Mortalidade Materna'
-                                            />
-                                        </FormGroup>
-                                    </FormControl>
-                                    {/* 
                                     <List className={styles.list} dense component="div" role="list">
                                         {dados.map((dado) => {
                                             const labelId = `checkbox-list-label-${dado.id}`;
@@ -301,35 +233,34 @@ const SistemaDeDados: NextPage = () => {
                                                             inputProps={{ "aria-labelledby": labelId }}
                                                             />
                                                         </ListItemIcon>
-                                                        <ListItemText key={dado.id}>{dado.name}</ListItemText>
+                                                        <ListItemText key={dado.id} style={{ color: '#077FA8' }}>{dado.name}</ListItemText>
                                                     </ListItemButton>
                                                 </ListItem>
                                             )
                                         })}
                                     </List>
-                                    */}
                                 </Collapse>
                             </Paper>
                         </Grid>
-                </div>
+                    </div>
 
-                <Autocomplete
-                    multiple
-                    options={dados}
-                    disableCloseOnSelect
-                    getOptionLabel={(dado) => dado.name}
-                    renderOption={(props, dado, { selected }) => (
-                        <li {...props}>
-                            {/* <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ margin: 8 }} checked={selected}/> */}
-                             {dado.name}
-                        </li>
-                    )}
-                    style={{ width: 800 }}
-                    renderInput={(params) => (
-                        <TextField {...params}/>
-                    )}
-                />
-            </div>
+                    <Autocomplete
+                        multiple
+                        options={dados}
+                        disableCloseOnSelect
+                        getOptionLabel={(dado) => dado.name}
+                        renderOption={(props, dado, { selected }) => (
+                            <li {...props}>
+                                <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ margin: 3 }} checked={selected}/>
+                                {dado.name}
+                            </li>
+                        )}
+                        style={{ width: 800 }}
+                        renderInput={(params) => (
+                            <TextField {...params}/>
+                        )}
+                    />
+                </div>
             </ThemeProvider>
         </div>
     );
