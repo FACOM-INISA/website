@@ -70,10 +70,8 @@
 
 .plataforma {
     background-color: #AFAFAF;
-    text-align: center;
     font-size: larger;
     font-weight: 900;
-    padding: 1rem 10rem 4.5rem 10rem;
 }
 
 .plataforma_container {
@@ -81,15 +79,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.plataforma_container h2 {
-    width: 50%;
-}
-
-.plataforma_container Image {
-    max-width: 100%;
-    height: auto;
 }
 
 .integrantes {

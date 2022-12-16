@@ -1,10 +1,22 @@
 import type { NextPage } from 'next';
 import React from 'react';
 import Image from 'next/image'
-import { Card, CardActionArea, CardContent, CardMedia, Avatar, Divider, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Avatar, Divider, Typography, Grid, createTheme, ThemeProvider } from '@mui/material';
 import styles from '../styles/components/Integrantes.module.css';
 import Lattes from '../public/images/lattes.svg';
 import Linkedin from '../public/images/linkedin.svg';
+
+const theme = createTheme({
+    palette: {
+        primary:{
+            main: '#077FA8',
+        }
+    },
+
+    typography: {
+        fontFamily: 'Lato',
+    }
+});
 
 interface CardItem {
     id: number;
@@ -61,50 +73,55 @@ const cardItems: CardItem[] = [
 
 export const IntegranteComponent: NextPage = () => {
     return (
-        <div className={styles.cards_container}>
-            {cardItems.map((card) => (
-                <Card className={styles.cards} key={card.id}>
-                    <Avatar
-                        src={card.img}  
-                        sx={{ width: 110, height: 110 }} 
-                        alt={card.name} />
+        <ThemeProvider theme={theme}>
+            <Grid container sx={{ flexGrow: 2 }} spacing={2}>
+                {cardItems.map((card) => (
+                    <Grid item xs={2} sm={4} md={4} key={card.id}>
+                        <Card className={styles.cards}>
+                            <Avatar
+                                src={card.img}  
+                                sx={{ width: 110, height: 110 }} 
+                                alt={card.name} 
+                            />
 
-                    <CardContent>
-                        <Typography variant="h5">{card.name}</Typography>
-                    </CardContent>
-                            
-                    <Divider style={{width:'80%'}} />
+                            <CardContent>
+                                <Typography variant="h5">{card.name}</Typography>
+                            </CardContent>
+                                    
+                            <Divider style={{width:'80%'}} />
 
-                    <CardContent>
-                        <Typography>{card.desc}</Typography>
-                    </CardContent>
-                            
-                    <CardContent className={styles.portfolios}>
-                        <CardActionArea href={card.linkedin}>
-                            <CardMedia>
-                                <Image src={Linkedin}
-                                    alt = "Linkedin Logo"
-                                    width={40}
-                                    height={40}
-                                    objectFit="contain"
-                                />
-                            </CardMedia>
-                        </CardActionArea>
+                            <CardContent>
+                                <Typography>{card.desc}</Typography>
+                            </CardContent>
+                                    
+                            <CardContent className={styles.portfolios}>
+                                <CardActionArea href={card.linkedin}>
+                                    <CardMedia>
+                                        <Image src={Linkedin}
+                                            alt = "Linkedin Logo"
+                                            width={40}
+                                            height={40}
+                                            objectFit="contain"
+                                        />
+                                    </CardMedia>
+                                </CardActionArea>
 
-                        <CardActionArea href={card.lattes}>
-                            <CardMedia>
-                                <Image src={Lattes}
-                                    alt = "Lattes Logo"
-                                    width={45}
-                                    height={45}
-                                    objectFit="contain"
-                                />
-                            </CardMedia>
-                        </CardActionArea>
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
+                                <CardActionArea href={card.lattes}>
+                                    <CardMedia>
+                                        <Image src={Lattes}
+                                            alt = "Lattes Logo"
+                                            width={45}
+                                            height={45}
+                                            objectFit="contain"
+                                        />
+                                    </CardMedia>
+                                </CardActionArea>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </ThemeProvider>
     );
 };
 
