@@ -1,68 +1,98 @@
 import React from 'react';
-import Image from 'next/image'
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 import Elements from '../utils/homeinterface';
 import logo from '../public/images/ufms.png';
 import divider from '../public/images/dividerWhite.svg';
-import { Box, createTheme, Grid, ThemeProvider, Typography } from '@mui/material'; 
+import { Box, Grid, Typography } from '@mui/material';
 
-const theme = createTheme({
-    typography: {
-        fontFamily: 'Lato',
-        h4: {
-            fontWeigth: 900,
-        }
-    }
-})
+import HomeIcon from '@mui/icons-material/Home';
+import InsertChartIcon from '@mui/icons-material/InsertChart';
+import InfoIcon from '@mui/icons-material/Info';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { useRouter } from 'next/router';
 
 export interface ElementProps {
-    elements: Elements[];
+  elements: Elements[];
 }
 
-export const HeaderComponent: React.FC<ElementProps> = ({elements}: ElementProps) => {
-    const element = elements
+const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => {
+  const { asPath } = useRouter();
 
-    return (
-        <ThemeProvider theme={theme}>
-            <Box 
-                sx={{
-                    paddingRight: '10rem',
-                    paddingLeft: '10rem',
-                    height: '25vh', 
-                    display: 'flex', 
-                    flexDirection: 'row',
-                    backgroundColor: '#077FA8', 
-                    color: '#FEFEFE'
-                }}>
-                {/* container esquerdo */}
-                <Grid container spacing={2} alignItems='center'>
-                    <Grid item>
-                        <Link href="/">
-                            <a><Image src={logo} alt="UFMS Logo" width={68} height={90}/></a>
-                        </Link>
-                    </Grid>
-                    <Grid item>
-                        <Image src={divider} height={100} />
-                    </Grid>
-                    <Grid item>
-                            <Typography variant='h4'>INISA</Typography>
-                            <Typography>Instituto Integrado de Saúde</Typography>
-                    </Grid>
-                </Grid>
+  const element = elements;
 
-                {/* container direito */}
-                <Grid container alignItems='center' justifyContent='right' spacing={2}>
-                    {element.map((item) => {
-                            return (
-                                <Grid item key={item.id}>
-                                    <Link key={item.id} href={item.path}>{item.name}</Link>
-                                </Grid>
-                            )
-                    })}
-                </Grid>
-            </Box>
-        </ThemeProvider>
-    );
+  return (
+    <Box
+      sx={{
+        padding: '0 10em',
+        height: 150,
+        display: 'flex',
+        flexDirection: 'row',
+        backgroundColor: '#077FA8',
+        color: '#FEFEFE',
+      }}
+    >
+      {/* container esquerdo */}
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <Link href="/">
+            <a>
+              <Image src={logo} alt="UFMS Logo" width={68} height={90} />
+            </a>
+          </Link>
+        </Grid>
+        <Grid item>
+          <Image src={divider} height={100} />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">INISA</Typography>
+          <Typography>Instituto Integrado de Saúde</Typography>
+        </Grid>
+      </Grid>
+
+      {/* container direito */}
+      <Grid container alignItems="center" justifyContent="right" spacing={2}>
+        {element.map((item, index) => {
+          const Icon = item.icon;
+          const active = asPath === item.path;
+
+          return (
+            <Grid item key={index}>
+              <Link href={item.path} passHref>
+                <a>
+                  <Typography
+                    sx={{
+                      fontSize: '1.15em',
+                      textTransform: 'uppercase',
+                      display: 'flex',
+                      alignItems: 'center',
+                      columnGap: 1,
+                      fontWeight: active ? 'bold' : 'normal',
+                      textDecoration: active ? 'underline' : 'none',
+                      textUnderlineOffset: 5,
+                    }}
+                  >
+                    {Icon && <Icon />}
+                    {item.name}
+                  </Typography>
+                </a>
+              </Link>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </Box>
+  );
 };
 
-export default HeaderComponent;
+export default function AppHeader(props: { admin?: boolean }) {
+  const elements = [
+    { name: 'Inicio', path: '/', icon: HomeIcon },
+    { name: 'Painel', path: '/sistemadedados', icon: InsertChartIcon },
+    { name: 'Metodologia', path: '/maisinfos', icon: InfoIcon },
+  ];
+
+  if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
+
+  return <HeaderComponent elements={elements} />;
+}

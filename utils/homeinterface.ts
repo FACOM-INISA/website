@@ -1,7 +1,8 @@
 interface Elements {
-    id: number,
-    name: string,
-    path: string,
+  name: string;
+  path: string;
+  icon: React.FC;
+  active?: boolean;
 }
 
 export default Elements;
