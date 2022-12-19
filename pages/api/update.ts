@@ -102,10 +102,7 @@ async function update(req: NextApiRequest, res: NextApiResponse) {
       res.status(400).send({ message: 'Bad Request', filename: csv });
     }
 
-    // Fazer o populate do municipio que representa
-    // TODO: DESCOBRIR SE PRECISAMOS ESPERAR QUE ELE TERMINE OU NAO
-    // TODO: DEMORA EM TORNO DE 8.73S O ENDPOINT COM O AWAIT
-    populateAndProcess([idmunicipio, csv]);
+    await populateAndProcess([idmunicipio, csv]);
 
     res.status(200).send({ message: 'Processing' });
   }
