@@ -36,7 +36,11 @@ export function populatePartos(csv: string) {
                 municipio_id: parseInt(row[5])
               }
             },
-            update: {},
+            update: {
+              parto_normais: parseInt(row[2]),
+              parto_cesaria: parseInt(row[3]),
+              parto_total: parseInt(row[4]),
+            },
             create: {
               ano: parseInt(row[0]),
               mes: parseInt(row[1]),
