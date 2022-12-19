@@ -1,0 +1,112 @@
+.body {
+    color: black;
+    display: block;
+    background-image: url("../public/images/retangulo.png");
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.landing {
+    display: flex;
+    flex-direction: row;
+    height: 25%;
+    margin: 3rem 10rem 3rem 10rem;
+}
+
+.img_container {
+    position: relative; 
+    padding-top: 3%;
+    padding-bottom: 3%;
+    width: 100%;
+}
+
+.img_container span {
+    display: block;
+    position: relative;
+    border-radius: 15px;
+}
+
+.img_container span::before {
+    content: ' ';
+    display: block;
+    width: 65.5%;
+    height: 106%;
+    position: absolute;
+    left: -1.8%;
+    top: -3%;
+    background: var(--azul-uf);
+    border-radius: 15px;
+}
+
+.ppsus {
+    padding-top: 10%;
+    text-align: right;
+    font-size: larger;
+}
+
+.ppsus h1:nth-child(1) {
+    margin-bottom: 0px;
+}
+
+.ppsus h1:nth-child(2) {
+    margin-top: 0px;
+    font-size: 57px;
+    font-weight: 900;
+}
+
+.botao {
+    width: 360px;
+    height: 72px;
+    justify-content: space-evenly;
+    background: #BFBFBF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    color: black;
+    font-family: Lato;
+    font-size: 30px;
+    font-weight: 900;
+    text-transform: none;
+}
+
+.plataforma {
+    background-color: #AFAFAF;
+    text-align: center;
+    font-size: larger;
+    font-weight: 900;
+    padding: 1rem 10rem 4.5rem 10rem;
+}
+
+.plataforma_container {
+    text-align:justify;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.plataforma_container h2 {
+    width: 50%;
+}
+
+.plataforma_container Image {
+    max-width: 100%;
+    height: auto;
+}
+
+.integrantes {
+    font-size: larger;
+    font-weight: 900;
+    text-align: center;
+    padding: 1rem 10rem 2rem 10rem;
+}
+
+.cards_integrantes {
+    display: flex;
+    flex-direction: row;
+}
+
+.parcerias {
+    font-size: larger;
+    font-weight: 900;
+    text-align: center;
+    padding: 1rem 10rem 4rem 10rem;
+}

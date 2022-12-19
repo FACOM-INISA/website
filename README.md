@@ -11,6 +11,7 @@ Este repositório tem como objetivo armazenar os códigos do Projeto Inisa, uma 
 - [Descrição do projeto](#descri%C3%A7%C3%A3o-do-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Requisitos](#requisitos)
+- [Variáveis de Ambiente](#variáveis-de-ambiente)
 - [Instalação](#instala%C3%A7%C3%A3o--implanta%C3%A7%C3%A3o)
 - [Primeiros passos](#primeiros-passos)
 - [Autores e histórico](#autores-e-hist%C3%B3rico)
@@ -46,6 +47,7 @@ Para cada uma das dependências do sistema é importatne listar também a versã
   - Se necessário, você pode deixar alguma observação ou instrução necessária.
 - [Prisma](https://www.prisma.io)
 - [React](https://reactjs.org) (versão 18.2.0)
+- [Next.js](https://nextjs.org) (versão 17.0.2)
 - [TypeScript](https://www.typescriptlang.org) (versão 4.8.4)
 - [R](https://www.r-project.org/) (vesão 4.2 ou superior) com os seguintes pacotes:
 
@@ -65,7 +67,11 @@ Para cada uma das dependências do sistema é importatne listar também a versã
 
 ---
 
+## Variáveis de Ambiente
 
+Para correta utilização da aplicação são necessários as seguintes váriaveis de ambiente:
+
+- SECRET_PASSWORD: uma string de 32 caracteres alfanuméricos
 
 ## Instalação / Implantação
 
