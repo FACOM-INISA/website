@@ -24,7 +24,7 @@ const theme = createTheme({
   }
 });
 
-const instHeader = [
+const header = [
   {
     id: 1,
     name: 'A PLATAFORMA',
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
         </Head>
 
         {/* header */}
-        <HeaderComponent elements={instHeader}></HeaderComponent>
+        <HeaderComponent elements={header}></HeaderComponent>
 
         {/* body */}
         <div className={styles.body}>
