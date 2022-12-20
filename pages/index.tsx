@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
 import { Button, createTheme, Grid, ThemeProvider, Typography } from '@mui/material';
 import IntegranteComponent from '../components/integrantes';
@@ -12,6 +11,8 @@ import access from '../public/images/access.png';
 import landing from '../public/images/residencia-medica.png';
 import plataforma from '../public/images/pag-analise-de-dados.png';
 import styles from '../styles/Institucional.module.css';
+
+import NextLink from 'next/link';
 
 const theme = createTheme({
   palette: {
@@ -45,10 +46,12 @@ const Home: NextPage = () => {
             <div className={styles.ppsus}>
               <h1>Painel de Monitoramento para a Gestão do Sistema Único de Saúde</h1>
               <h1>PPSUS - MS</h1>
-              <Button className={styles.botao} href="sistemadedados">
-                Acessar Painel
-                <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
-              </Button>
+              <NextLink href="/sistemadedados" passHref>
+                <Button className={styles.botao}>
+                  Acessar Painel
+                  <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
+                </Button>
+              </NextLink>
             </div>
           </div>
         </div>
