@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Elements from '../utils/homeinterface';
 import logo from '../public/images/ufms.png';
 import divider from '../public/images/dividerWhite.svg';
 import { Box, Grid, Typography } from '@mui/material';
@@ -12,14 +11,17 @@ import InfoIcon from '@mui/icons-material/Info';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useRouter } from 'next/router';
 
-export interface ElementProps {
-  elements: Elements[];
+export interface HeaderProps {
+  items: Array<{
+    name: string;
+    path: string;
+    icon: React.FC;
+    active?: boolean;
+  }>;
 }
 
-const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => {
+const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   const { asPath } = useRouter();
-
-  const element = elements;
 
   return (
     <Box
@@ -52,7 +54,7 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
 
       {/* container direito */}
       <Grid container alignItems="center" justifyContent="right" spacing={2}>
-        {element.map((item, index) => {
+        {items.map((item, index) => {
           const Icon = item.icon;
           const active = asPath === item.path;
 
@@ -94,5 +96,5 @@ export default function AppHeader(props: { admin?: boolean }) {
 
   if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
 
-  return <HeaderComponent elements={elements} />;
+  return <HeaderComponent items={elements} />;
 }
