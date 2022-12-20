@@ -32,13 +32,13 @@ em conjunto do Instituto de Matemática (INMA) da UFMS. `;
 const Home: NextPage = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Layout>
+      <Layout className={styles.center}>
         {/* body */}
         <div className={styles.body}>
           <div className={styles.landing}>
             <div className={styles.img_container}>
               <span>
-                <Image src={landing} alt="UFMS Logo" width={550} height={550} />
+                <Image src={landing} alt="UFMS Logo" width={550} height={550} layout="fixed" />
               </span>
             </div>
 
