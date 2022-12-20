@@ -4,7 +4,7 @@ import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
 const data = [
   { name: 'Partos Sensíveis', value: 400 },
   { name: 'Partos Normais', value: 1000 },
-  { name: 'Internações evitadas', value: 600 },
+  
 ];
 
 const renderActiveShape = (props: {
