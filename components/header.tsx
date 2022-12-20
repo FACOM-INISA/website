@@ -2,8 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../public/images/ufms.png';
-import divider from '../public/images/dividerWhite.svg';
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, SvgIconProps, Typography } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
@@ -15,7 +14,7 @@ export interface HeaderProps {
   items: Array<{
     name: string;
     path: string;
-    icon: React.FC;
+    icon: React.FC<SvgIconProps>;
     active?: boolean;
   }>;
 }
@@ -57,7 +56,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
       </Grid>
 
       {/* container direito */}
-      <Grid container alignItems="center" justifyContent="right" spacing={2}>
+      <Grid container alignItems="center" justifyContent="end" spacing={3}>
         {items.map((item, index) => {
           const Icon = item.icon;
           const active = asPath === item.path;
@@ -72,13 +71,13 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
                       textTransform: 'uppercase',
                       display: 'flex',
                       alignItems: 'center',
-                      columnGap: 1,
+                      columnGap: 0.75,
                       fontWeight: active ? 'bold' : 'normal',
                       textDecoration: active ? 'underline' : 'none',
                       textUnderlineOffset: 5,
                     }}
                   >
-                    {Icon && <Icon />}
+                    {Icon && <Icon sx={{ fontSize: '1.75rem' }} />}
                     {item.name}
                   </Typography>
                 </a>
