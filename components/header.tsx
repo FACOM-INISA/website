@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../public/images/ufms.png';
 import divider from '../public/images/dividerWhite.svg';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
@@ -30,8 +30,8 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
         height: 150,
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#077FA8',
-        color: '#FEFEFE',
+        backgroundColor: 'primary.main',
+        color: 'primary.contrastText',
       }}
     >
       {/* container esquerdo */}
@@ -44,7 +44,11 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
           </Link>
         </Grid>
         <Grid item>
-          <Image src={divider} height={100} />
+          <Divider
+            sx={{ height: 90, width: 3, backgroundColor: 'primary.contrastText' }}
+            orientation="vertical"
+            flexItem
+          />
         </Grid>
         <Grid item>
           <Typography variant="h4">INISA</Typography>
