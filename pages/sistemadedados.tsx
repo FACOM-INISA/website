@@ -24,7 +24,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SearchIcon from '@mui/icons-material/Search';
 import styles from '../styles/components/SistemaDeDados.module.css';
 import { createTheme, makeStyles, ThemeProvider } from '@mui/material/styles';
-
+import OpenDataVisualization from '../components/graficoLinha';
+import PieChartData from '../components/graficoTorta';
 import Layout from '../components/layouts/default';
 
 const theme = createTheme({
@@ -170,7 +171,7 @@ const SistemaDeDados: NextPage = () => {
     <Layout className={styles.sistema}>
       <ThemeProvider theme={theme}>
         <div className={styles.main}>
-          <div className={styles.sidebar}>
+          <Grid className={styles.sidebar}>
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
                 <Card style={{ display: 'flex', flexDirection: 'column' }}>
@@ -266,7 +267,13 @@ const SistemaDeDados: NextPage = () => {
                 </Collapse>
               </Paper>
             </Grid>
-          </div>
+          </Grid>
+          <Grid>
+            <OpenDataVisualization />
+          </Grid>
+          <Grid>
+            <PieChartData />
+          </Grid>
         </div>
       </ThemeProvider>
     </Layout>
