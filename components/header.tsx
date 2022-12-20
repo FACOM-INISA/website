@@ -26,7 +26,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   return (
     <Box
       sx={{
-        padding: '0 10em',
+        padding: '0 4em',
         height: 150,
         display: 'flex',
         flexDirection: 'row',
