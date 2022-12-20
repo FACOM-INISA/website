@@ -24,7 +24,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SearchIcon from '@mui/icons-material/Search';
 import styles from '../styles/components/SistemaDeDados.module.css';
 import { createTheme, makeStyles, ThemeProvider } from '@mui/material/styles';
-
+import OpenDataVisualization from '../components/graficoLinha';
+import PieChartData from '../components/graficoTorta';
 import Layout from '../components/layouts/default';
 
 const theme = createTheme({
@@ -126,8 +127,6 @@ const dados = [
   { name: 'Partos', id: 0 },
   { name: 'Partos Normais', id: 1 },
   { name: 'Partos Sensíveis', id: 2 },
-  { name: 'Internações Evitadas', id: 3 },
-  { name: 'Taxa de Mortalidade Materna', id: 4 },
 ];
 
 {
@@ -168,107 +167,128 @@ const SistemaDeDados: NextPage = () => {
 
   return (
     <Layout className={styles.sistema}>
-      <ThemeProvider theme={theme}>
+      
+      
+        <Grid>
+        <ThemeProvider theme={theme}>
+        
         <div className={styles.main}>
-          <div className={styles.sidebar}>
-            <Grid className={styles.grid} alignItems="center">
-              <Paper elevation={3}>
-                <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                  <CardHeader
-                    title={
-                      <span style={{ textAlign: 'center', color: '#077FA8' }}>
-                        Filtro por Região
-                      </span>
-                    }
-                    action={
-                      <IconButton
-                        onClick={handleExpandClickR}
-                        aria-expanded={expandedR}
-                        aria-label="show more"
-                        style={{ color: '#077FA8' }}
-                      >
-                        {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </IconButton>
-                    }
-                  />
-                </Card>
-                <Collapse in={expandedR} className={styles.collapse}>
-                  <Autocomplete
-                    className={styles.busca}
-                    popupIcon={<SearchIcon style={{ color: '#077FA8' }} />}
-                    options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-                    groupBy={(option) => option.firstLetter}
-                    getOptionLabel={(option) => option.name}
-                    sx={{
-                      width: '90%',
-                      bgColor: '#D4D5D6',
-                      [`& .${autocompleteClasses.popupIndicator}`]: {
-                        transform: 'none',
-                      },
-                    }}
-                    renderInput={(params) => <TextField {...params} label="Buscar por município" />}
-                  />
+        <div className={styles.sidebar}>
+          <Grid className={styles.grid} alignItems="center">
+            <Paper elevation={3}>
+              <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                <CardHeader
+                  title={
+                    <span style={{ textAlign: 'center', color: '#077FA8' }}>
+                      Filtro por Região
+                    </span>
+                  }
+                  action={
+                    <IconButton
+                      onClick={handleExpandClickR}
+                      aria-expanded={expandedR}
+                      aria-label="show more"
+                      style={{ color: '#077FA8' }}
+                    >
+                      {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                  }
+                />
+              </Card>
+              <Collapse in={expandedR} className={styles.collapse}>
+                <Autocomplete
+                  className={styles.busca}
+                  popupIcon={<SearchIcon style={{ color: '#077FA8' }} />}
+                  options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                  groupBy={(option) => option.firstLetter}
+                  getOptionLabel={(option) => option.name}
+                  sx={{
+                    width: '90%',
+                    bgColor: '#D4D5D6',
+                    [`& .${autocompleteClasses.popupIndicator}`]: {
+                      transform: 'none',
+                    },
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Buscar por município" />}
+                />
 
-                  <div className={styles.botoes}>
-                    <Button variant="contained" onClick={() => setLimpar('')}>
-                      Limpar
-                    </Button>
-                    <Button variant="contained">Buscar</Button>
-                  </div>
-                </Collapse>
-              </Paper>
-            </Grid>
+                <div className={styles.botoes}>
+                  <Button variant="contained" onClick={() => setLimpar('')}>
+                    Limpar
+                  </Button>
+                  <Button variant="contained">Buscar</Button>
+                </div>
+              </Collapse>
+            </Paper>
+          </Grid>
 
-            {/* Segundo Card */}
-            <Grid className={styles.grid} alignItems="center">
-              <Paper elevation={3}>
-                <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                  <CardHeader
-                    className={styles.cardHeader}
-                    title={
-                      <span style={{ textAlign: 'center', color: '#077FA8' }}>Filtro de Dados</span>
-                    }
-                    action={
-                      <IconButton
-                        onClick={handleExpandClickD}
-                        aria-expanded={expandedD}
-                        aria-label="show more"
-                        style={{ color: '#077FA8' }}
-                      >
-                        {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </IconButton>
-                    }
-                  />
-                </Card>
-                <Collapse in={expandedD} className={styles.collapse}>
-                  <List className={styles.list} dense component="div" role="list">
-                    {dados.map((dado) => {
-                      const labelId = `checkbox-list-label-${dado.id}`;
-                      return (
-                        <ListItem key={dado.id} role="listitem">
-                          <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
-                            <ListItemIcon>
-                              <Checkbox
-                                checked={checked.indexOf(dado.id) !== -1}
-                                tabIndex={-1}
-                                disableRipple
-                                inputProps={{ 'aria-labelledby': labelId }}
-                              />
-                            </ListItemIcon>
-                            <ListItemText key={dado.id} style={{ color: '#077FA8' }}>
-                              {dado.name}
-                            </ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                </Collapse>
-              </Paper>
-            </Grid>
-          </div>
+          {/* Segundo Card */}
+          <Grid className={styles.grid} alignItems="center">
+            <Paper elevation={3}>
+              <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                <CardHeader
+                  className={styles.cardHeader}
+                  title={
+                    <span style={{ textAlign: 'center', color: '#077FA8' }}>Filtro de Dados</span>
+                  }
+                  action={
+                    <IconButton
+                      onClick={handleExpandClickD}
+                      aria-expanded={expandedD}
+                      aria-label="show more"
+                      style={{ color: '#077FA8' }}
+                    >
+                      {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                  }
+                />
+              </Card>
+              <Collapse in={expandedD} className={styles.collapse}>
+                <List className={styles.list} dense component="div" role="list">
+                  {dados.map((dado) => {
+                    const labelId = `checkbox-list-label-${dado.id}`;
+                    return (
+                      <ListItem key={dado.id} role="listitem">
+                        <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
+                          <ListItemIcon>
+                            <Checkbox
+                              checked={checked.indexOf(dado.id) !== -1}
+                              tabIndex={-1}
+                              disableRipple
+                              inputProps={{ 'aria-labelledby': labelId }}
+                            />
+                          </ListItemIcon>
+                          <ListItemText key={dado.id} style={{ color: '#077FA8' }}>
+                            {dado.name}
+                          </ListItemText>
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              </Collapse>
+            </Paper>
+          </Grid>
         </div>
-      </ThemeProvider>
+      </div>
+      
+      
+
+      
+      
+    </ThemeProvider>
+
+    <Grid alignItems={'flex-end'} alignContent='flex-end'>
+          <Grid item>
+            <PieChartData/>
+          </Grid>
+        
+          <Grid item> 
+            <OpenDataVisualization />
+          </Grid>
+         
+        </Grid>
+        </Grid>
     </Layout>
   );
 };
