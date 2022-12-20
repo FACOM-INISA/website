@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
-import { Button, createTheme, Grid, ThemeProvider, Typography } from '@mui/material';
+import NextLink from 'next/link';
+import { Box, Button, createTheme, Grid, ThemeProvider, Typography } from '@mui/material';
 import IntegranteComponent from '../components/integrantes';
 import ParceiroComponent from '../components/parceiros';
 
@@ -33,39 +33,82 @@ const Home: NextPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Layout>
-        {/* body */}
-        <div className={styles.body}>
-          <div className={styles.landing}>
-            <div className={styles.img_container}>
-              <span>
-                <Image src={landing} alt="UFMS Logo" width={550} height={550} />
-              </span>
-            </div>
-
-            <div className={styles.ppsus}>
-              <h1>Painel de Monitoramento para a Gestão do Sistema Único de Saúde</h1>
-              <h1>PPSUS - MS</h1>
-              <Button className={styles.botao} href="sistemadedados">
+        {/* Landing */}
+        <Grid
+          className={styles.landing}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            margin: '3em 0',
+            rowGap: '3px',
+          }}
+        >
+          <Box
+            sx={{
+              padding: '10px',
+              marginLeft: '10em',
+              minHeight: '300',
+              minWidth: '300',
+              display: 'flex',
+              flexDirection: 'row',
+              borderRadius: '15px',
+              backgroundColor: '#077FA8',
+            }}
+          >
+            <Image className={styles.imagem} src={landing} alt="UFMS Logo" />
+          </Box>
+          <Box
+            sx={{
+              marginRight: '10em',
+              textAlign: 'right',
+              width: '50%',
+            }}
+          >
+            <Typography variant="h4" sx={{ fontWeight: 'bold', paddingBottom: '10px' }}>
+              Painel de Monitoramento para a Gestão do Sistema Único de Saúde
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', paddingBottom: '30px' }}>
+              PPSUS - MS
+            </Typography>
+            <NextLink href="/sistemadedados" passHref>
+              <Button
+                sx={{
+                  width: '360px',
+                  height: '72px',
+                  justifyContent: 'space-evenly',
+                  backgroundColor: '#bfbfbf',
+                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  borderRadius: '4px',
+                  fontFamily: 'Lato',
+                  fontSize: '30px',
+                  fontWeight: '900',
+                  color: 'black',
+                  textTransform: 'none',
+                }}
+              >
                 Acessar Painel
                 <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
               </Button>
-            </div>
-          </div>
-        </div>
+            </NextLink>
+          </Box>
+        </Grid>
 
+        {/* Plataforma */}
         <Grid
-          id="1"
-          className={styles.plataforma}
           container
           direction="row"
           justifyContent="center"
           alignItems="center"
+          sx={{ backgroundColor: '#afafaf', padding: '30px 0' }}
         >
-          <Typography variant="h4">Conheça a Plataforma</Typography>
-          <Grid className={styles.plataforma_container} container xs={10}>
-            <Grid container wrap="nowrap" spacing={2}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', paddingBottom: '30px' }}>
+            Conheça a Plataforma
+          </Typography>
+          <Grid container xs={10}>
+            <Grid container wrap="nowrap" spacing={7}>
               <Grid item xs>
-                <Typography>{texto}</Typography>
+                <Typography sx={{ fontSize: '1.5em', textAlign: 'justify' }}>{texto}</Typography>
               </Grid>
               <Grid item xs>
                 <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
@@ -74,19 +117,23 @@ const Home: NextPage = () => {
           </Grid>
         </Grid>
 
-        <div id="2" className={styles.integrantes}>
-          <h1>Nossos Integrantes</h1>
-          <div className={styles.cards_integrantes}>
-            <IntegranteComponent></IntegranteComponent>
-          </div>
-        </div>
+        {/* Integrantes */}
+        <Grid container justifyContent="center" alignItems="center" sx={{ padding: '30px 0' }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', paddingBottom: '30px' }}>
+            Nossos Integrantes
+          </Typography>
+          <Grid item>
+            <IntegranteComponent />
+          </Grid>
+        </Grid>
 
-        <div className={styles.parcerias}>
-          <h1>Instituições Parceiras</h1>
-          <div>
-            <ParceiroComponent></ParceiroComponent>
-          </div>
-        </div>
+        {/* Parceiros */}
+        <Grid container justifyContent="center" alignItems="center" sx={{ padding: '30px 0' }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', paddingBottom: '30px' }}>
+            Instituições Parceiras
+          </Typography>
+          <ParceiroComponent />
+        </Grid>
       </Layout>
     </ThemeProvider>
   );
