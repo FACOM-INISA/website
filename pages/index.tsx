@@ -14,84 +14,91 @@ import styles from '../styles/Institucional.module.css';
 
 import NextLink from 'next/link';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#077FA8',
-    },
-  },
-
-  typography: {
-    fontFamily: 'Lato',
-  },
-});
-
 const texto = `O Sistema Previsional para Gestão de Saúde Pública do Mato Grosso do Sul (SISPREG - MS) é uma plataforma aberta que tem como objetivo,
 auxiliar nas decisões dos gestores de saúde de MS. Baseando-se na disponibilização de dados estaticamente obtidos por meio de modelos elaborados
 em conjunto do Instituto de Matemática (INMA) da UFMS. `;
 
 const Home: NextPage = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Layout className={styles.center}>
-        {/* body */}
-        <div className={styles.body}>
-          <div className={styles.landing}>
-            <div className={styles.img_container}>
-              <span>
-                <Image src={landing} alt="UFMS Logo" width={550} height={550} layout="fixed" />
-              </span>
-            </div>
+    <Layout className={styles.center}>
+      {/* body */}
 
-            <div className={styles.ppsus}>
-              <h1>Painel de Monitoramento para a Gestão do Sistema Único de Saúde</h1>
-              <h1>PPSUS - MS</h1>
-              <NextLink href="/sistemadedados" passHref>
-                <Button className={styles.botao}>
-                  Acessar Painel
-                  <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
-                </Button>
-              </NextLink>
-            </div>
-          </div>
+      <div className={styles.landing}>
+        <div className={styles.img_container}>
+          <span>
+            <Image src={landing} alt="UFMS Logo" width={450} height={450} layout="fixed" />
+          </span>
         </div>
 
+        <div className={styles.ppsus}>
+          <h1>Painel de Monitoramento para a Gestão do Sistema Único de Saúde</h1>
+          <h1>PPSUS - MS</h1>
+          <NextLink href="/sistemadedados" passHref>
+            <Button className={styles.botao}>
+              Acessar Painel
+              <Image src={access} alt="Ícone Acessar Painel" width={30} height={30} />
+            </Button>
+          </NextLink>
+        </div>
+      </div>
+
+      <Grid
+        id="1"
+        className={styles.plataforma}
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid
-          id="1"
-          className={styles.plataforma}
+          className={styles.plataforma_container}
           container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
+          direction="column"
+          alignContent="center"
+          margin="4em auto"
         >
-          <Typography variant="h4">Conheça a Plataforma</Typography>
-          <Grid className={styles.plataforma_container} container xs={10}>
-            <Grid container wrap="nowrap" spacing={2}>
-              <Grid item xs>
-                <Typography>{texto}</Typography>
-              </Grid>
-              <Grid item xs>
-                <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
-              </Grid>
+          {/* <Grid item>
+            <Typography
+              variant="h3"
+              textAlign="center"
+              sx={{
+                marginBottom: '1em',
+                color: 'primary.main',
+                fontWeight: 'bold',
+                textDecoration: 'underline',
+                textUnderlineOffset: 10,
+              }}
+            >
+              A Plataforma
+            </Typography>
+          </Grid> */}
+          <Grid container wrap="nowrap" justifyContent="center" spacing={8} xs={12} md={10}>
+            <Grid item margin="auto" xs>
+              <Typography variant="h5" textAlign="center">
+                {texto}
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
             </Grid>
           </Grid>
         </Grid>
+      </Grid>
 
-        <div id="2" className={styles.integrantes}>
-          <h1>Nossos Integrantes</h1>
-          <div className={styles.cards_integrantes}>
-            <IntegranteComponent></IntegranteComponent>
-          </div>
+      <div id="2" className={styles.integrantes}>
+        <h1>Nossos Integrantes</h1>
+        <div className={styles.cards_integrantes}>
+          <IntegranteComponent />
         </div>
+      </div>
 
-        <div className={styles.parcerias}>
-          <h1>Instituições Parceiras</h1>
-          <div>
-            <ParceiroComponent></ParceiroComponent>
-          </div>
+      <div className={styles.parcerias}>
+        <h1>Instituições Parceiras</h1>
+        <div>
+          <ParceiroComponent />
         </div>
-      </Layout>
-    </ThemeProvider>
+      </div>
+    </Layout>
   );
 };
 

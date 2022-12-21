@@ -5,26 +5,15 @@
   align-items: center;
 }
 
-.body {
-  display: block;
-  background-image: url('../public/images/retangulo.png');
-  background-repeat: no-repeat;
-  background-position: right;
-  height: calc(100vh - 150px);
-  max-width: 1440px;
-}
-
 .landing {
+  max-width: 1240px;
+  margin: 6em 3em;
+
   display: flex;
   flex-direction: row;
-  margin: 3rem 4rem auto 10rem;
-}
+  align-items: center;
 
-.img_container {
-  position: relative;
-  padding-top: 3%;
-  padding-bottom: 3%;
-  width: 100%;
+  column-gap: 2em;
 }
 
 .img_container span {
@@ -36,8 +25,8 @@
 .img_container span::before {
   content: ' ';
   display: block;
-  width: 580px;
-  height: 580px;
+  width: 480px;
+  height: 480px;
   position: absolute;
   left: -15px;
   top: -15px;
@@ -46,7 +35,6 @@
 }
 
 .ppsus {
-  padding-top: 10%;
   text-align: right;
   font-size: larger;
 }
@@ -79,20 +67,14 @@
   background-color: #afafaf;
   font-size: larger;
   font-weight: 900;
-}
-
-.plataforma_container {
-  text-align: justify;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  padding: 1em 0 2em;
 }
 
 .integrantes {
   font-size: larger;
   font-weight: 900;
   text-align: center;
-  padding: 1rem 10rem 2rem 10rem;
+  margin: 2em auto;
 }
 
 .cards_integrantes {
@@ -105,4 +87,5 @@
   font-weight: 900;
   text-align: center;
   padding: 1rem 10rem 4rem 10rem;
+  margin-bottom: 2em;
 }

@@ -24,19 +24,21 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
 
   return (
     <Box
-      sx={{
-        padding: '0 4em',
+      sx={(theme) => ({
+        [theme.breakpoints.up('lg')]: { padding: '0 4em' },
+        [theme.breakpoints.up('xl')]: { padding: '0 8em' },
+        [theme.breakpoints.down('lg')]: { padding: '0 2em' },
         height: 150,
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: 'primary.main',
         color: 'primary.contrastText',
-      }}
+      })}
     >
       {/* container esquerdo */}
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-          <Link href="/">
+          <Link href="/" passHref>
             <a>
               <Image src={logo} alt="UFMS Logo" width={68} height={90} />
             </a>
@@ -67,17 +69,17 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
                 <a>
                   <Typography
                     sx={{
-                      fontSize: '1.15em',
-                      textTransform: 'uppercase',
+                      fontSize: '1.25em',
+                      textTransform: 'none',
                       display: 'flex',
-                      alignItems: 'center',
-                      columnGap: 0.75,
+                      alignItems: 'start',
+                      columnGap: 0.5,
                       fontWeight: active ? 'bold' : 'normal',
                       textDecoration: active ? 'underline' : 'none',
                       textUnderlineOffset: 5,
                     }}
                   >
-                    {Icon && <Icon sx={{ fontSize: '1.75rem' }} />}
+                    {Icon && <Icon sx={{ fontSize: '1.95rem' }} />}
                     {item.name}
                   </Typography>
                 </a>
