@@ -28,7 +28,7 @@ const cardItems: CardItem[] = [
 
 const ParceiroComponent: NextPage = () => {
   return (
-    <Grid container justifyContent="center" sx={{ paddingTop: '1rem' }} spacing={2}>
+    <Grid container justifyContent="space-around">
       {cardItems.map((card, index) => (
         <Grid item key={index}>
           <Card className={styles.parceiros} key={index}>
@@ -42,7 +42,7 @@ const ParceiroComponent: NextPage = () => {
               <CardMedia
                 style={{
                   width: 'auto',
-                  maxHeight: '8rem',
+                  maxHeight: '7em',
                 }}
                 component="img"
                 image={card.img}

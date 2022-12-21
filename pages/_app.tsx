@@ -2,6 +2,24 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SWRConfig } from 'swr';
 import fetchJson from '../lib/fetchJson';
+import { createTheme, ThemeProvider } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#077FA8',
+      contrastText: '#FEFEFE',
+    },
+
+    secondary: {
+      main: '#EFEFEF',
+    },
+  },
+
+  typography: {
+    fontFamily: 'Lato',
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +31,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         },
       }}
     >
-      <Component {...pageProps} />
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </SWRConfig>
   );
 }

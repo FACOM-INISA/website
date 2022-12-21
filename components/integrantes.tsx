@@ -10,27 +10,14 @@ import {
   Divider,
   Typography,
   Grid,
-  createTheme,
-  ThemeProvider,
+  Container,
 } from '@mui/material';
 import styles from '../styles/components/Integrantes.module.css';
 import Lattes from '../public/images/lattes.svg';
 import Linkedin from '../public/images/linkedin.svg';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#077FA8',
-    },
-  },
-
-  typography: {
-    fontFamily: 'Lato',
-  },
-});
+import Carousel from 'react-material-ui-carousel';
 
 interface CardItem {
-  id: number;
   img: string;
   name: string;
   desc: string;
@@ -40,7 +27,6 @@ interface CardItem {
 
 const cardItems: CardItem[] = [
   {
-    id: 1,
     img: 'https://media.licdn.com/dms/image/C4E03AQGXsLmfbsyI7w/profile-displayphoto-shrink_800_800/0/1517635728863?e=2147483647&v=beta&t=bRUOwsQRW-KeJdPO6fpF0_xNsuIfbT_m-iotT16n6Xc',
     name: 'Nathan Aratani',
     desc: 'Docente pesquisador e Coordenador no Instituto Integrado de Saúde',
@@ -48,7 +34,6 @@ const cardItems: CardItem[] = [
     lattes: 'http://lattes.cnpq.br/4421062652834737',
   },
   {
-    id: 2,
     img: 'https://avatars.githubusercontent.com/u/2676029?v=4',
     name: 'Hudson Borges',
     desc: 'Docente pesquisador na Faculdade de Computação',
@@ -56,7 +41,6 @@ const cardItems: CardItem[] = [
     lattes: 'http://lattes.cnpq.br/4732229402586329',
   },
   {
-    id: 3,
     img: 'https://media.licdn.com/dms/image/C4D03AQEbR8o5UsUI_Q/profile-displayphoto-shrink_800_800/0/1657842424516?e=2147483647&v=beta&t=wfixpLea3mbWAGxsV7I2SiD-az5T5zf8VCtZZOaZZXE',
     name: 'José Pedro',
     desc: 'Estudante de Engenharia de Computação',
@@ -64,7 +48,6 @@ const cardItems: CardItem[] = [
     lattes: 'http://lattes.cnpq.br/9795863779374673',
   },
   {
-    id: 4,
     img: 'https://media-exp1.licdn.com/dms/image/D4D03AQGnV-H3ix7LMA/profile-displayphoto-shrink_800_800/0/1665173752285?e=2147483647&v=beta&t=NWwEo-K8LHKXqR5QP16fiRH82s7uEiUi9DNrpcwAPj0',
     name: 'Leonardo Kazu',
     desc: 'Estudante de Ciência da Computação',
@@ -73,7 +56,6 @@ const cardItems: CardItem[] = [
     lattes: ' http://lattes.cnpq.br/7507601980536823',
   },
   {
-    id: 5,
     img: 'https://media-exp1.licdn.com/dms/image/C4D03AQGqtC9rnwtBhA/profile-displayphoto-shrink_200_200/0/1649345833817?e=1676505600&v=beta&t=o4WZuF1aGWV5df_qikWdKV06orRdHgQdy2bIXyfDaH4',
     name: 'Letícia Yurie',
     desc: 'Estudante de Engenharia de Software',
@@ -84,60 +66,57 @@ const cardItems: CardItem[] = [
 
 export const IntegranteComponent: NextPage = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        textAlign="center"
-        sx={{ flexGrow: 1 }}
-        spacing={2}
-      >
-        {cardItems.map((card) => (
-          <Grid item key={card.id}>
-            <Card className={styles.cards}>
-              <Avatar src={card.img} sx={{ width: 110, height: 110 }} alt={card.name} />
+    <Grid
+      container
+      justifyContent="space-around"
+      alignContent="center"
+      textAlign="center"
+      spacing={2}
+    >
+      {cardItems.map((card, index) => (
+        <Grid item key={index}>
+          <Card className={styles.cards}>
+            <Avatar src={card.img} sx={{ width: 110, height: 110 }} alt={card.name} />
 
-              <CardContent>
-                <Typography variant="h5">{card.name}</Typography>
-              </CardContent>
+            <CardContent>
+              <Typography variant="h5">{card.name}</Typography>
+            </CardContent>
 
-              <Divider style={{ width: '80%' }} />
+            <Divider style={{ width: '85%' }} />
 
-              <CardContent>
-                <Typography>{card.desc}</Typography>
-              </CardContent>
+            <CardContent>
+              <Typography>{card.desc}</Typography>
+            </CardContent>
 
-              <CardContent className={styles.portfolios}>
-                <CardActionArea href={card.linkedin}>
-                  <CardMedia>
-                    <Image
-                      src={Linkedin}
-                      alt="Linkedin Logo"
-                      width={40}
-                      height={40}
-                      objectFit="contain"
-                    />
-                  </CardMedia>
-                </CardActionArea>
+            <CardContent className={styles.portfolios}>
+              <CardActionArea href={card.linkedin}>
+                <CardMedia>
+                  <Image
+                    src={Linkedin}
+                    alt="Linkedin Logo"
+                    width={40}
+                    height={40}
+                    objectFit="contain"
+                  />
+                </CardMedia>
+              </CardActionArea>
 
-                <CardActionArea href={card.lattes}>
-                  <CardMedia>
-                    <Image
-                      src={Lattes}
-                      alt="Lattes Logo"
-                      width={45}
-                      height={45}
-                      objectFit="contain"
-                    />
-                  </CardMedia>
-                </CardActionArea>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </ThemeProvider>
+              <CardActionArea href={card.lattes}>
+                <CardMedia>
+                  <Image
+                    src={Lattes}
+                    alt="Lattes Logo"
+                    width={45}
+                    height={45}
+                    objectFit="contain"
+                  />
+                </CardMedia>
+              </CardActionArea>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
