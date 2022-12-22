@@ -313,24 +313,30 @@ const SistemaDeDados: NextPage = () => {
                 <Grid item xs minWidth={700}>
                   <PieChartData />
                 </Grid>
-                <Grid item xs sm container minWidth={30}>
-                  <Grid item xs container direction="column" spacing={2}>
+                <Grid item xs sm container>
+                  <Grid item xs container direction="column" spacing={10}>
                     <Grid item xs>
-                      <Typography gutterBottom variant="subtitle1" component="div">
-                        Partos
-                      </Typography>
-                      <Typography variant="body2" color="blue">
+                      <Paper
+                        sx={{ backgroundColor: '#0088B7', p: 2, margin: 'auto', maxWidth: 100 }}
+                      >
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          color="#ffffff"
+                          fontWeight={800}
+                        >
+                          Partos
+                        </Typography>
+                      </Paper>
+
+                      <Typography variant="h5" color="#0088B7" fontWeight={800}>
                         Partos normais
                       </Typography>
-                      <Typography variant="body2" color="blue">
+                      <Typography variant="h5" color="#0088B7" fontWeight={800}>
                         Partos sensíveis
                       </Typography>
                     </Grid>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle1" component="div">
-                      $19.00
-                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
