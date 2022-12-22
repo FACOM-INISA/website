@@ -3,8 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Elements from '../utils/homeinterface';
 import logo from '../public/images/ufms.png';
-import divider from '../public/images/dividerWhite.svg';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
@@ -28,8 +27,8 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
         height: 150,
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#077FA8',
-        color: '#FEFEFE',
+        backgroundColor: 'primary.main',
+        color: 'primary.contrastText',
       }}
     >
       {/* container esquerdo */}
@@ -42,7 +41,16 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
           </Link>
         </Grid>
         <Grid item>
-          <Image src={divider} height={100} />
+          <Divider
+            sx={{
+              height: 90,
+              width: 3,
+              backgroundColor: 'primary.contrastText',
+              borderRadius: '2px',
+            }}
+            orientation="vertical"
+            flexItem
+          />
         </Grid>
         <Grid item>
           <Typography variant="h4">INISA</Typography>
@@ -51,7 +59,7 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
       </Grid>
 
       {/* container direito */}
-      <Grid container alignItems="center" justifyContent="right" spacing={2}>
+      <Grid container alignItems="center" justifyContent="right" spacing={3}>
         {element.map((item, index) => {
           const Icon = item.icon;
           const active = asPath === item.path;
