@@ -14,7 +14,7 @@ import {
   Pie,
   Sector,
 } from 'recharts';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import Grid from '@mui/material/Grid/Grid';
 
 const data = [
   {
@@ -68,9 +68,9 @@ const OpenDataVisualization: NextPage = (props) => {
   const ey = my;
   const textAnchor = cos >= 0 ? 'start' : 'end'; */
   return (
-    <Grid2>
-      <Grid2>
-        <ResponsiveContainer width="50%" height="100%" aspect={2}>
+    <Grid>
+      <Grid>
+        <ResponsiveContainer width="100%" height="100%" aspect={2}>
           <LineChart
             width={500}
             height={300}
@@ -88,11 +88,11 @@ const OpenDataVisualization: NextPage = (props) => {
             <Tooltip />
             <Legend />
 
-            <Line type="monotone" dataKey="pv" stroke="#0088B7" name="Partos Sensíveis" />
+            <Line type="monotone" dataKey="pv" stroke="#0088B7" name="Quantidade" />
           </LineChart>
         </ResponsiveContainer>
-      </Grid2>
-      <Grid2>
+      </Grid>
+      <Grid>
         {/* <g>
           <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
             {payload.name}
@@ -133,8 +133,8 @@ const OpenDataVisualization: NextPage = (props) => {
             {`(Rate ${(percent * 100).toFixed(2)}%)`}
           </text>
         </g> */}
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 

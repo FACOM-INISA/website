@@ -4,7 +4,6 @@ import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
 const data = [
   { name: 'Partos Sensíveis', value: 400 },
   { name: 'Partos Normais', value: 1000 },
-  
 ];
 
 const renderActiveShape = (props: {
@@ -95,8 +94,8 @@ export default class GraficoTorta extends PureComponent {
 
   render() {
     return (
-      <ResponsiveContainer width="100%" height="100%" aspect={2}>
-        <PieChart width={600} height={600}>
+      <ResponsiveContainer width="100%" height="100%" aspect={3}>
+        <PieChart>
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}

@@ -15,6 +15,7 @@ import {
   ListItemText,
   Paper,
   TextField,
+  Typography,
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -27,6 +28,7 @@ import { createTheme, makeStyles, ThemeProvider } from '@mui/material/styles';
 import OpenDataVisualization from '../components/graficoLinha';
 import PieChartData from '../components/graficoTorta';
 import Layout from '../components/layouts/default';
+import { borderRadius } from '@mui/system';
 
 const theme = createTheme({
   palette: {
@@ -167,128 +169,175 @@ const SistemaDeDados: NextPage = () => {
 
   return (
     <Layout className={styles.sistema}>
-      
-      
-        <Grid>
-        <ThemeProvider theme={theme}>
-        
-        <div className={styles.main}>
-        <div className={styles.sidebar}>
-          <Grid className={styles.grid} alignItems="center">
-            <Paper elevation={3}>
-              <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                <CardHeader
-                  title={
-                    <span style={{ textAlign: 'center', color: '#077FA8' }}>
-                      Filtro por Região
-                    </span>
-                  }
-                  action={
-                    <IconButton
-                      onClick={handleExpandClickR}
-                      aria-expanded={expandedR}
-                      aria-label="show more"
-                      style={{ color: '#077FA8' }}
-                    >
-                      {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                  }
-                />
-              </Card>
-              <Collapse in={expandedR} className={styles.collapse}>
-                <Autocomplete
-                  className={styles.busca}
-                  popupIcon={<SearchIcon style={{ color: '#077FA8' }} />}
-                  options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-                  groupBy={(option) => option.firstLetter}
-                  getOptionLabel={(option) => option.name}
-                  sx={{
-                    width: '90%',
-                    bgColor: '#D4D5D6',
-                    [`& .${autocompleteClasses.popupIndicator}`]: {
-                      transform: 'none',
-                    },
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Buscar por município" />}
-                />
+      <Grid container component="main" sx={{ height: '100vh' }} spacing={-50}>
+        <Grid item xs>
+          <ThemeProvider theme={theme}>
+            <div className={styles.main}>
+              <div className={styles.sidebar}>
+                <Grid className={styles.grid} alignItems="center">
+                  <Paper elevation={3}>
+                    <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                      <CardHeader
+                        title={
+                          <span style={{ textAlign: 'center', color: '#077FA8' }}>
+                            Filtro por Região
+                          </span>
+                        }
+                        action={
+                          <IconButton
+                            onClick={handleExpandClickR}
+                            aria-expanded={expandedR}
+                            aria-label="show more"
+                            style={{ color: '#077FA8' }}
+                          >
+                            {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                          </IconButton>
+                        }
+                      />
+                    </Card>
+                    <Collapse in={expandedR} className={styles.collapse}>
+                      <Autocomplete
+                        className={styles.busca}
+                        popupIcon={<SearchIcon style={{ color: '#077FA8' }} />}
+                        options={options.sort(
+                          (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
+                        )}
+                        groupBy={(option) => option.firstLetter}
+                        getOptionLabel={(option) => option.name}
+                        sx={{
+                          width: '90%',
+                          bgColor: '#D4D5D6',
+                          [`& .${autocompleteClasses.popupIndicator}`]: {
+                            transform: 'none',
+                          },
+                        }}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Buscar por município" />
+                        )}
+                      />
 
-                <div className={styles.botoes}>
-                  <Button variant="contained" onClick={() => setLimpar('')}>
-                    Limpar
-                  </Button>
-                  <Button variant="contained">Buscar</Button>
-                </div>
-              </Collapse>
+                      <div className={styles.botoes}>
+                        <Button variant="contained" onClick={() => setLimpar('')}>
+                          Limpar
+                        </Button>
+                        <Button variant="contained">Buscar</Button>
+                      </div>
+                    </Collapse>
+                  </Paper>
+                </Grid>
+
+                {/* Segundo Card */}
+                <Grid className={styles.grid} alignItems="center">
+                  <Paper elevation={3}>
+                    <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                      <CardHeader
+                        className={styles.cardHeader}
+                        title={
+                          <span style={{ textAlign: 'center', color: '#077FA8' }}>
+                            Filtro de Dados
+                          </span>
+                        }
+                        action={
+                          <IconButton
+                            onClick={handleExpandClickD}
+                            aria-expanded={expandedD}
+                            aria-label="show more"
+                            style={{ color: '#077FA8' }}
+                          >
+                            {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                          </IconButton>
+                        }
+                      />
+                    </Card>
+                    <Collapse in={expandedD} className={styles.collapse}>
+                      <List className={styles.list} dense component="div" role="list">
+                        {dados.map((dado) => {
+                          const labelId = `checkbox-list-label-${dado.id}`;
+                          return (
+                            <ListItem key={dado.id} role="listitem">
+                              <ListItemButton
+                                role={undefined}
+                                onClick={handleToggle(dado.id)}
+                                dense
+                              >
+                                <ListItemIcon>
+                                  <Checkbox
+                                    checked={checked.indexOf(dado.id) !== -1}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                  />
+                                </ListItemIcon>
+                                <ListItemText key={dado.id} style={{ color: '#077FA8' }}>
+                                  {dado.name}
+                                </ListItemText>
+                              </ListItemButton>
+                            </ListItem>
+                          );
+                        })}
+                      </List>
+                    </Collapse>
+                  </Paper>
+                </Grid>
+              </div>
+            </div>
+          </ThemeProvider>
+        </Grid>
+
+        <Grid container xs id="graficos" alignItems={'flex-start'}>
+          <Paper
+            sx={{
+              p: 1,
+              margin: 'auto',
+              maxWidth: 1000,
+              flexGrow: 1,
+              backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
+            }}
+          >
+            <Grid item sx={{ borderRadius: 2 }}>
+              <OpenDataVisualization />
+            </Grid>
+          </Paper>
+
+          <Grid item sx={{ borderRadius: 2 }}>
+            <Paper
+              sx={{
+                p: 2,
+                margin: 'auto',
+                maxWidth: 1000,
+                flexGrow: 1,
+                backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
+              }}
+            >
+              <Grid container>
+                <Grid item xs minWidth={700}>
+                  <PieChartData />
+                </Grid>
+                <Grid item xs sm container minWidth={30}>
+                  <Grid item xs container direction="column" spacing={2}>
+                    <Grid item xs>
+                      <Typography gutterBottom variant="subtitle1" component="div">
+                        Partos
+                      </Typography>
+                      <Typography variant="body2" color="blue">
+                        Partos normais
+                      </Typography>
+                      <Typography variant="body2" color="blue">
+                        Partos sensíveis
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" component="div">
+                      $19.00
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Paper>
           </Grid>
-
-          {/* Segundo Card */}
-          <Grid className={styles.grid} alignItems="center">
-            <Paper elevation={3}>
-              <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                <CardHeader
-                  className={styles.cardHeader}
-                  title={
-                    <span style={{ textAlign: 'center', color: '#077FA8' }}>Filtro de Dados</span>
-                  }
-                  action={
-                    <IconButton
-                      onClick={handleExpandClickD}
-                      aria-expanded={expandedD}
-                      aria-label="show more"
-                      style={{ color: '#077FA8' }}
-                    >
-                      {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                  }
-                />
-              </Card>
-              <Collapse in={expandedD} className={styles.collapse}>
-                <List className={styles.list} dense component="div" role="list">
-                  {dados.map((dado) => {
-                    const labelId = `checkbox-list-label-${dado.id}`;
-                    return (
-                      <ListItem key={dado.id} role="listitem">
-                        <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
-                          <ListItemIcon>
-                            <Checkbox
-                              checked={checked.indexOf(dado.id) !== -1}
-                              tabIndex={-1}
-                              disableRipple
-                              inputProps={{ 'aria-labelledby': labelId }}
-                            />
-                          </ListItemIcon>
-                          <ListItemText key={dado.id} style={{ color: '#077FA8' }}>
-                            {dado.name}
-                          </ListItemText>
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </Collapse>
-            </Paper>
-          </Grid>
-        </div>
-      </div>
-      
-      
-
-      
-      
-    </ThemeProvider>
-
-    <Grid alignItems={'flex-end'} alignContent='flex-end'>
-          <Grid item>
-            <PieChartData/>
-          </Grid>
-        
-          <Grid item> 
-            <OpenDataVisualization />
-          </Grid>
-         
         </Grid>
-        </Grid>
+      </Grid>
     </Layout>
   );
 };
