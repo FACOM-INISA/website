@@ -103,14 +103,13 @@ const Home: NextPage = () => {
         <Typography variant="h4" sx={{ fontWeight: 'bold', paddingBottom: '40px' }}>
           Conheça a Plataforma
         </Typography>
-        <Grid container xs={10}>
-          <Grid container wrap="nowrap" spacing={7}>
-            <Grid item xs>
-              <Typography sx={{ fontSize: '1.5em', textAlign: 'justify' }}>{texto}</Typography>
-            </Grid>
-            <Grid item xs>
-              <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
-            </Grid>
+
+        <Grid container wrap="nowrap" spacing={7} justifyContent="center">
+          <Grid item xs={5}>
+            <Typography sx={{ fontSize: '1.5em', textAlign: 'justify' }}>{texto}</Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
           </Grid>
         </Grid>
       </Grid>

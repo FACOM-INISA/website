@@ -50,12 +50,9 @@ const FooterComponent: NextPage = () => {
 
       {/* container direito */}
       <Grid container direction="column" sx={{ textAlign: 'right' }}>
-        <Grid item direction="row">
+        <Grid item>
           <IconButton>
-            <TelIcon
-              sx={{ color: 'primary.contrastText' }}
-              onClick={() => window.open('https://ufms.com.br')}
-            />
+            <TelIcon sx={{ color: 'primary.contrastText' }} />
             <Typography
               sx={{
                 fontSize: '0.6em',
@@ -68,43 +65,34 @@ const FooterComponent: NextPage = () => {
           </IconButton>
         </Grid>
 
-        <Grid item direction="row">
-          <IconButton>
-            <LocIcon
-              sx={{ color: 'primary.contrastText' }}
-              onClick={() => window.open('https://goo.gl/maps/a3UUwjr5dUjJV5Vi9')}
-            />
-            <Link href="https://goo.gl/maps/a3UUwjr5dUjJV5Vi9">
-              <Typography
-                sx={{
-                  fontSize: '0.6em',
-                  color: 'primary.contrastText',
-                  paddingLeft: '10px',
-                }}
-              >
-                Cidade Universitária, Caixa Postal 549, CEP 79070-900. Campo Grande - MS
-              </Typography>
-            </Link>
+        <Grid item>
+          <IconButton href="https://goo.gl/maps/a3UUwjr5dUjJV5Vi9" target="_blank" rel="noreferrer">
+            <LocIcon sx={{ color: 'primary.contrastText' }} />
+
+            <Typography
+              sx={{
+                fontSize: '0.6em',
+                color: 'primary.contrastText',
+                paddingLeft: '10px',
+              }}
+            >
+              Cidade Universitária, Caixa Postal 549, CEP 79070-900. Campo Grande - MS
+            </Typography>
           </IconButton>
         </Grid>
 
-        <Grid item direction="row">
-          <IconButton>
-            <EditalIcon
-              sx={{ color: 'primary.contrastText' }}
-              onClick={() =>
-                window.open(
-                  'https://www.fundect.ms.gov.br/wp-content/uploads/2020/07/1-CHAMADA-FUNDECT-PPSUS-Nº-08-2020.pdf'
-                )
-              }
-            />
-            <Link href="https://www.fundect.ms.gov.br/wp-content/uploads/2020/07/1-CHAMADA-FUNDECT-PPSUS-Nº-08-2020.pdf">
-              <Typography
-                sx={{ fontSize: '0.6em', color: 'primary.contrastText', paddingLeft: '10px' }}
-              >
-                Edital: CHAMADA FUNDECT Nº 08/2020 - PPSUS
-              </Typography>
-            </Link>
+        <Grid item>
+          <IconButton
+            href="https://www.fundect.ms.gov.br/wp-content/uploads/2020/07/1-CHAMADA-FUNDECT-PPSUS-Nº-08-2020.pdf"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <EditalIcon sx={{ color: 'primary.contrastText' }} />
+            <Typography
+              sx={{ fontSize: '0.6em', color: 'primary.contrastText', paddingLeft: '10px' }}
+            >
+              Edital: CHAMADA FUNDECT Nº 08/2020 - PPSUS
+            </Typography>
           </IconButton>
         </Grid>
       </Grid>
