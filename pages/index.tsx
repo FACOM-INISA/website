@@ -7,6 +7,7 @@ import IntegranteComponent from '../components/integrantes';
 import ParceiroComponent from '../components/parceiros';
 import Layout from '../components/layouts/default';
 
+
 import access from '../public/images/access.png';
 import landing from '../public/images/residencia-medica.png';
 import plataforma from '../public/images/pag-analise-de-dados.png';
