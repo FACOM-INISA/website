@@ -69,7 +69,7 @@ const SistemaDeDados: NextPage = () => {
     setExpandedD(!expandedD);
   };
 
-  const [value, setValue] = React.useState<any>('');
+  const [value, setValue] = React.useState<any>({ name: '' });
 
   return (
     <Layout className={styles.sistema}>
