@@ -15,7 +15,6 @@ import {
   ListItemText,
   Paper,
   TextField,
-  Typography,
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -24,103 +23,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SearchIcon from '@mui/icons-material/Search';
 import styles from '../styles/components/SistemaDeDados.module.css';
-import { createTheme, makeStyles, ThemeProvider } from '@mui/material/styles';
 import OpenDataVisualization from '../components/graficoLinha';
 import PieChartData from '../components/graficoTorta';
 import Layout from '../components/layouts/default';
-import { borderRadius } from '@mui/system';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#077FA8',
-    },
-  },
-
-  typography: {
-    fontFamily: 'Lato',
-  },
-});
-
-const municipios = [
-  { name: 'Água Clara', id: 1 },
-  { name: 'Alcinópolis', id: 2 },
-  { name: 'Amambai', id: 3 },
-  { name: 'Anastácio', id: 4 },
-  { name: 'Anaurilândia', id: 5 },
-  { name: 'Angélica', id: 6 },
-  { name: 'Antônio João', id: 7 },
-  { name: 'Aparecida do Taboado', id: 8 },
-  { name: 'Aquidauana', id: 9 },
-  { name: 'Aral Moreira', id: 10 },
-  { name: 'Bandeirantes', id: 11 },
-  { name: 'Bataguassu', id: 12 },
-  { name: 'Batayporã', id: 13 },
-  { name: 'Bela Vista', id: 14 },
-  { name: 'Bodoquena', id: 15 },
-  { name: 'Bonito', id: 16 },
-  { name: 'Brasilândia', id: 17 },
-  { name: 'Caarapó', id: 18 },
-  { name: 'Camapuã', id: 19 },
-  { name: 'Campo Grande', id: 20 },
-  { name: 'Caracol', id: 21 },
-  { name: 'Cassilândia', id: 22 },
-  { name: 'Chapadão do Sul', id: 23 },
-  { name: 'Corguinho', id: 24 },
-  { name: 'Coronel Sapucaia', id: 25 },
-  { name: 'Corumbá', id: 26 },
-  { name: 'Costa Rica', id: 27 },
-  { name: 'Coxim', id: 28 },
-  { name: 'Deodápolis', id: 29 },
-  { name: 'Dois Irmãos do Buriti', id: 30 },
-  { name: 'Douradina', id: 31 },
-  { name: 'Dourados', id: 32 },
-  { name: 'Eldorado', id: 33 },
-  { name: 'Fátima do Sul', id: 34 },
-  { name: 'Figueirão', id: 35 },
-  { name: 'Glória de Dourados', id: 36 },
-  { name: 'Guia Lopes da Laguna', id: 37 },
-  { name: 'Iguatemi', id: 38 },
-  { name: 'Inocência', id: 39 },
-  { name: 'Itaporã', id: 40 },
-  { name: 'Itaquiraí', id: 41 },
-  { name: 'Ivinhema', id: 42 },
-  { name: 'Japorã', id: 43 },
-  { name: 'Jaraguari', id: 44 },
-  { name: 'Jardim', id: 45 },
-  { name: 'Jateí', id: 46 },
-  { name: 'Juti', id: 47 },
-  { name: 'Ladário', id: 48 },
-  { name: 'Laguna Carapã', id: 49 },
-  { name: 'Maracaju', id: 50 },
-  { name: 'Miranda', id: 51 },
-  { name: 'Mundo Novo', id: 52 },
-  { name: 'Naviraí', id: 53 },
-  { name: 'Nioaque', id: 54 },
-  { name: 'Nova Alvorada do Sul', id: 55 },
-  { name: 'Nova Andradina', id: 56 },
-  { name: 'Novo Horizonte do Sul', id: 57 },
-  { name: 'Paranaíba', id: 58 },
-  { name: 'Paranhos', id: 59 },
-  { name: 'Pedro Gomes', id: 60 },
-  { name: 'Ponta Porã', id: 61 },
-  { name: 'Porto Murtinho', id: 62 },
-  { name: 'Ribas do Rio Pardo', id: 63 },
-  { name: 'Rio Brilhante', id: 64 },
-  { name: 'Rio Verde de Mato Grosso', id: 65 },
-  { name: 'Rochedo', id: 66 },
-  { name: 'Santa Rita do Pardo', id: 67 },
-  { name: 'São Gabriel do Oeste', id: 68 },
-  { name: 'Selvíria', id: 69 },
-  { name: 'Sete Quedas', id: 70 },
-  { name: 'Sidrolândia', id: 71 },
-  { name: 'Sonora', id: 72 },
-  { name: 'Tacuru', id: 73 },
-  { name: 'Taquarussu', id: 74 },
-  { name: 'Terenos', id: 75 },
-  { name: 'Três Lagoas', id: 76 },
-  { name: 'Vicentina', id: 77 },
-];
+import municipios from '../data/municipios.json';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -169,127 +76,116 @@ const SistemaDeDados: NextPage = () => {
 
   return (
     <Layout className={styles.sistema}>
-      <Grid container component="main" sx={{ height: '100vh' }} spacing={-50}>
-        <Grid item xs>
-          <ThemeProvider theme={theme}>
-            <div className={styles.main}>
-              <div className={styles.sidebar}>
-                <Grid className={styles.grid} alignItems="center">
-                  <Paper elevation={3}>
-                    <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                      <CardHeader
-                        title={
-                          <span style={{ textAlign: 'center', color: '#077FA8' }}>
-                            Filtro por Região
-                          </span>
-                        }
-                        action={
-                          <IconButton
-                            onClick={handleExpandClickR}
-                            aria-expanded={expandedR}
-                            aria-label="show more"
-                            style={{ color: '#077FA8' }}
-                          >
-                            {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                          </IconButton>
-                        }
-                      />
-                    </Card>
-                    <Collapse in={expandedR} className={styles.collapse}>
-                      <Autocomplete
-                        className={styles.busca}
-                        popupIcon={<SearchIcon style={{ color: '#077FA8' }} />}
-                        options={options.sort(
-                          (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
-                        )}
-                        groupBy={(option) => option.firstLetter}
-                        getOptionLabel={(option) => option.name}
-                        sx={{
-                          width: '90%',
-                          bgColor: '#D4D5D6',
-                          [`& .${autocompleteClasses.popupIndicator}`]: {
-                            transform: 'none',
-                          },
-                        }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Buscar por município" />
-                        )}
-                      />
+      <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
+        <div className={styles.main}>
+          <div className={styles.sidebar}>
+            <Grid className={styles.grid} alignItems="center">
+              <Paper elevation={3}>
+                <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                  <CardHeader
+                    title={
+                      <span style={{ textAlign: 'center', color: 'primary.main' }}>
+                        Filtro por Região
+                      </span>
+                    }
+                    action={
+                      <IconButton
+                        onClick={handleExpandClickR}
+                        aria-expanded={expandedR}
+                        aria-label="show more"
+                        style={{ color: 'primary.main' }}
+                      >
+                        {expandedR ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </IconButton>
+                    }
+                  />
+                </Card>
+                <Collapse in={expandedR} className={styles.collapse}>
+                  <Autocomplete
+                    className={styles.busca}
+                    popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
+                    options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                    groupBy={(option) => option.firstLetter}
+                    getOptionLabel={(option) => option.name}
+                    sx={{
+                      width: '90%',
+                      bgColor: '#D4D5D6',
+                      [`& .${autocompleteClasses.popupIndicator}`]: {
+                        transform: 'none',
+                      },
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Buscar por município" />}
+                  />
 
-                      <div className={styles.botoes}>
-                        <Button variant="contained" onClick={() => setLimpar('')}>
-                          Limpar
-                        </Button>
-                        <Button variant="contained">Buscar</Button>
-                      </div>
-                    </Collapse>
-                  </Paper>
-                </Grid>
+                  <div className={styles.botoes}>
+                    <Button variant="contained" onClick={() => setLimpar('')}>
+                      Limpar
+                    </Button>
+                    <Button variant="contained">Buscar</Button>
+                  </div>
+                </Collapse>
+              </Paper>
+            </Grid>
 
-                {/* Segundo Card */}
-                <Grid className={styles.grid} alignItems="center">
-                  <Paper elevation={3}>
-                    <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                      <CardHeader
-                        className={styles.cardHeader}
-                        title={
-                          <span style={{ textAlign: 'center', color: '#077FA8' }}>
-                            Filtro de Dados
-                          </span>
-                        }
-                        action={
-                          <IconButton
-                            onClick={handleExpandClickD}
-                            aria-expanded={expandedD}
-                            aria-label="show more"
-                            style={{ color: '#077FA8' }}
-                          >
-                            {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                          </IconButton>
-                        }
-                      />
-                    </Card>
-                    <Collapse in={expandedD} className={styles.collapse}>
-                      <List className={styles.list} dense component="div" role="list">
-                        {dados.map((dado) => {
-                          const labelId = `checkbox-list-label-${dado.id}`;
-                          return (
-                            <ListItem key={dado.id} role="listitem">
-                              <ListItemButton
-                                role={undefined}
-                                onClick={handleToggle(dado.id)}
-                                dense
-                              >
-                                <ListItemIcon>
-                                  <Checkbox
-                                    checked={checked.indexOf(dado.id) !== -1}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
-                                  />
-                                </ListItemIcon>
-                                <ListItemText key={dado.id} style={{ color: '#077FA8' }}>
-                                  {dado.name}
-                                </ListItemText>
-                              </ListItemButton>
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                    </Collapse>
-                  </Paper>
-                </Grid>
-              </div>
-            </div>
-          </ThemeProvider>
-        </Grid>
+            {/* Segundo Card */}
+            <Grid className={styles.grid} alignItems="center">
+              <Paper elevation={3}>
+                <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                  <CardHeader
+                    className={styles.cardHeader}
+                    title={
+                      <span style={{ textAlign: 'center', color: 'primary.main' }}>
+                        Filtro de Dados
+                      </span>
+                    }
+                    action={
+                      <IconButton
+                        onClick={handleExpandClickD}
+                        aria-expanded={expandedD}
+                        aria-label="show more"
+                        style={{ color: 'primary.main' }}
+                      >
+                        {expandedD ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </IconButton>
+                    }
+                  />
+                </Card>
+                <Collapse in={expandedD} className={styles.collapse}>
+                  <List className={styles.list} dense component="div" role="list">
+                    {dados.map((dado) => {
+                      const labelId = `checkbox-list-label-${dado.id}`;
+                      return (
+                        <ListItem key={dado.id} role="listitem">
+                          <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
+                            <ListItemIcon>
+                              <Checkbox
+                                checked={checked.indexOf(dado.id) !== -1}
+                                tabIndex={-1}
+                                disableRipple
+                                inputProps={{ 'aria-labelledby': labelId }}
+                              />
+                            </ListItemIcon>
+                            <ListItemText key={dado.id} style={{ color: 'primary.main' }}>
+                              {dado.name}
+                            </ListItemText>
+                          </ListItemButton>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </Collapse>
+              </Paper>
+            </Grid>
+          </div>
+        </div>
 
-        <Grid container xs id="graficos" alignItems={'flex-start'}>
+        <Grid container id="graficos" justifyContent="center" rowGap="2em" flexDirection="column">
           <Paper
             sx={{
               p: 1,
               margin: 'auto',
-              maxWidth: 1000,
+              width: 800,
+              maxWidth: 1200,
               flexGrow: 1,
               backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
             }}
@@ -302,10 +198,10 @@ const SistemaDeDados: NextPage = () => {
           <Grid item sx={{ borderRadius: 2 }}>
             <Paper
               sx={{
-                p: 2,
+                p: 4,
                 margin: 'auto',
-                maxWidth: 1000,
-                flexGrow: 1,
+                width: 800,
+                maxWidth: 1200,
                 backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
               }}
             >
@@ -316,7 +212,7 @@ const SistemaDeDados: NextPage = () => {
                 <Grid item xs sm container>
                   <Grid item xs container direction="column" spacing={10}>
                     <Grid item xs>
-                      <Paper
+                      {/* <Paper
                         sx={{ backgroundColor: '#0088B7', p: 2, margin: 'auto', maxWidth: 100 }}
                       >
                         <Typography
@@ -335,7 +231,7 @@ const SistemaDeDados: NextPage = () => {
                       </Typography>
                       <Typography variant="h5" color="#0088B7" fontWeight={800}>
                         Partos sensíveis
-                      </Typography>
+                      </Typography> */}
                     </Grid>
                   </Grid>
                 </Grid>

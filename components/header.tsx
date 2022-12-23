@@ -1,9 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Elements from '../utils/homeinterface';
 import logo from '../public/images/ufms.png';
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, SvgIconProps, Typography } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
@@ -11,30 +10,35 @@ import InfoIcon from '@mui/icons-material/Info';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useRouter } from 'next/router';
 
-export interface ElementProps {
-  elements: Elements[];
+export interface HeaderProps {
+  items: Array<{
+    name: string;
+    path: string;
+    icon: React.FC<SvgIconProps>;
+    active?: boolean;
+  }>;
 }
 
-const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => {
+const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   const { asPath } = useRouter();
-
-  const element = elements;
 
   return (
     <Box
-      sx={{
-        padding: '0 10em',
-        height: 150,
+      sx={(theme) => ({
+        [theme.breakpoints.up('lg')]: { padding: '0 4em' },
+        [theme.breakpoints.up('xl')]: { padding: '0 8em' },
+        [theme.breakpoints.down('lg')]: { padding: '0 2em' },
+        height: 125,
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: 'primary.main',
         color: 'primary.contrastText',
-      }}
+      })}
     >
       {/* container esquerdo */}
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-          <Link href="/">
+          <Link href="/" passHref>
             <a>
               <Image src={logo} alt="UFMS Logo" width={68} height={90} />
             </a>
@@ -42,12 +46,7 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
         </Grid>
         <Grid item>
           <Divider
-            sx={{
-              height: 90,
-              width: 3,
-              backgroundColor: 'primary.contrastText',
-              borderRadius: '2px',
-            }}
+            sx={{ height: 90, width: 3, backgroundColor: 'primary.contrastText' }}
             orientation="vertical"
             flexItem
           />
@@ -59,8 +58,8 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
       </Grid>
 
       {/* container direito */}
-      <Grid container alignItems="center" justifyContent="right" spacing={3}>
-        {element.map((item, index) => {
+      <Grid container alignItems="center" justifyContent="end" spacing={3}>
+        {items.map((item, index) => {
           const Icon = item.icon;
           const active = asPath === item.path;
 
@@ -70,17 +69,17 @@ const HeaderComponent: React.FC<ElementProps> = ({ elements }: ElementProps) => 
                 <a>
                   <Typography
                     sx={{
-                      fontSize: '1.15em',
-                      textTransform: 'uppercase',
+                      fontSize: '1.25em',
+                      textTransform: 'none',
                       display: 'flex',
-                      alignItems: 'center',
-                      columnGap: 1,
+                      alignItems: 'start',
+                      columnGap: 0.5,
                       fontWeight: active ? 'bold' : 'normal',
                       textDecoration: active ? 'underline' : 'none',
                       textUnderlineOffset: 5,
                     }}
                   >
-                    {Icon && <Icon />}
+                    {Icon && <Icon sx={{ fontSize: '1.95rem' }} />}
                     {item.name}
                   </Typography>
                 </a>
@@ -102,5 +101,5 @@ export default function AppHeader(props: { admin?: boolean }) {
 
   if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
 
-  return <HeaderComponent elements={elements} />;
+  return <HeaderComponent items={elements} />;
 }

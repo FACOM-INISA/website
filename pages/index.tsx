@@ -12,8 +12,8 @@ import landing from '../public/images/residencia-medica.png';
 import plataforma from '../public/images/pag-analise-de-dados.png';
 import styles from '../styles/Institucional.module.css';
 
-const texto = `O Sistema Previsional para Gestão de Saúde Pública do Mato Grosso do Sul (SISPREG - MS) 
-               é uma plataforma aberta que tem como objetivo, auxiliar nas decisões dos gestores de saúde de MS. 
+const texto = `O Sistema Previsional para Gestão de Saúde Pública do Mato Grosso do Sul (SISPREG - MS)
+               é uma plataforma aberta que tem como objetivo, auxiliar nas decisões dos gestores de saúde de MS.
                Baseando-se na disponibilização de dados estaticamente obtidos por meio de modelos elaborados
                em conjunto do Instituto de Matemática (INMA) da UFMS. `;
 
@@ -26,9 +26,9 @@ const Home: NextPage = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          gridRow: '100px',
           alignItems: 'center',
-          margin: '3em 0',
+          margin: '2em 0 4em',
+          minHeight: 'calc(100vh - 125px - 4em)',
         }}
       >
         <Box
