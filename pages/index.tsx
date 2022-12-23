@@ -36,6 +36,39 @@ const Home: NextPage = () => {
     }
     // console.log(file);
   };
+  const handleUpdate = () => {
+    const body = {
+      data: [
+        {
+          email: 'leonaro@ufms.com',
+          authorized: true,
+        },
+        {
+          email: 'leonaro@ufms.com',
+          authorized: false,
+        },
+        {
+          email: 'leonaro@ufms.com',
+          authorized: true,
+        },
+      ],
+      password: 'hello',
+    };
+
+    fetch('api/updateUsers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((message) => {
+        return message.json();
+      })
+      .then((message) => {
+        console.log(message);
+      });
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -46,11 +79,10 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to 
+          Welcome to
           <Link href="institucional">PPSUS</Link>
           <Link href="sistemadedados">Dados</Link>
           <Link href="maisinfos">Mais Infos</Link>
-
           Página Index do Projeto, acesse o cadastro &rarr;{' '}
           <Link href="./signIn">Página de cadastro</Link>
         </h1>
@@ -77,10 +109,10 @@ const Home: NextPage = () => {
             <p>Clique aqui para acessar a página de login</p>
           </a>
 
-          <a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>
+          <button onClick={handleUpdate} className={styles.card}>
             <h2>Examples &rarr;</h2>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+          </button>
 
           <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
