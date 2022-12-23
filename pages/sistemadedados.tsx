@@ -43,33 +43,33 @@ const theme = createTheme({
 });
 
 const municipios = [
-  { name: 'Água Clara', id: 1 },
-  { name: 'Alcinópolis', id: 2 },
-  { name: 'Amambai', id: 3 },
-  { name: 'Anastácio', id: 4 },
-  { name: 'Anaurilândia', id: 5 },
-  { name: 'Angélica', id: 6 },
-  { name: 'Antônio João', id: 7 },
-  { name: 'Aparecida do Taboado', id: 8 },
-  { name: 'Aquidauana', id: 9 },
-  { name: 'Aral Moreira', id: 10 },
-  { name: 'Bandeirantes', id: 11 },
-  { name: 'Bataguassu', id: 12 },
-  { name: 'Batayporã', id: 13 },
-  { name: 'Bela Vista', id: 14 },
-  { name: 'Bodoquena', id: 15 },
-  { name: 'Bonito', id: 16 },
-  { name: 'Brasilândia', id: 17 },
-  { name: 'Caarapó', id: 18 },
-  { name: 'Camapuã', id: 19 },
-  { name: 'Campo Grande', id: 20 },
-  { name: 'Caracol', id: 21 },
-  { name: 'Cassilândia', id: 22 },
-  { name: 'Chapadão do Sul', id: 23 },
-  { name: 'Corguinho', id: 24 },
-  { name: 'Coronel Sapucaia', id: 25 },
-  { name: 'Corumbá', id: 26 },
-  { name: 'Costa Rica', id: 27 },
+  { name: 'Água Clara', id: 5000203 },
+  { name: 'Alcinópolis', id: 5000252 },
+  { name: 'Amambai', id: 5000609 },
+  { name: 'Anastácio', id: 5000708 },
+  { name: 'Anaurilândia', id: 5000807 },
+  { name: 'Angélica', id: 5000856 },
+  { name: 'Antônio João', id: 5000906 },
+  { name: 'Aparecida do Taboado', id: 5001003 },
+  { name: 'Aquidauana', id: 5001102 },
+  { name: 'Aral Moreira', id: 5001243 },
+  { name: 'Bandeirantes', id: 5001508 },
+  { name: 'Bataguassu', id: 5001904 },
+  { name: 'Batayporã', id: 5002001 },
+  { name: 'Bela Vista', id: 5002100 },
+  { name: 'Bodoquena', id: 5002159 },
+  { name: 'Bonito', id: 5002209 },
+  { name: 'Brasilândia', id: 5002308 },
+  { name: 'Caarapó', id: 5002407 },
+  { name: 'Camapuã', id: 5002605 },
+  { name: 'Campo Grande', id: 5002704 },
+  { name: 'Caracol', id: 5002803 },
+  { name: 'Cassilândia', id: 5002902 },
+  { name: 'Chapadão do Sul', id: 5002951 },
+  { name: 'Corguinho', id: 5003108 },
+  { name: 'Coronel Sapucaia', id: 5003157 },
+  { name: 'Corumbá', id: 5003207 },
+  { name: 'Costa Rica', id: 5003207 },
   { name: 'Coxim', id: 28 },
   { name: 'Deodápolis', id: 29 },
   { name: 'Dois Irmãos do Buriti', id: 30 },
@@ -131,9 +131,6 @@ const dados = [
   { name: 'Partos Sensíveis', id: 2 },
 ];
 
-{
-  /* ANTES DAQUI */
-}
 const SistemaDeDados: NextPage = () => {
   const options = municipios.map((option) => {
     const firstLetter = option.name[0].toUpperCase();
@@ -165,7 +162,8 @@ const SistemaDeDados: NextPage = () => {
     setExpandedD(!expandedD);
   };
 
-  const [limpar, setLimpar] = React.useState('');
+  const [value, setValue] = React.useState<any>(true);
+  console.log(value);
 
   return (
     <Layout className={styles.sistema}>
@@ -211,13 +209,22 @@ const SistemaDeDados: NextPage = () => {
                             transform: 'none',
                           },
                         }}
+                        disableClearable
+                        value={value}
+                        onChange={(event, newValue) => {
+                          setValue(newValue);
+                        }}
                         renderInput={(params) => (
                           <TextField {...params} label="Buscar por município" />
                         )}
                       />
 
                       <div className={styles.botoes}>
-                        <Button variant="contained" onClick={() => setLimpar('')}>
+                        <Button
+                          variant="contained"
+                          // TODO: LIDAR COM ID DO MUNICIPIO NO FETCH
+                          onClick={() => setValue({ name: '' })}
+                        >
                           Limpar
                         </Button>
                         <Button variant="contained">Buscar</Button>
@@ -268,9 +275,7 @@ const SistemaDeDados: NextPage = () => {
                                     inputProps={{ 'aria-labelledby': labelId }}
                                   />
                                 </ListItemIcon>
-                                <ListItemText key={dado.id} style={{ color: '#077FA8' }}>
-                                  {dado.name}
-                                </ListItemText>
+                                <ListItemText key={dado.id}>{dado.name}</ListItemText>
                               </ListItemButton>
                             </ListItem>
                           );
