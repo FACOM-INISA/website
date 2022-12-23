@@ -1,20 +1,17 @@
-# <p align="center"> Práticas em Desenvolvimento de Software <br/> (Repositório Modelo) </p>
+# <p align="center"> Projeto PPSUS<br/> Universidade Federal de Mato Grosso do Sul (UFMS) </p>
 
 <p align="center">
-  <img src="" height="175px" />
+  <img src="inisa.jpg" height="175px" />
   <br/>
-  <small>Logo ou screenshot da aplicação</small>
 </p>
-
-Este repositório é um modelo de como os alunos das disciplinas de Prática em Desenvolvimento de Software I e II podem organizar seus respectivos projetos e artefatos gerados. Portanto, a partir deste ponto, será proposta uma estrutura básica contendo uma descrição simplificada de cada seção. Recomendações e instruções mais detalhadas podem ser encontradas no arquivo [INSTRUCOES.md](INSTRUCOES.md).
-
-Use desta seção para apresentar seu produto de forma simples e sussinta, assim como na frase acima.
+Este repositório tem como objetivo armazenar os códigos do Projeto Inisa, uma parceria entre a Enfermagem, a Facom e o Instituto de Matemática.
 
 ## Estrutura do documento
 
 - [Descrição do projeto](#descri%C3%A7%C3%A3o-do-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Requisitos](#requisitos)
+- [Variáveis de Ambiente](#variáveis-de-ambiente)
 - [Instalação](#instala%C3%A7%C3%A3o--implanta%C3%A7%C3%A3o)
 - [Primeiros passos](#primeiros-passos)
 - [Autores e histórico](#autores-e-hist%C3%B3rico)
@@ -22,17 +19,21 @@ Use desta seção para apresentar seu produto de forma simples e sussinta, assim
 
 ## Descrição do projeto
 
-Nesta seção você deve apresentar, de forma mais detalhada, um pouco mais do projeto que foi desenvolvido, para isso apresente: o contexto, o problema e a solução proposta.
+O Datasus disponibiliza informações da situação sanitária de todo Brasil, por meio do Tabnet. Neste aplicativo, os gestores conseguem realizar análises sobre questões como parto e anomalias dos recém-nascidos, a fim de quantificar e avaliar as principais necessidades de investimento na saúde pública - no caso deste projeto, do Mato Grasso do Sul.
 
-Busque ser objetivo e apresentar cada um dos pontos em um parágrafo dedicado.
+O processo de instalação do programa, a coleta de dados, a procura específica por região estatal e a predição dos dados são pouco práticos para os gestores.
+
+Assim, para facilitar o entendimento das principais necessidades de cada cidade do Mato Grosso do Sul, propõe-se a criação de uma plataforma web para análise de dados. Além das informações serem alimentadas periodicamente, o sistema também realizará uma predição. Tudo isso será realizado de forma visual, com o uso de gráficos.
 
 ## Funcionalidades
 
-Liste as principais funcionalidades do sistema implementado. Você pode usar de checkbox para indicar aquelas que foram, ou não, implementadas na versão atual. Por exemplo:
+O sistema possui como principais funcionalidades:
 
-- [x] Funcionalidade 1
-- [ ] Funcionalidade 2
-- [ ] ...
+- [ ] Inserção de dados
+- [ ] Filtragem por cidade
+- [ ] Representação gráfica da principais informações de cada cidade
+- [ ] Criação da parte administrativa e dos usuários (acadêmicos da iniciação científica)
+- [ ] Predição de dados
 
 ## Requisitos
 
@@ -40,13 +41,37 @@ Aqui você deve apresentar todos os requisitos para que sua aplicação funcione
 
 Começe indicando qual, ou quais, sistemas operacionais são suportados. Por exemplo: `Este sistema foi desenvolvido e amplamente testado em ambientes Unix ...`
 
-Para cada uma das dependências do sistema é importatne listar também a versão mínima necessária. Por exemplo:
+Para cada uma das dependências do sistema é importatne listar também a versão mínima necessária.
 
 - [Docker](https://www.docker.com/) (versão 20 ou superior)
   - Se necessário, você pode deixar alguma observação ou instrução necessária.
-- [Python](https://www.python.org/) (versão 3.10 ou superior)
-- [Node.js](https://nodejs.org/) (versão 16)
-- ...
+- [Prisma](https://www.prisma.io)
+- [React](https://reactjs.org) (versão 18.2.0)
+- [Next.js](https://nextjs.org) (versão 17.0.2)
+- [TypeScript](https://www.typescriptlang.org) (versão 4.8.4)
+- [R](https://www.r-project.org/) (vesão 4.2 ou superior) com os seguintes pacotes:
+
+  - compiler
+  
+  - forecast
+  
+  - fpp2
+  
+  - acp
+  
+  - tscount
+  
+  - ggplot2
+  
+  - car
+
+---
+
+## Variáveis de Ambiente
+
+Para correta utilização da aplicação são necessários as seguintes váriaveis de ambiente:
+
+- SECRET_PASSWORD: uma string de 32 caracteres alfanuméricos
 
 ## Instalação / Implantação
 
@@ -81,11 +106,11 @@ Use esta seção para mostrar os primeiros passos para usar a aplicação. Lembr
 
 Este sistema foi desenvolvido pela seguinte equipe:
 
-- [Fulano](https://github.com/fulano) (fulano@email.com)
-- [Sicrano](https://github.com/sicrano) (sicrano@email.com)
-- ....
+- [José Pedro Cândido Lopes Peres](https://github.com/PeterYouseph) (peteryouseph@gmail.com)
+- [Leonardo Kazuyoshi Takahashi da Silva](https://github.com/leonardo-kazu) (lkazu@duck.com)
+- [Letícia Yurie Kokubu](https://github.com/leyurie) (leticia.yuurie@gmail.com)
 
-Orientado pelo professor [Beltrano Silva](https://github.com/beltrano-silva) e proposto por XXXX YYYY.
+Orientado pelo professor [Hudson Silva Borges](https://github.com/hsborges) e proposto por Nathan Aratani.
 
 > :warning: Se o projeto for de continuidade, vocẽ deverá mencionar qual e criar um link para o projeto original.
 
