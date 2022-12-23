@@ -1,4 +1,4 @@
-# <p align="center"> Projeto INISA<br/> Universidade Federal de Mato Grosso do Sul (UFMS) </p>
+# <p align="center"> Projeto PPSUS<br/> Universidade Federal de Mato Grosso do Sul (UFMS) </p>
 
 <p align="center">
   <img src="inisa.jpg" height="175px" />

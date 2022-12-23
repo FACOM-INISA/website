@@ -17,6 +17,10 @@ import Image from 'next/image';
 import * as React from 'react';
 import { InputAdornment } from '@mui/material';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+
+import NextLink from 'next/link';
+
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -49,6 +53,9 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Head>
+        <title>Cadastro Administrativo</title>
+      </Head>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -62,14 +69,18 @@ export default function SignInSide() {
             }}
           >
             <Typography component="h1" variant="h5">
-              <Image
-                id="logo-ppsus"
-                src={ppsusLogo}
-                alt="PPSUS - MS"
-                width={500}
-                height={45}
-                objectFit="contain"
-              ></Image>
+              <NextLink href="/" passHref>
+                <a>
+                  <Image
+                    id="logo-ppsus"
+                    src={ppsusLogo}
+                    alt="PPSUS - MS"
+                    width={500}
+                    height={45}
+                    objectFit="contain"
+                  />
+                </a>
+              </NextLink>
               <Box
                 sx={{
                   my: 2,
@@ -203,9 +214,11 @@ export default function SignInSide() {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Link href="./logIn" variant="body1" underline="hover" fontWeight={550}>
-                    {'Acesse aqui'}
-                  </Link>
+                  <NextLink href="/logIn" passHref>
+                    <Link variant="body1" underline="hover" fontWeight={550}>
+                      {'Acesse aqui'}
+                    </Link>
+                  </NextLink>
                 </Grid>
               </Grid>
             </Box>

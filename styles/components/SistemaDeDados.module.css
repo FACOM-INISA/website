@@ -1,52 +1,53 @@
 .main {
-    margin: 3rem 10rem 3rem 10rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  margin: 0 4rem;
 }
 
 .sidebar {
-    width: 360px;
-    display: grid;
-    grid-gap: 20px;
+  width: 360px;
+  display: grid;
+  grid-gap: 20px;
 }
 
 .cardHeader {
-    box-shadow: "0px 4px 80px grey";
+  box-shadow: '0px 4px 80px grey';
 }
 
 .busca {
-    margin: 1.1rem 1.1rem 0 1.1rem;
+  margin: 1.1rem 1.1rem 0 1.1rem;
 }
 
 .collapse {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .botoes Button {
-    width: 130px;
-    text-transform: none;
-    background: #0680AA;
+  width: 130px;
+  text-transform: none;
+  background: #0680aa;
 }
 
-.botoes Button:hover {background-color: #10a0cf}
+.botoes Button:hover {
+  background-color: #10a0cf;
+}
 
 .botoes Button:nth-child(1) {
-    background-color: #383838;
+  background-color: #383838;
 }
 
-.botoes Button:nth-child(1):hover {background-color: rgb(71, 71, 71)}
+.botoes Button:nth-child(1):hover {
+  background-color: rgb(71, 71, 71);
+}
 
 .botoes {
-    display: flex;
-    align-content: center;
-    justify-content: space-around;
-    padding-top: 20px;
-    padding-bottom: 20px;
+  display: flex;
+  align-content: center;
+  justify-content: space-around;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .grid {
-    margin: 0;
+  margin: 0;
 }
