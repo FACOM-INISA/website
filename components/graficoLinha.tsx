@@ -14,7 +14,7 @@ import {
   Pie,
   Sector,
 } from 'recharts';
-import Grid from '@mui/material/Grid/Grid';
+import { Grid } from '@mui/material';
 
 const data = [
   {

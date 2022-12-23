@@ -12,8 +12,8 @@ import landing from '../public/images/residencia-medica.png';
 import plataforma from '../public/images/pag-analise-de-dados.png';
 import styles from '../styles/Institucional.module.css';
 
-const texto = `O Sistema Previsional para Gestão de Saúde Pública do Mato Grosso do Sul (SISPREG - MS) 
-               é uma plataforma aberta que tem como objetivo, auxiliar nas decisões dos gestores de saúde de MS. 
+const texto = `O Sistema Previsional para Gestão de Saúde Pública do Mato Grosso do Sul (SISPREG - MS)
+               é uma plataforma aberta que tem como objetivo, auxiliar nas decisões dos gestores de saúde de MS.
                Baseando-se na disponibilização de dados estaticamente obtidos por meio de modelos elaborados
                em conjunto do Instituto de Matemática (INMA) da UFMS. `;
 
@@ -26,9 +26,9 @@ const Home: NextPage = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          gridRow: '100px',
           alignItems: 'center',
-          margin: '3em 0',
+          margin: '2em 0 4em',
+          minHeight: 'calc(100vh - 125px - 4em)',
         }}
       >
         <Box
@@ -103,14 +103,13 @@ const Home: NextPage = () => {
         <Typography variant="h4" sx={{ fontWeight: 'bold', paddingBottom: '40px' }}>
           Conheça a Plataforma
         </Typography>
-        <Grid container xs={10}>
-          <Grid container wrap="nowrap" spacing={7}>
-            <Grid item xs>
-              <Typography sx={{ fontSize: '1.5em', textAlign: 'justify' }}>{texto}</Typography>
-            </Grid>
-            <Grid item xs>
-              <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
-            </Grid>
+
+        <Grid container wrap="nowrap" spacing={7} justifyContent="center">
+          <Grid item xs={5}>
+            <Typography sx={{ fontSize: '1.5em', textAlign: 'justify' }}>{texto}</Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Image src={plataforma} alt="Imagem da Plataforma" width={700} height={500} />
           </Grid>
         </Grid>
       </Grid>
