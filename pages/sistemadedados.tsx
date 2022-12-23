@@ -69,8 +69,7 @@ const SistemaDeDados: NextPage = () => {
     setExpandedD(!expandedD);
   };
 
-  const [value, setValue] = React.useState<any>(true);
-  console.log(value);
+  const [value, setValue] = React.useState<any>('');
 
   return (
     <Layout className={styles.sistema}>
@@ -105,6 +104,7 @@ const SistemaDeDados: NextPage = () => {
                     options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                     groupBy={(option) => option.firstLetter}
                     getOptionLabel={(option) => option.name}
+                    value={value}
                     sx={{
                       width: '90%',
                       bgColor: '#D4D5D6',
@@ -116,7 +116,7 @@ const SistemaDeDados: NextPage = () => {
                   />
 
                   <div className={styles.botoes}>
-                    <Button variant="contained" onClick={() => setLimpar('')}>
+                    <Button variant="contained" onClick={() => setValue({ name: '' })}>
                       Limpar
                     </Button>
                     <Button variant="contained">Buscar</Button>
