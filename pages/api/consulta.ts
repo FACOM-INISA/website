@@ -19,43 +19,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).send({ message: 'Wrong data sent' });
     return;
   }
+
   const municipio = parseInt(req.body.municipio);
   const prisma = new PrismaClient();
   await prisma.$connect();
 
   const partos = await prisma.parto.findMany({
-    where: {
-      municipio_id: {
-        equals: municipio,
-      },
-    },
-    orderBy: [
-      {
-        ano: 'asc',
-      },
-      {
-        mes: 'asc',
-      },
-    ],
+    where: { municipio_id: { equals: municipio } },
+    orderBy: [{ ano: 'asc' }, { mes: 'asc' }],
   });
 
   const predicoes = await prisma.predicao.findMany({
-    where: {
-      municipio_id: {
-        equals: municipio,
-      },
-    },
-    orderBy: [
-      {
-        tipo_parto: 'asc',
-      },
-      {
-        ano: 'asc',
-      },
-      {
-        mes: 'asc',
-      },
-    ],
+    where: { municipio_id: { equals: municipio } },
+    orderBy: [{ tipo_parto: 'asc' }, { ano: 'asc' }, { mes: 'asc' }],
   });
 
   await prisma.$disconnect();
