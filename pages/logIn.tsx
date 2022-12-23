@@ -19,6 +19,8 @@ import * as React from 'react';
 import fetchJson from '../lib/fetchJson';
 import useUser from '../lib/useUser';
 
+import NextLink from 'next/link';
+
 const theme = createTheme();
 
 export default function LoginSide() {
@@ -63,14 +65,18 @@ export default function LoginSide() {
             }}
           >
             <Typography component="h1" variant="h5">
-              <Image
-                id="logo-ppsus"
-                src={ppsusLogo}
-                alt="PPSUS - MS"
-                width={500}
-                height={45}
-                objectFit="contain"
-              ></Image>
+              <NextLink href="/" passHref>
+                <a>
+                  <Image
+                    id="logo-ppsus"
+                    src={ppsusLogo}
+                    alt="PPSUS - MS"
+                    width={500}
+                    height={45}
+                    objectFit="contain"
+                  />
+                </a>
+              </NextLink>
               <Box
                 sx={{
                   my: 2,
@@ -134,10 +140,6 @@ export default function LoginSide() {
               />
               <Grid container>
                 <Grid>
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" size="small" />}
-                    label="Lembre-se do meu acesso"
-                  />
                   <Link href="#" variant="body2" underline="hover" color={'gray'}>
                     Esqueceu sua senha?
                   </Link>
@@ -167,9 +169,11 @@ export default function LoginSide() {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Link href="./signIn" variant="body1" underline="hover" fontWeight={550}>
-                    {'Crie aqui'}
-                  </Link>
+                  <NextLink href="/signIn" passHref>
+                    <Link variant="body1" underline="hover" fontWeight={550}>
+                      {'Crie aqui'}
+                    </Link>
+                  </NextLink>
                 </Grid>
               </Grid>
             </Box>

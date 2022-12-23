@@ -7,63 +7,49 @@
   ordenandos ascendentemente e sendo um vetor.
 */
 
-
-
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const municipio = parseInt(req.body.municipio)
+  if (req.method != 'POST') {
+    res.status(405).send({ message: 'Only POST requests are allowed' });
+    return;
+  }
+  if (!req.body.municipio) {
+    res.status(400).send({ message: 'Wrong data sent' });
+    return;
+  }
+
+  const municipio = parseInt(req.body.municipio);
   const prisma = new PrismaClient();
   await prisma.$connect();
 
   const partos = await prisma.parto.findMany({
-    where: {
-      municipio_id: {
-        equals: municipio
-      }
-    },
-    orderBy: [
-      {
-        ano: 'asc'
-      },
-      {
-        mes: 'asc'
-      }
-    ]
+    where: { municipio_id: { equals: municipio } },
+    orderBy: [{ ano: 'asc' }, { mes: 'asc' }],
   });
 
   const predicoes = await prisma.predicao.findMany({
-    where: {
-      municipio_id: {
-        equals: municipio
-      }
-    },
-    orderBy: [
-      {
-        tipo_parto: 'asc'
-      },
-      {
-        ano: 'asc'
-      },
-      {
-        mes: 'asc'
-      }
-    ]
-  })
+    where: { municipio_id: { equals: municipio } },
+    orderBy: [{ tipo_parto: 'asc' }, { ano: 'asc' }, { mes: 'asc' }],
+  });
 
-  await prisma.$disconnect()
+  await prisma.$disconnect();
 
-  if ((partos.length === 0) || (predicoes.length === 0)) {
-    res.status(400).send({ 400: "Data not found" })
-    return
+  if (partos.length === 0 || predicoes.length === 0) {
+    res.status(400).send({ 400: 'Data not found' });
+    return;
   }
 
-  const predicoes_cesaria = predicoes.filter((element) => { if (element.tipo_parto == 'cesaria') return element })
-  const predicoes_normal = predicoes.filter((element) => { if (element.tipo_parto == 'normal') return element })
-  const predicoes_total = predicoes.filter((element) => { if (element.tipo_parto == 'total') return element })
-
-
+  const predicoes_cesaria = predicoes.filter((element) => {
+    if (element.tipo_parto == 'cesaria') return element;
+  });
+  const predicoes_normal = predicoes.filter((element) => {
+    if (element.tipo_parto == 'normal') return element;
+  });
+  const predicoes_total = predicoes.filter((element) => {
+    if (element.tipo_parto == 'total') return element;
+  });
 
   res.status(200).send({
     partos: partos,
@@ -71,8 +57,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       predicoes_cesaria: predicoes_cesaria,
       predicoes_normal: predicoes_normal,
       predicoes_total: predicoes_total,
-    }
+    },
   });
-
-
 }
