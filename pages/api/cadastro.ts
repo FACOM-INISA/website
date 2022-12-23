@@ -16,14 +16,18 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method != 'POST') {
+    res.status(405).send({ message: 'Only POST requests are allowed' });
+    return;
+  }
   let body = req.body;
-  if (!body.name && !body.email && !body.senha && !body.code
-    ||
-    body.code.length != 7 && body.code.length != 12
-    ||
-    !body.code.match(/(\d{7})/) && !body.code.match(/(\d{12})/)
-    || body.senha.length < 8) {
-    res.status(400).send({ message: "Incorrect data sent" });
+  if (
+    (!body.name && !body.email && !body.senha && !body.code) ||
+    (body.code.length != 7 && body.code.length != 12) ||
+    (!body.code.match(/(\d{7})/) && !body.code.match(/(\d{12})/)) ||
+    body.senha.length < 8
+  ) {
+    res.status(400).send({ message: 'Incorrect data sent' });
     return;
   }
   const prisma = new PrismaClient();
@@ -36,13 +40,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email: body.email,
         nome: body.name,
         codigo: body.code,
-        hash: hash
-      }
+        hash: hash,
+      },
     });
     await prisma.$disconnect();
     res.status(307).json({ message: '/logIn' });
     // res.status(201).json({ 201: 'okay' });
-
   } catch (err) {
     await prisma.$disconnect();
     res.status(400).json({ message: err });
