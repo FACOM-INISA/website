@@ -1,3 +1,15 @@
+/*
+ *  Endpoint da api para fazer upsert de apenas um dado único
+ *  recebe um método POST com os seguintes parâmetros:
+ *    - ano          <ano do dado>
+ *    - mes          <mes do dado>
+ *    - normal       <quantidade de partos normais>
+ *    - cesaria      <quantidade de partos cesaria>
+ *    - total        <quantidade de partos totais>
+ *    - idmunicipio  <id do municipio>
+ *  Em caso de sucesso responde com status 200.
+ */
+
 import { sessionOptions } from '../../../lib/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
