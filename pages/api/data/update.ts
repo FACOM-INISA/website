@@ -4,13 +4,13 @@ e fazer a inserção no banco de dados do municipio e suas predições
 (benchmark inicial em torno de 8.7s)
 */
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { sessionOptions } from '../../lib/session';
+import { sessionOptions } from '../../../lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { FormidableError, parseForm } from '../../lib/parseForm';
+import { FormidableError, parseForm } from '../../../lib/parseForm';
 import { Fields, File } from 'formidable';
 import fs from 'fs';
 import { parse } from 'csv-parse';
-import { populateAndProcess } from '../../scripts/populate-municipio';
+import { populateAndProcess } from '../../../scripts/populate-municipio';
 
 const checker = async (csv: string) => {
   // ler o arquivo
