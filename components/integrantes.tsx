@@ -60,7 +60,7 @@ const cardItems: CardItem[] = [
     name: 'Letícia Yurie',
     desc: 'Estudante de Engenharia de Software',
     linkedin: 'https://www.linkedin.com/in/leticiayurie',
-    lattes: 'https://lattes.cnpq.br',
+    lattes: 'https://lattes.cnpq.br/0779495231797028',
   },
 ];
 
