@@ -30,7 +30,8 @@ import 'dayjs/locale/pt-BR';
 import { useRouter } from 'next/router';
 
 const ButtonCinza = styled(Button)({
-  width: '140px',
+  textTransform: 'none',
+  width: '10em',
   backgroundColor: '#383838',
   '&:hover': {
     backgroundColor: '#474747',
@@ -38,7 +39,8 @@ const ButtonCinza = styled(Button)({
 });
 
 const ButtonAzul = styled(Button)({
-  width: '140px',
+  textTransform: 'none',
+  width: '10em',
   backgroundColor: 'primary.main',
   '&:hover': {
     backgroundColor: '#10a0cf',
@@ -47,28 +49,34 @@ const ButtonAzul = styled(Button)({
 
 const columns: GridColDef[] = [
   {
-    field: 'data',
-    headerName: 'Data (MM/AA)',
-    type: 'date',
-    editable: true,
+    field: 'mes',
+    headerName: 'Mês',
+    type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 150,
+    width: 90,
   },
   {
-    field: 'partoNormal',
+    field: 'ano',
+    headerName: 'Ano',
+    type: 'number',
+    headerAlign: 'center',
+    align: 'center',
+    width: 90,
+    valueFormatter: (params) => params.value + 2000,
+  },
+  {
+    field: 'parto_normais',
     headerName: 'Partos Normais',
     type: 'number',
-    editable: true,
     headerAlign: 'center',
     align: 'center',
     width: 170,
   },
   {
-    field: 'partoSensivel',
+    field: 'parto_cesaria',
     headerName: 'Partos Sensíveis',
-    type: 'number',
-    editable: true,
+    type: 'string',
     headerAlign: 'center',
     align: 'center',
     width: 170,
@@ -77,23 +85,10 @@ const columns: GridColDef[] = [
     field: 'localidade',
     headerName: 'Localidade',
     type: 'string',
-    editable: true,
     headerAlign: 'center',
     align: 'center',
     width: 270,
   },
-];
-
-const rows = [
-  {
-    id: 0,
-    data: '03/2022',
-    partoNormal: 300,
-    partoSensivel: 500,
-    localidade: 'Campo Grande - MS',
-  },
-  { id: 1, data: '05/2021', partoNormal: 500, partoSensivel: 900, localidade: 'Miranda - MS' },
-  { id: 2, data: '01/2023', partoNormal: 310, partoSensivel: 502, localidade: 'Dourados - MS' },
 ];
 
 export default function InsercaoDeDados() {
@@ -104,6 +99,8 @@ export default function InsercaoDeDados() {
       ...option,
     };
   });
+
+  const [rows, setRows] = React.useState([]);
 
   const [value, setValue] = React.useState<any>('');
 
@@ -117,11 +114,6 @@ export default function InsercaoDeDados() {
     setAnos(event.target.value);
   };
 
-  const [date, setDate] = React.useState<Dayjs | null>(dayjs());
-  const handleChangeDate = (newDate: Dayjs | null) => {
-    setDate(newDate);
-  };
-
   const minDate = dayjs('2015-01-01');
   const maxDate = dayjs();
 
@@ -133,7 +125,34 @@ export default function InsercaoDeDados() {
     localidade: '',
   });
 
-  const router = useRouter();
+  React.useEffect(() => {
+    fetch('api/consulta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify({ municipio: 5000203 }),
+    })
+      .then((message) => {
+        return message.json();
+      })
+      .then((data) => {
+        setRows(
+          data.partos.filter((element: any, index: number) => {
+            element.id = index;
+            element.localidade = municipios.map((municipio) => {
+              if (municipio.id == element.municipio_id) {
+                return municipio.name;
+              }
+            })[0];
+            console.log(element);
+            return element;
+          })
+        );
+        console.log(data.partos); // tem todas as informações
+      });
+  }, []);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -144,21 +163,6 @@ export default function InsercaoDeDados() {
       partoNormal: data.get('qtdnormal'),
       partoSensivel: data.get('qtdsensivel'),
     };
-
-    // fetch('api/cadastro', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'Application/json',
-    //   },
-    //   body: JSON.stringify(body),
-    // }).then(async (response) => {
-    //   const message = await response.json();
-    //   if (response.status == 307) {
-    //     router.push(message.message);
-    //   } else {
-    //     alert(message.message);
-    //   }
-    // });
   };
 
   return (
@@ -171,13 +175,29 @@ export default function InsercaoDeDados() {
             <Card>
               <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-BR">
                 <Paper elevation={3}>
-                  <CardHeader title="Data" sx={{ color: 'primary.main' }} />
+                  <Typography
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: '1.5em',
+                      ml: '0.7em',
+                      pt: '0.3em',
+                      pb: '0.3em',
+                    }}
+                  >
+                    Data
+                  </Typography>
                 </Paper>
                 <Grid sx={{ p: '20px' }}>
                   <Stack direction="row" spacing={'auto'}>
-                    <FormControl sx={{ width: '40%' }}>
+                    <FormControl sx={{ width: '50%' }}>
                       <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
-                      <Select id="mes" value={mes} onChange={handleChangeMes} size="small">
+                      <Select
+                        id="mes"
+                        name="mes"
+                        value={mes}
+                        onChange={handleChangeMes}
+                        size="small"
+                      >
                         <MenuItem value="">
                           <em>Nenhum</em>
                         </MenuItem>
@@ -197,7 +217,13 @@ export default function InsercaoDeDados() {
                     </FormControl>
                     <FormControl sx={{ width: '40%' }}>
                       <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
-                      <Select id="ano" value={anos} onChange={handleChangeAnos} size="small">
+                      <Select
+                        id="ano"
+                        name="ano"
+                        value={anos}
+                        onChange={handleChangeAnos}
+                        size="small"
+                      >
                         <MenuItem value="">
                           <em>Nenhum</em>
                         </MenuItem>
@@ -211,19 +237,6 @@ export default function InsercaoDeDados() {
                       </Select>
                     </FormControl>
                   </Stack>
-
-                  <Stack sx={{ width: '320px', mt: '20px', mb: '10px' }}>
-                    <DatePicker
-                      views={['year', 'month']}
-                      minDate={minDate}
-                      maxDate={maxDate}
-                      value={value}
-                      onChange={(newDate) => {
-                        setValue(newDate);
-                      }}
-                      renderInput={(params) => <TextField {...params} helperText={null} />}
-                    />
-                  </Stack>
                 </Grid>
               </LocalizationProvider>
             </Card>
@@ -233,15 +246,25 @@ export default function InsercaoDeDados() {
           <Paper elevation={3} sx={{ mb: '2em' }}>
             <Card>
               <Paper elevation={3}>
-                <CardHeader title="Localidade" sx={{ color: 'primary.main' }} />
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    fontSize: '1.5em',
+                    ml: '0.7em',
+                    pt: '0.3em',
+                    pb: '0.3em',
+                  }}
+                >
+                  Localidade
+                </Typography>
               </Paper>
               <Stack sx={{ m: '20px' }}>
                 <Typography sx={{ fontSize: '1.2em', mb: '3px' }}>Escolha o Município</Typography>
+
                 <Autocomplete
                   id="localidade"
                   popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
                   disableClearable
-                  size="small"
                   options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                   groupBy={(option) => option.firstLetter}
                   getOptionLabel={(option) => (option.name ? option.name : '')}
@@ -253,6 +276,7 @@ export default function InsercaoDeDados() {
                     },
                   }}
                   renderInput={(params) => <TextField {...params} />}
+                  size="small"
                 />
 
                 <Stack
@@ -273,38 +297,68 @@ export default function InsercaoDeDados() {
           <Paper elevation={3}>
             <Card>
               <Paper elevation={3}>
-                <CardHeader title="Partos" sx={{ color: 'primary.main' }} />
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    fontSize: '1.5em',
+                    ml: '0.7em',
+                    pt: '0.3em',
+                    pb: '0.3em',
+                  }}
+                >
+                  Partos
+                </Typography>
               </Paper>
               <Stack sx={{ m: '20px' }}>
                 <FormControl>
-                  <Typography sx={{ fontSize: '1.2em', color: '#383838' }}>
-                    Partos Normais
-                  </Typography>
-                  <OutlinedInput
-                    id="qtdnormal"
-                    required
-                    sx={{
-                      color: '#383838',
-                      textAlign: 'center',
-                      mt: '3px',
-                    }}
-                    size="small"
-                    placeholder="Inserir quantidade de Partos Normais"
-                  />
-                  <Typography sx={{ fontSize: '1.2em', color: '#383838', mt: '20px' }}>
-                    Partos Sensíveis
-                  </Typography>
-                  <OutlinedInput
-                    id="qtdsensivel"
-                    required
-                    sx={{
-                      color: '#383838',
-                      textAlign: 'center',
-                      mt: '3px',
-                    }}
-                    size="small"
-                    placeholder="Inserir quantidade de Partos Sensíveis"
-                  />
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignContent="center"
+                    sx={{ mb: '20px' }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: '1.2em',
+                        color: '#383838',
+                        alignSelf: 'center',
+                      }}
+                    >
+                      Partos Normais
+                    </Typography>
+                    <OutlinedInput
+                      id="qtdnormal"
+                      name="qtdnormal"
+                      required
+                      sx={{
+                        color: '#383838',
+                        textAlign: 'center',
+                        width: '30%',
+                      }}
+                      type="number"
+                      size="small"
+                    />
+                  </Grid>
+
+                  <Grid container direction="row" justifyContent="space-between">
+                    {' '}
+                    <Typography sx={{ fontSize: '1.2em', color: '#383838', alignSelf: 'center' }}>
+                      Partos Sensíveis
+                    </Typography>
+                    <OutlinedInput
+                      id="qtdsensivel"
+                      name="qtdsensivel"
+                      required
+                      sx={{
+                        color: '#383838',
+                        textAlign: 'center',
+                        width: '30%',
+                      }}
+                      type="number"
+                      size="small"
+                    />
+                  </Grid>
                 </FormControl>
                 <Stack
                   direction="row"
@@ -328,9 +382,8 @@ export default function InsercaoDeDados() {
           <DataGrid
             rows={rows}
             columns={columns}
-            experimentalFeatures={{ newEditingApi: true }}
             hideFooterSelectedRowCount
-            sx={{ width: '100%', background: '#FFFFFF', color: 'primary.main', boxShadow: 3 }}
+            sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
           />
         </Grid>
       </Grid>
