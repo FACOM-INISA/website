@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import {
   Button,
@@ -15,6 +15,10 @@ import {
   ListItemText,
   Paper,
   TextField,
+  Typography,
+  Box,
+  SelectChangeEvent,
+  Stack,
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -26,8 +30,10 @@ import styles from '../styles/components/SistemaDeDados.module.css';
 import OpenDataVisualization from '../components/graficoLinha';
 import PieChartData from '../components/graficoTorta';
 import Layout from '../components/layouts/default';
-
 import municipios from '../data/municipios.json';
+import { Body } from 'node-fetch';
+import { props } from 'bluebird';
+import Parto from '../lib/Parto';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -46,6 +52,66 @@ const SistemaDeDados: NextPage = () => {
       ...option,
     };
   });
+
+  const [data, setData] = React.useState(new Array<Parto>());
+
+  const [rows, setRows] = React.useState([]);
+
+  const [value, setValue] = React.useState<any>('');
+
+  const [mes, setMes] = React.useState('');
+  const handleChangeMes = (event: SelectChangeEvent) => {
+    setMes(event.target.value);
+  };
+  const [anos, setAnos] = React.useState('');
+  const handleChangeAnos = (event: SelectChangeEvent) => {
+    setAnos(event.target.value);
+  };
+  const [tableData, setTableData] = React.useState([]);
+  const [formInputData, setformInputData] = React.useState({
+    data: '',
+    partoNormal: '',
+    partoSensivel: '',
+    localidade: '',
+  });
+
+  React.useEffect(() => {
+    const body = {
+      municipio: 5000203,
+    };
+
+    fetch('api/consulta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((message) => {
+        return message.json();
+      })
+      /* .then((data) => {
+        setData(data);
+        data?.partos.forEach((element: any) => {
+          console.log(element.mes);
+        });
+      }) */
+      .then((data) => {
+        setData(
+          data.partos.filter((element: any, index: number) => {
+            element.id = index;
+            element.localidade = municipios.map((municipio) => {
+              if (municipio.id == element.municipio_id) {
+                return municipio.name;
+              }
+            })[0];
+            console.log(element);
+            return element;
+          })
+        );
+        console.log(data);
+      });
+  }, []);
 
   const [checked, setChecked] = React.useState([0]);
   const handleToggle = (value: number) => () => {
@@ -68,8 +134,6 @@ const SistemaDeDados: NextPage = () => {
   const handleExpandClickD = () => {
     setExpandedD(!expandedD);
   };
-
-  const [value, setValue] = React.useState<any>(true);
   console.log(value);
 
   return (
@@ -116,7 +180,7 @@ const SistemaDeDados: NextPage = () => {
                   />
 
                   <div className={styles.botoes}>
-                    <Button variant="contained" onClick={() => setLimpar('')}>
+                    <Button variant="contained" onClick={() => setValue({ name: '' })}>
                       Limpar
                     </Button>
                     <Button variant="contained">Buscar</Button>
@@ -189,11 +253,11 @@ const SistemaDeDados: NextPage = () => {
             }}
           >
             <Grid item sx={{ borderRadius: 2 }}>
-              <OpenDataVisualization />
+              <OpenDataVisualization registros={data} />
             </Grid>
           </Paper>
 
-          <Grid item sx={{ borderRadius: 2 }}>
+          <Grid item container sx={{ borderRadius: 2 }}>
             <Paper
               sx={{
                 p: 4,
@@ -203,35 +267,30 @@ const SistemaDeDados: NextPage = () => {
                 backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
               }}
             >
-              <Grid container>
-                <Grid item xs minWidth={700}>
-                  <PieChartData />
-                </Grid>
-                <Grid item xs sm container>
-                  <Grid item xs container direction="column" spacing={10}>
-                    <Grid item xs>
-                      {/* <Paper
-                        sx={{ backgroundColor: '#0088B7', p: 2, margin: 'auto', maxWidth: 100 }}
-                      >
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="div"
-                          color="#ffffff"
-                          fontWeight={800}
-                        >
-                          Partos
-                        </Typography>
-                      </Paper>
+              <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
+                Porcentagem de partos
+              </Typography>
+              <Grid item xs minWidth={800}>
+                <PieChartData />
+              </Grid>
 
-                      <Typography variant="h5" color="#0088B7" fontWeight={800}>
-                        Partos normais
-                      </Typography>
-                      <Typography variant="h5" color="#0088B7" fontWeight={800}>
-                        Partos sensíveis
-                      </Typography> */}
-                    </Grid>
-                  </Grid>
+              <Grid item container xs direction={'row'}>
+                <Grid item xs={6}>
+                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
+                    Partos Normais:
+                  </Typography>
+                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
+                    {1000}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
+                    Partos Sensíveis:
+                  </Typography>
+                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
+                    {400}
+                  </Typography>
                 </Grid>
               </Grid>
             </Paper>
@@ -241,5 +300,4 @@ const SistemaDeDados: NextPage = () => {
     </Layout>
   );
 };
-
 export default SistemaDeDados;
