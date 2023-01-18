@@ -33,7 +33,7 @@ import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
 import { Body } from 'node-fetch';
 import { props } from 'bluebird';
-import Parto from '../lib/Parto';
+import Parto, { Predicao } from '../lib/Parto';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -55,6 +55,8 @@ const SistemaDeDados: NextPage = () => {
 
   const [data, setData] = React.useState(new Array<Parto>());
 
+  const [dataPredicao, setDataPredicao] = React.useState(new Array<Predicao>());
+
   const [rows, setRows] = React.useState([]);
 
   const [value, setValue] = React.useState<any>('');
@@ -75,6 +77,8 @@ const SistemaDeDados: NextPage = () => {
     localidade: '',
   });
 
+  //useEffect para consumir e sincronizar dados da API de dados.
+
   React.useEffect(() => {
     const body = {
       municipio: 5000203,
@@ -90,12 +94,7 @@ const SistemaDeDados: NextPage = () => {
       .then((message) => {
         return message.json();
       })
-      /* .then((data) => {
-        setData(data);
-        data?.partos.forEach((element: any) => {
-          console.log(element.mes);
-        });
-      }) */
+
       .then((data) => {
         setData(
           data.partos.filter((element: any, index: number) => {
@@ -109,9 +108,56 @@ const SistemaDeDados: NextPage = () => {
             return element;
           })
         );
+        /* setDataPredicao(
+          dataPredicao.predicoes.filter((element: any, index: number) => {
+            element.id = index;
+            element.localidade = municipios.map((municipio) => {
+              if (municipio.id == element.municipio_id) {
+                return municipio.name;
+              }
+            })[0];
+            console.log(element);
+            return element;
+          })
+        ); */
         console.log(data);
       });
   }, []);
+
+  //useEffect para consumir e sincronizar dados da API de predição.
+
+  /* React.useEffect(() => {
+    const body = {
+      municipio: 5000203,
+    };
+
+    fetch('api/consulta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((message) => {
+        return message.json();
+      })
+
+      .then((dataPredicao) => {
+        setDataPredicao(
+          dataPredicao.predicoes.filter((element: any, index: number) => {
+            element.id = index;
+            element.localidade = municipios.map((municipio) => {
+              if (municipio.id == element.municipio_id) {
+                return municipio.name;
+              }
+            })[0];
+            console.log(element);
+            return element;
+          })
+        );
+        console.log(dataPredicao);
+      });
+  }, []); */
 
   const [checked, setChecked] = React.useState([0]);
   const handleToggle = (value: number) => () => {
@@ -253,7 +299,7 @@ const SistemaDeDados: NextPage = () => {
             }}
           >
             <Grid item sx={{ borderRadius: 2 }}>
-              <OpenDataVisualization registros={data} />
+              <OpenDataVisualization registros={data} predicoes={dataPredicao} />
             </Grid>
           </Paper>
 
@@ -268,7 +314,7 @@ const SistemaDeDados: NextPage = () => {
               }}
             >
               <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-                Porcentagem de partos
+                Percentual de partos
               </Typography>
               <Grid item xs minWidth={800}>
                 <PieChartData />

@@ -16,7 +16,7 @@ import {
 } from 'recharts';
 import { Grid } from '@mui/material';
 import { any } from 'bluebird';
-import Parto from '../lib/Parto';
+import Parto, { Predicao } from '../lib/Parto';
 
 function OpenDataVisualization({
   registros,
@@ -27,14 +27,20 @@ function OpenDataVisualization({
 }) {
   const data = registros.map((reg) => {
     return {
-      name: `${reg.mes}.${reg.ano}`,
+      name: `${reg.mes}/${2000 + reg.ano}`,
       cesaria: reg.parto_cesaria,
       normais: reg.parto_normais,
       total: reg.parto_total,
     };
   });
 
-  const dataPredicao = predicoes.filter((pred) => pred.tipo_parto === 'total').map();
+  const dataPredicao = predicoes
+    .filter((pred) => pred.tipo_parto === 'cesaria')
+    .map((predicao) => {
+      return {
+        name: `${predicao.ano}/${predicao.tipo_parto}`,
+      };
+    });
 
   return (
     <Grid>
@@ -57,7 +63,8 @@ function OpenDataVisualization({
             <Tooltip />
             <Legend />
 
-            <Line type="monotone" dataKey="total" stroke="#0088B7" name="Quantidade" />
+            <Line type="monotone" dataKey="total" stroke="#0088B7" name="Quantidade de partos" />
+            <Line type="monotone" dataKey="cesaria" stroke="#0088B7" name="Quantidade de partos" />
           </LineChart>
         </ResponsiveContainer>
       </Grid>

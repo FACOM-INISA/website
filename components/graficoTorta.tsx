@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
-
-const data = [
-  { name: 'Partos Sensíveis', value: 400 },
-  { name: 'Partos Normais', value: 1000 },
-];
+import Parto from '../lib/Parto';
 
 const renderActiveShape = (props: {
   cx: any;
@@ -18,8 +14,10 @@ const renderActiveShape = (props: {
   payload: any;
   percent: any;
   value: any;
+  registros: Array<Parto>;
 }) => {
   const RADIAN = Math.PI / 180;
+
   const {
     cx,
     cy,
@@ -32,6 +30,7 @@ const renderActiveShape = (props: {
     payload,
     percent,
     value,
+    registros,
   } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
@@ -42,6 +41,15 @@ const renderActiveShape = (props: {
   const ex = mx + (cos >= 0 ? 1 : -1) * 22;
   const ey = my;
   const textAnchor = cos >= 0 ? 'start' : 'end';
+
+  const data = registros.map((reg) => {
+    return {
+      name: `${reg.mes}/${2000 + reg.ano}`,
+      cesaria: reg.parto_cesaria,
+      normais: reg.parto_normais,
+      value: reg.parto_total,
+    };
+  });
 
   return (
     <g>
@@ -99,13 +107,12 @@ export default class GraficoTorta extends PureComponent {
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}
-            data={data}
             cx="50%"
             cy="50%"
             innerRadius={80}
             outerRadius={100}
             fill="#0088B7"
-            dataKey="value"
+            dataKey=""
             onMouseEnter={this.onPieEnter}
           />
         </PieChart>
