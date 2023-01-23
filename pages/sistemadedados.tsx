@@ -265,7 +265,7 @@ const SistemaDeDados: NextPage = () => {
             </Grid>
           </Paper>
 
-          {/* <Grid item container sx={{ borderRadius: 2 }}>
+          <Grid item container sx={{ borderRadius: 2 }}>
             <Paper
               sx={{
                 p: 4,
@@ -278,11 +278,11 @@ const SistemaDeDados: NextPage = () => {
               <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
                 Percentual de partos
               </Typography>
-              <Grid item xs minWidth={800}>
-                <PieChartData />
+              <Grid item xs sx={{ display: 'flex', alignItems: 'center' }}>
+                <PieChartData registros={data} />
               </Grid>
 
-              <Grid item container xs direction={'row'}>
+              {/* <Grid item container xs direction={'row'}>
                 <Grid item xs={6}>
                   <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
                     Partos Normais:
@@ -300,9 +300,9 @@ const SistemaDeDados: NextPage = () => {
                     {400}
                   </Typography>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Paper>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Grid>
     </Layout>
