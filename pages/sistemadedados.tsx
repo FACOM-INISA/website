@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import {
   Button,
@@ -16,13 +16,9 @@ import {
   Paper,
   TextField,
   Typography,
-  Box,
   SelectChangeEvent,
-  Stack,
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SearchIcon from '@mui/icons-material/Search';
@@ -31,18 +27,7 @@ import OpenDataVisualization from '../components/graficoLinha';
 import PieChartData from '../components/graficoTorta';
 import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
-import { Body } from 'node-fetch';
-import { props } from 'bluebird';
 import Parto, { Predicao } from '../lib/Parto';
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-const dados = [
-  { name: 'Partos', id: 0 },
-  { name: 'Partos Normais', id: 1 },
-  { name: 'Partos Sensíveis', id: 2 },
-];
 
 const SistemaDeDados: NextPage = () => {
   const options = municipios.map((option) => {
@@ -53,46 +38,24 @@ const SistemaDeDados: NextPage = () => {
     };
   });
 
-  const [data, setData] = React.useState(new Array<Parto>());
+  const [data, setData] = useState(new Array<Parto>());
+  const [dataPredicao, setDataPredicao] = useState(new Array<Predicao>());
 
-  const [dataPredicao, setDataPredicao] = React.useState(new Array<Predicao>());
+  const municipioPadrao =
+    options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
 
-  const [value, setValue] = React.useState<any>('');
-
-  const [mes, setMes] = React.useState('');
-  const handleChangeMes = (event: SelectChangeEvent) => {
-    setMes(event.target.value);
-  };
-  const [anos, setAnos] = React.useState('');
-  const handleChangeAnos = (event: SelectChangeEvent) => {
-    setAnos(event.target.value);
-  };
-  const [tableData, setTableData] = React.useState([]);
-  const [formInputData, setformInputData] = React.useState({
-    data: '',
-    partoNormal: '',
-    partoSensivel: '',
-    localidade: '',
-  });
+  const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
 
   //useEffect para consumir e sincronizar dados da API de dados de partos.
-
-  React.useEffect(() => {
-    const body = {
-      municipio: 5000203,
-    };
+  useEffect(() => {
+    const body = { municipio: municipio?.id };
 
     fetch('api/consulta', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'Application/json',
-      },
+      headers: { 'Content-Type': 'Application/json' },
       body: JSON.stringify(body),
     })
-      .then((message) => {
-        return message.json();
-      })
-
+      .then((message) => message.json())
       .then((data) => {
         setData(
           data.partos.filter((element: any, index: number) => {
@@ -113,36 +76,18 @@ const SistemaDeDados: NextPage = () => {
                 return municipio.name;
               }
             })[0];
-            console.log(element);
             return element;
           })
         );
-        console.log(data);
       });
-  }, []);
+  }, [municipio]);
 
-  const [checked, setChecked] = React.useState([0]);
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const [tipoParto, setTipoParto] = useState<'todos' | 'normais' | 'sensiveis'>('todos');
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
+  const [expandedR, setExpandedR] = useState(true);
+  const [expandedD, setExpandedD] = useState(true);
 
-  const [expandedR, setExpandedR] = React.useState(true);
-  const handleExpandClickR = () => {
-    setExpandedR(!expandedR);
-  };
-  const [expandedD, setExpandedD] = React.useState(true);
-  const handleExpandClickD = () => {
-    setExpandedD(!expandedD);
-  };
-  console.log(value);
+  const fakeInput = { name: '', id: 0, firstLetter: '' };
 
   return (
     <Layout className={styles.sistema}>
@@ -160,7 +105,7 @@ const SistemaDeDados: NextPage = () => {
                     }
                     action={
                       <IconButton
-                        onClick={handleExpandClickR}
+                        onClick={() => setExpandedR(!expandedR)}
                         aria-expanded={expandedR}
                         aria-label="show more"
                         style={{ color: 'primary.main' }}
@@ -172,9 +117,13 @@ const SistemaDeDados: NextPage = () => {
                 </Card>
                 <Collapse in={expandedR} className={styles.collapse}>
                   <Autocomplete
+                    value={municipio}
                     className={styles.busca}
                     popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
-                    options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                    options={[
+                      fakeInput,
+                      ...options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter)),
+                    ]}
                     groupBy={(option) => option.firstLetter}
                     getOptionLabel={(option) => option.name}
                     sx={{
@@ -185,10 +134,11 @@ const SistemaDeDados: NextPage = () => {
                       },
                     }}
                     renderInput={(params) => <TextField {...params} label="Buscar por município" />}
+                    onChange={(_, selected) => setMunicipio(selected || fakeInput)}
                   />
 
                   <div className={styles.botoes}>
-                    <Button variant="contained" onClick={() => setValue({ name: '' })}>
+                    <Button variant="contained" onClick={() => setMunicipio(fakeInput)}>
                       Limpar
                     </Button>
                     <Button variant="contained">Buscar</Button>
@@ -210,7 +160,7 @@ const SistemaDeDados: NextPage = () => {
                     }
                     action={
                       <IconButton
-                        onClick={handleExpandClickD}
+                        onClick={() => setExpandedD(!expandedD)}
                         aria-expanded={expandedD}
                         aria-label="show more"
                         style={{ color: 'primary.main' }}
@@ -222,20 +172,28 @@ const SistemaDeDados: NextPage = () => {
                 </Card>
                 <Collapse in={expandedD} className={styles.collapse}>
                   <List className={styles.list} dense component="div" role="list">
-                    {dados.map((dado) => {
-                      const labelId = `checkbox-list-label-${dado.id}`;
+                    {[
+                      { name: 'Partos', value: 'todos' },
+                      { name: 'Partos Normais', value: 'normais' },
+                      { name: 'Partos Sensíveis', value: 'sensiveis' },
+                    ].map((dado) => {
+                      const labelId = `checkbox-list-label-${dado.value}`;
                       return (
-                        <ListItem key={dado.id} role="listitem">
-                          <ListItemButton role={undefined} onClick={handleToggle(dado.id)} dense>
+                        <ListItem key={dado.value} role="listitem">
+                          <ListItemButton
+                            role={undefined}
+                            onClick={() => setTipoParto(dado.value as any)}
+                            dense
+                          >
                             <ListItemIcon>
                               <Checkbox
-                                checked={checked.indexOf(dado.id) !== -1}
+                                checked={tipoParto === dado.value}
                                 tabIndex={-1}
                                 disableRipple
                                 inputProps={{ 'aria-labelledby': labelId }}
                               />
                             </ListItemIcon>
-                            <ListItemText key={dado.id} style={{ color: 'primary.main' }}>
+                            <ListItemText key={dado.value} style={{ color: 'primary.main' }}>
                               {dado.name}
                             </ListItemText>
                           </ListItemButton>
@@ -261,7 +219,7 @@ const SistemaDeDados: NextPage = () => {
             }}
           >
             <Grid item sx={{ borderRadius: 2 }}>
-              <OpenDataVisualization registros={data} predicoes={dataPredicao} />
+              <OpenDataVisualization registros={data} predicoes={dataPredicao} tipo={tipoParto} />
             </Grid>
           </Paper>
 

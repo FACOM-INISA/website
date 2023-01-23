@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import {
   LineChart,
@@ -18,32 +18,55 @@ import { Grid } from '@mui/material';
 import { any } from 'bluebird';
 import Parto, { Predicao } from '../lib/Parto';
 
+type TipoDadosLocais = {
+  name: string;
+  cesaria?: number;
+  normais?: number;
+  total?: number;
+  pred?: number;
+};
+
 function OpenDataVisualization({
   registros,
   predicoes,
+  tipo,
 }: {
   registros: Array<Parto>;
   predicoes: Array<Predicao>;
+  tipo: 'todos' | 'normais' | 'sensiveis';
 }) {
-  let data = registros.map((reg) => {
-    return {
-      name: `${reg.mes}/${2000 + reg.ano}`,
-      cesaria: reg.parto_cesaria,
-      normais: reg.parto_normais,
-      total: reg.parto_total,
-    };
-  });
+  const [campoData, setCampoData] = useState<'total' | 'cesaria' | 'normais'>('total');
 
-  predicoes
-    .filter((pred) => pred.tipo_parto === 'total')
-    .forEach((predicao) => {
-      data.push({
-        name: `${predicao.mes}/${predicao.ano + 2000}`,
-        pred: predicao.pred,
-      });
+  const [data, setData] = useState<TipoDadosLocais[]>();
+
+  useEffect(() => {
+    if (tipo === 'todos') setCampoData('total');
+    if (tipo === 'normais') setCampoData('normais');
+    if (tipo === 'sensiveis') setCampoData('cesaria');
+
+    let dataAux: Array<TipoDadosLocais> = registros.map((reg) => {
+      return {
+        name: `${reg.mes}/${2000 + reg.ano}`,
+        cesaria: reg.parto_cesaria,
+        normais: reg.parto_normais,
+        total: reg.parto_total,
+      };
     });
 
-  console.log(predicoes);
+    const ultimo = dataAux[dataAux.length - 1];
+    dataAux.push({ name: ultimo?.name, pred: ultimo?.total }); // TODO - Alterar campo quando dados estiverem disponiveis
+
+    predicoes
+      .filter((pred) => pred.tipo_parto === 'total') // TODO - Alterar campo quando dados estiverem disponiveis
+      .forEach((predicao) => {
+        dataAux.push({
+          name: `${predicao.mes}/${predicao.ano + 2000}`,
+          pred: predicao.pred,
+        });
+      });
+
+    setData(dataAux);
+  }, [tipo, predicoes, registros]);
 
   return (
     <Grid>
@@ -53,12 +76,7 @@ function OpenDataVisualization({
             width={500}
             height={300}
             data={data}
-            margin={{
-              top: 20,
-              right: 50,
-              left: 20,
-              bottom: 5,
-            }}
+            margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -68,7 +86,7 @@ function OpenDataVisualization({
 
             <Line
               type="monotone"
-              dataKey="total"
+              dataKey={campoData}
               stroke="#0088B7"
               name="Quantidade de partos"
               strokeWidth={1}
