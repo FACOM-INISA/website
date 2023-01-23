@@ -112,7 +112,7 @@ export default class GraficoTorta extends PureComponent {
             innerRadius={80}
             outerRadius={100}
             fill="#0088B7"
-            dataKey=""
+            dataKey="name"
             onMouseEnter={this.onPieEnter}
           />
         </PieChart>

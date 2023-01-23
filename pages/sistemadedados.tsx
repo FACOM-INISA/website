@@ -57,8 +57,6 @@ const SistemaDeDados: NextPage = () => {
 
   const [dataPredicao, setDataPredicao] = React.useState(new Array<Predicao>());
 
-  const [rows, setRows] = React.useState([]);
-
   const [value, setValue] = React.useState<any>('');
 
   const [mes, setMes] = React.useState('');
@@ -77,7 +75,7 @@ const SistemaDeDados: NextPage = () => {
     localidade: '',
   });
 
-  //useEffect para consumir e sincronizar dados da API de dados.
+  //useEffect para consumir e sincronizar dados da API de dados de partos.
 
   React.useEffect(() => {
     const body = {
@@ -104,12 +102,11 @@ const SistemaDeDados: NextPage = () => {
                 return municipio.name;
               }
             })[0];
-            console.log(element);
             return element;
           })
         );
-        /* setDataPredicao(
-          dataPredicao.predicoes.filter((element: any, index: number) => {
+        setDataPredicao(
+          data.predicoes.predicoes_total.filter((element: any, index: number) => {
             element.id = index;
             element.localidade = municipios.map((municipio) => {
               if (municipio.id == element.municipio_id) {
@@ -119,45 +116,10 @@ const SistemaDeDados: NextPage = () => {
             console.log(element);
             return element;
           })
-        ); */
+        );
         console.log(data);
       });
   }, []);
-
-  //useEffect para consumir e sincronizar dados da API de predição.
-
-  /* React.useEffect(() => {
-    const body = {
-      municipio: 5000203,
-    };
-
-    fetch('api/consulta', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/json',
-      },
-      body: JSON.stringify(body),
-    })
-      .then((message) => {
-        return message.json();
-      })
-
-      .then((dataPredicao) => {
-        setDataPredicao(
-          dataPredicao.predicoes.filter((element: any, index: number) => {
-            element.id = index;
-            element.localidade = municipios.map((municipio) => {
-              if (municipio.id == element.municipio_id) {
-                return municipio.name;
-              }
-            })[0];
-            console.log(element);
-            return element;
-          })
-        );
-        console.log(dataPredicao);
-      });
-  }, []); */
 
   const [checked, setChecked] = React.useState([0]);
   const handleToggle = (value: number) => () => {
@@ -287,7 +249,7 @@ const SistemaDeDados: NextPage = () => {
           </div>
         </div>
 
-        <Grid container id="graficos" justifyContent="center" rowGap="2em" flexDirection="column">
+        <Grid container id="graficos" justifyContent="center" rowGap="2rem" flexDirection="column">
           <Paper
             sx={{
               p: 1,
@@ -303,7 +265,7 @@ const SistemaDeDados: NextPage = () => {
             </Grid>
           </Paper>
 
-          <Grid item container sx={{ borderRadius: 2 }}>
+          {/* <Grid item container sx={{ borderRadius: 2 }}>
             <Paper
               sx={{
                 p: 4,
@@ -340,7 +302,7 @@ const SistemaDeDados: NextPage = () => {
                 </Grid>
               </Grid>
             </Paper>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Layout>

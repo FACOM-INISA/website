@@ -25,7 +25,7 @@ function OpenDataVisualization({
   registros: Array<Parto>;
   predicoes: Array<Predicao>;
 }) {
-  const data = registros.map((reg) => {
+  let data = registros.map((reg) => {
     return {
       name: `${reg.mes}/${2000 + reg.ano}`,
       cesaria: reg.parto_cesaria,
@@ -34,13 +34,16 @@ function OpenDataVisualization({
     };
   });
 
-  const dataPredicao = predicoes
-    .filter((pred) => pred.tipo_parto === 'cesaria')
-    .map((predicao) => {
-      return {
-        name: `${predicao.ano}/${predicao.tipo_parto}`,
-      };
+  predicoes
+    .filter((pred) => pred.tipo_parto === 'total')
+    .forEach((predicao) => {
+      data.push({
+        name: `${predicao.mes}/${predicao.ano + 2000}`,
+        pred: predicao.pred,
+      });
     });
+
+  console.log(predicoes);
 
   return (
     <Grid>
@@ -63,8 +66,20 @@ function OpenDataVisualization({
             <Tooltip />
             <Legend />
 
-            <Line type="monotone" dataKey="total" stroke="#0088B7" name="Quantidade de partos" />
-            <Line type="monotone" dataKey="cesaria" stroke="#0088B7" name="Quantidade de partos" />
+            <Line
+              type="monotone"
+              dataKey="total"
+              stroke="#0088B7"
+              name="Quantidade de partos"
+              strokeWidth={1}
+            />
+            <Line
+              type="monotone"
+              dataKey="pred"
+              stroke="#B70000"
+              name="Predição de partos"
+              strokeWidth={2}
+            />
           </LineChart>
         </ResponsiveContainer>
       </Grid>
