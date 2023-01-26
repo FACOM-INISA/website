@@ -138,7 +138,7 @@ const SistemaDeDados: NextPage = () => {
                   />
 
                   <div className={styles.botoes}>
-                    <Button variant="contained" onClick={() => setMunicipio(fakeInput)}>
+                    <Button variant="contained" onClick={() => setMunicipio(null)}>
                       Limpar
                     </Button>
                     <Button variant="contained">Buscar</Button>
@@ -175,7 +175,7 @@ const SistemaDeDados: NextPage = () => {
                     {[
                       { name: 'Partos', value: 'todos' },
                       { name: 'Partos Normais', value: 'normais' },
-                      { name: 'Partos Sensíveis', value: 'sensiveis' },
+                      /* { name: 'Partos Sensíveis', value: 'sensiveis' }, */
                     ].map((dado) => {
                       const labelId = `checkbox-list-label-${dado.value}`;
                       return (
