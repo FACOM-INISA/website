@@ -1,13 +1,11 @@
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
 import {
   Button,
-  Box,
   Card,
-  CardHeader,
   FormControl,
   Grid,
   MenuItem,
@@ -21,17 +19,14 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled } from '@mui/material/styles';
-import dayjs, { Dayjs } from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import 'dayjs/locale/pt-BR';
-import { useRouter } from 'next/router';
+import Parto from '../lib/Parto';
 
 const ButtonCinza = styled(Button)({
   textTransform: 'none',
   width: '10em',
+  marginRight: '10px',
   backgroundColor: '#383838',
   '&:hover': {
     backgroundColor: '#474747',
@@ -41,6 +36,7 @@ const ButtonCinza = styled(Button)({
 const ButtonAzul = styled(Button)({
   textTransform: 'none',
   width: '10em',
+  marginLeft: '10px',
   backgroundColor: 'primary.main',
   '&:hover': {
     backgroundColor: '#10a0cf',
@@ -62,21 +58,13 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 90,
+    width: 100,
     valueFormatter: (params) => params.value + 2000,
   },
   {
     field: 'parto_normais',
     headerName: 'Partos Normais',
     type: 'number',
-    headerAlign: 'center',
-    align: 'center',
-    width: 170,
-  },
-  {
-    field: 'parto_cesaria',
-    headerName: 'Partos Sensíveis',
-    type: 'string',
     headerAlign: 'center',
     align: 'center',
     width: 170,
@@ -100,9 +88,24 @@ export default function InsercaoDeDados() {
     };
   });
 
-  const [rows, setRows] = React.useState([]);
+  const [data, setData] = useState(new Array<Parto>());
+
+  const municipioPadrao =
+    options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
+
+  const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
+
+  const [rows, setRows] = React.useState(new Array<Parto>());
 
   const [value, setValue] = React.useState<any>('');
+
+  const [buscar, setBuscar] = React.useState();
+  const handleSearch = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (value) {
+      // console.log(value);
+      setMunicipio(value);
+    }
+  };
 
   const [mes, setMes] = React.useState('');
   const handleChangeMes = (event: SelectChangeEvent) => {
@@ -114,44 +117,34 @@ export default function InsercaoDeDados() {
     setAnos(event.target.value);
   };
 
-  const minDate = dayjs('2015-01-01');
+  const minDate = dayjs('2006');
   const maxDate = dayjs();
 
-  const [tableData, setTableData] = React.useState([]);
-  const [formInputData, setformInputData] = React.useState({
-    data: '',
-    partoNormal: '',
-    partoSensivel: '',
-    localidade: '',
-  });
+  // useEffect para consumir e sincronizar dados da API de dados de partos.
+  useEffect(() => {
+    const body = { municipio: municipio?.id };
+    console.log(body);
 
-  React.useEffect(() => {
-    fetch('api/consulta', {
+    fetch('api/data/consulta', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'Application/json',
-      },
-      body: JSON.stringify({ municipio: 5000203 }),
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify(body),
     })
-      .then((message) => {
-        return message.json();
-      })
+      .then((message) => message.json())
       .then((data) => {
         setRows(
           data.partos.filter((element: any, index: number) => {
             element.id = index;
-            element.localidade = municipios.map((municipio) => {
-              if (municipio.id == element.municipio_id) {
-                return municipio.name;
-              }
-            })[0];
+            element.localidade = municipios.find(
+              (municipio) => element.municipio_id === municipio.id
+            )?.name;
+
             console.log(element);
             return element;
           })
         );
-        console.log(data.partos); // tem todas as informações
       });
-  }, []);
+  }, [municipio]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -163,86 +156,28 @@ export default function InsercaoDeDados() {
       partoNormal: data.get('qtdnormal'),
       partoSensivel: data.get('qtdsensivel'),
     };
+
+    fetch('api/data/singleupdate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((data) => {
+        return data.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   return (
     <Layout>
       <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
         {/* Sidebar */}
-        <Grid component="form" onSubmit={handleSubmit} sx={{ width: '360px', margin: '0 4rem' }}>
+        <Grid component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
           {/* Primeiro Card */}
-          <Paper elevation={3} sx={{ mb: '2em' }}>
-            <Card>
-              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-BR">
-                <Paper elevation={3}>
-                  <Typography
-                    sx={{
-                      color: 'primary.main',
-                      fontSize: '1.5em',
-                      ml: '0.7em',
-                      pt: '0.3em',
-                      pb: '0.3em',
-                    }}
-                  >
-                    Data
-                  </Typography>
-                </Paper>
-                <Grid sx={{ p: '20px' }}>
-                  <Stack direction="row" spacing={'auto'}>
-                    <FormControl sx={{ width: '50%' }}>
-                      <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
-                      <Select
-                        id="mes"
-                        name="mes"
-                        value={mes}
-                        onChange={handleChangeMes}
-                        size="small"
-                      >
-                        <MenuItem value="">
-                          <em>Nenhum</em>
-                        </MenuItem>
-                        <MenuItem value={0o1}>Janeiro</MenuItem>
-                        <MenuItem value={0o2}>Fevereiro</MenuItem>
-                        <MenuItem value={0o3}>Março</MenuItem>
-                        <MenuItem value={0o4}>Abril</MenuItem>
-                        <MenuItem value={0o5}>Maio</MenuItem>
-                        <MenuItem value={0o6}>Junho</MenuItem>
-                        <MenuItem value={0o7}>Julho</MenuItem>
-                        <MenuItem value={'08'}>Agosto</MenuItem>
-                        <MenuItem value={'09'}>Setembro</MenuItem>
-                        <MenuItem value={10}>Outubro</MenuItem>
-                        <MenuItem value={11}>Novembro</MenuItem>
-                        <MenuItem value={12}>Dezembro</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <FormControl sx={{ width: '40%' }}>
-                      <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
-                      <Select
-                        id="ano"
-                        name="ano"
-                        value={anos}
-                        onChange={handleChangeAnos}
-                        size="small"
-                      >
-                        <MenuItem value="">
-                          <em>Nenhum</em>
-                        </MenuItem>
-
-                        <MenuItem value={0o1}>2018</MenuItem>
-                        <MenuItem value={0o2}>2019</MenuItem>
-                        <MenuItem value={0o3}>2020</MenuItem>
-                        <MenuItem value={0o4}>2021</MenuItem>
-                        <MenuItem value={0o5}>2022</MenuItem>
-                        <MenuItem value={0o6}>2023</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                </Grid>
-              </LocalizationProvider>
-            </Card>
-          </Paper>
-
-          {/* Segundo Card */}
           <Paper elevation={3} sx={{ mb: '2em' }}>
             <Card>
               <Paper elevation={3}>
@@ -260,7 +195,6 @@ export default function InsercaoDeDados() {
               </Paper>
               <Stack sx={{ m: '20px' }}>
                 <Typography sx={{ fontSize: '1.2em', mb: '3px' }}>Escolha o Município</Typography>
-
                 <Autocomplete
                   id="localidade"
                   popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
@@ -269,6 +203,9 @@ export default function InsercaoDeDados() {
                   groupBy={(option) => option.firstLetter}
                   getOptionLabel={(option) => (option.name ? option.name : '')}
                   value={value}
+                  onChange={(event: any, newValue: string | null) => {
+                    setValue(newValue);
+                  }}
                   sx={{
                     width: 'auto',
                     [`& .${autocompleteClasses.popupIndicator}`]: {
@@ -278,23 +215,24 @@ export default function InsercaoDeDados() {
                   renderInput={(params) => <TextField {...params} />}
                   size="small"
                 />
-
                 <Stack
                   direction="row"
                   justifyContent="space-between"
-                  sx={{ mt: '20px', mb: '10px' }}
+                  sx={{ mt: '20px', mb: '5px' }}
                 >
-                  <ButtonCinza variant="contained" onClick={() => setValue({ name: '' })}>
+                  <ButtonCinza variant="contained" onClick={() => setValue(null)}>
                     Limpar
                   </ButtonCinza>
-                  <ButtonAzul variant="contained">Buscar</ButtonAzul>
+                  <ButtonAzul variant="contained" onClick={handleSearch}>
+                    Buscar
+                  </ButtonAzul>
                 </Stack>
               </Stack>
             </Card>
           </Paper>
 
-          {/* Terceiro Card */}
-          <Paper elevation={3}>
+          {/* Segundo Card */}
+          <Paper elevation={3} sx={{ mb: '2em' }}>
             <Card>
               <Paper elevation={3}>
                 <Typography
@@ -306,64 +244,107 @@ export default function InsercaoDeDados() {
                     pb: '0.3em',
                   }}
                 >
-                  Partos
+                  Inserção de Dados
                 </Typography>
               </Paper>
-              <Stack sx={{ m: '20px' }}>
-                <FormControl>
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignContent="center"
-                    sx={{ mb: '20px' }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: '1.2em',
-                        color: '#383838',
-                        alignSelf: 'center',
-                      }}
+              <Grid sx={{ p: '20px' }}>
+                <Stack direction="row" spacing={'auto'}>
+                  <Stack sx={{ width: '50%' }}>
+                    <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
+                    <Select
+                      id="mes"
+                      name="mes"
+                      value={mes}
+                      onChange={handleChangeMes}
+                      size="small"
+                      required
                     >
-                      Partos Normais
-                    </Typography>
-                    <OutlinedInput
-                      id="qtdnormal"
-                      name="qtdnormal"
-                      required
-                      sx={{
-                        color: '#383838',
-                        textAlign: 'center',
-                        width: '30%',
-                      }}
-                      type="number"
+                      <MenuItem value={0o1}>Janeiro</MenuItem>
+                      <MenuItem value={0o2}>Fevereiro</MenuItem>
+                      <MenuItem value={0o3}>Março</MenuItem>
+                      <MenuItem value={0o4}>Abril</MenuItem>
+                      <MenuItem value={0o5}>Maio</MenuItem>
+                      <MenuItem value={0o6}>Junho</MenuItem>
+                      <MenuItem value={0o7}>Julho</MenuItem>
+                      <MenuItem value={'08'}>Agosto</MenuItem>
+                      <MenuItem value={'09'}>Setembro</MenuItem>
+                      <MenuItem value={10}>Outubro</MenuItem>
+                      <MenuItem value={11}>Novembro</MenuItem>
+                      <MenuItem value={12}>Dezembro</MenuItem>
+                    </Select>
+                  </Stack>
+                  <Stack sx={{ width: '40%' }}>
+                    <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
+                    <Select
+                      id="ano"
+                      name="ano"
+                      value={anos}
+                      onChange={handleChangeAnos}
                       size="small"
-                    />
-                  </Grid>
+                      required
+                    >
+                      <MenuItem value={0o1}>minDate</MenuItem>
+                      <MenuItem value={0o2}>2019</MenuItem>
+                      <MenuItem value={0o3}>2020</MenuItem>
+                      <MenuItem value={0o4}>2021</MenuItem>
+                      <MenuItem value={0o5}>2022</MenuItem>
+                      <MenuItem value={0o6}>2023</MenuItem>
+                    </Select>
+                  </Stack>
+                </Stack>
 
-                  <Grid container direction="row" justifyContent="space-between">
-                    {' '}
-                    <Typography sx={{ fontSize: '1.2em', color: '#383838', alignSelf: 'center' }}>
-                      Partos Sensíveis
-                    </Typography>
-                    <OutlinedInput
-                      id="qtdsensivel"
-                      name="qtdsensivel"
-                      required
-                      sx={{
-                        color: '#383838',
-                        textAlign: 'center',
-                        width: '30%',
-                      }}
-                      type="number"
-                      size="small"
-                    />
-                  </Grid>
-                </FormControl>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignContent="center"
+                  sx={{ m: '20px 0' }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: '1.2em',
+                      color: '#383838',
+                      alignSelf: 'center',
+                    }}
+                  >
+                    Partos Normais
+                  </Typography>
+                  <OutlinedInput
+                    id="qtdnormal"
+                    name="qtdnormal"
+                    required
+                    sx={{
+                      color: '#383838',
+                      textAlign: 'center',
+                      width: '30%',
+                    }}
+                    type="number"
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid container direction="row" justifyContent="space-between">
+                  {' '}
+                  <Typography sx={{ fontSize: '1.2em', color: '#383838', alignSelf: 'center' }}>
+                    Partos Sensíveis
+                  </Typography>
+                  <OutlinedInput
+                    id="qtdsensivel"
+                    name="qtdsensivel"
+                    required
+                    sx={{
+                      color: '#383838',
+                      textAlign: 'center',
+                      width: '30%',
+                    }}
+                    type="number"
+                    size="small"
+                  />
+                </Grid>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
-                  sx={{ mt: '20px', mb: '10px' }}
+                  sx={{ mt: '20px', mb: '5px' }}
                 >
                   <ButtonCinza variant="contained" onClick={() => setValue({ name: '' })}>
                     Cancelar
@@ -372,7 +353,7 @@ export default function InsercaoDeDados() {
                     Enviar
                   </ButtonAzul>
                 </Stack>
-              </Stack>
+              </Grid>
             </Card>
           </Paper>
         </Grid>
