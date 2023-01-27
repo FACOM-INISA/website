@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
@@ -90,14 +90,13 @@ export default function InsercaoDeDados() {
 
   const [data, setData] = useState(new Array<Parto>());
 
+  const fakeInput = { name: '', id: 0, firstLetter: '' };
   const municipioPadrao =
     options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
 
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
 
   const [rows, setRows] = React.useState(new Array<Parto>());
-
-  const [value, setValue] = React.useState<any>('');
 
   const [buscar, setBuscar] = React.useState();
 
@@ -107,13 +106,6 @@ export default function InsercaoDeDados() {
 
   const [ano, setAno] = React.useState<number[]>([]);
 
-  const handleSearch = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (value) {
-      // console.log(value);
-      setMunicipio(value);
-    }
-  };
-
   const handleChangeMes = (event: SelectChangeEvent) => {
     setMes(event.target.value);
   };
@@ -122,10 +114,8 @@ export default function InsercaoDeDados() {
     setAnos(event.target.value);
   };
 
-  // useEffect para consumir e sincronizar dados da API de dados de partos.
-  useEffect(() => {
-    const body = { municipio: municipio?.id };
-    // console.log(body);
+  const autoUpdate = useCallback((municipio: typeof municipioPadrao) => {
+    const body = { municipio: municipio.id };
 
     fetch('api/data/consulta', {
       method: 'POST',
@@ -135,18 +125,25 @@ export default function InsercaoDeDados() {
       .then((message) => message.json())
       .then((data) => {
         setRows(
-          data.partos.filter((element: any, index: number) => {
-            element.id = index;
-            element.localidade = municipios.find(
-              (municipio) => element.municipio_id === municipio.id
-            )?.name;
+          data.partos
+            .filter((element: any, index: number) => {
+              element.id = index;
+              element.localidade = municipios.find(
+                (municipio) => element.municipio_id === municipio.id
+              )?.name;
 
-            // console.log(element);
-            return element;
-          })
+              // console.log(element);
+              return element;
+            })
+            .sort((a: Parto, b: Parto) => b.ano - a.ano || b.mes - a.mes)
         );
       });
-  }, [municipio]);
+  }, []);
+
+  // useEffect para consumir e sincronizar dados da API de dados de partos.
+  useEffect(() => {
+    if (municipio) autoUpdate(municipio);
+  }, [autoUpdate, municipio]);
 
   useEffect(() => {
     const minDate = dayjs('2006');
@@ -159,45 +156,20 @@ export default function InsercaoDeDados() {
     setAno(aux);
   }, []);
 
-  const autoUpdate = (municipio: typeof municipioPadrao) => {
-    const body = { municipio: municipio.id };
-
-    fetch('api/data/consulta', {
-      method: 'POST',
-      headers: { 'Content-Type': 'Application/json' },
-      body: JSON.stringify(body),
-    })
-      .then((message) => message.json())
-      .then((data) => {
-        setRows(
-          data.partos.filter((element: any, index: number) => {
-            element.id = index;
-            element.localidade = municipios.find(
-              (municipio) => element.municipio_id === municipio.id
-            )?.name;
-
-            // console.log(element);
-            return element;
-          })
-        );
-      });
-  };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (!value) {
-      return;
-    }
+
+    if (!municipio || municipio.id === 0) return;
     const body = {
       mes: data.get('mes'),
       ano: data.get('ano'),
       normal: data.get('qtdnormal'),
       cesaria: data.get('qtdnormal'),
       total: +data.get('qtdnormal')! * 2,
-      idmunicipio: value.id,
+      idmunicipio: municipio.id,
     };
 
-    console.log(body);
     fetch('api/data/singleupdate', {
       method: 'POST',
       headers: {
@@ -206,12 +178,10 @@ export default function InsercaoDeDados() {
       body: JSON.stringify(body),
     }).then((response) => {
       if (response.ok) {
-        autoUpdate(value);
-        return;
+        return autoUpdate(municipio);
       }
       if (response.status === 401) {
-        alert('USUÁRIO NÃO AUTORIZADO');
-        return;
+        return alert('USUÁRIO NÃO AUTORIZADO');
       }
       alert('FALHA AO INSERIR OS DADOS');
     });
@@ -244,13 +214,14 @@ export default function InsercaoDeDados() {
                   id="localidade"
                   popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
                   disableClearable
-                  options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                  options={[
+                    fakeInput,
+                    ...options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter)),
+                  ]}
                   groupBy={(option) => option.firstLetter}
                   getOptionLabel={(option) => (option.name ? option.name : '')}
-                  value={value}
-                  onChange={(event: any, newValue: string | null) => {
-                    setValue(newValue);
-                  }}
+                  value={municipio || fakeInput}
+                  onChange={(event: any, newValue) => setMunicipio(newValue)}
                   sx={{
                     width: 'auto',
                     [`& .${autocompleteClasses.popupIndicator}`]: {
@@ -265,10 +236,10 @@ export default function InsercaoDeDados() {
                   justifyContent="space-between"
                   sx={{ mt: '20px', mb: '5px' }}
                 >
-                  <ButtonCinza variant="contained" onClick={() => setValue(null)}>
+                  <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
                     Limpar
                   </ButtonCinza>
-                  <ButtonAzul variant="contained" onClick={handleSearch}>
+                  <ButtonAzul variant="contained" onClick={() => console.log('TODO')}>
                     Buscar
                   </ButtonAzul>
                 </Stack>
@@ -392,7 +363,7 @@ export default function InsercaoDeDados() {
                   justifyContent="space-between"
                   sx={{ mt: '20px', mb: '5px' }}
                 >
-                  <ButtonCinza variant="contained" onClick={() => setValue({ name: '' })}>
+                  <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
                     Cancelar
                   </ButtonCinza>
                   <ButtonAzul variant="contained" type="submit">

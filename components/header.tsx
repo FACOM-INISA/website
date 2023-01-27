@@ -93,18 +93,15 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   );
 };
 
-export default function AppHeader(props: { admin?: boolean }) {
+export default function AppHeader(props: { admin?: boolean; logout?: boolean }) {
   const elements = [
     { name: 'Inicio', path: '/', icon: HomeIcon },
     { name: 'Painel', path: '/sistemadedados', icon: InsertChartIcon },
     { name: 'Metodologia', path: '/maisinfos', icon: InfoIcon },
   ];
 
-  if (props.admin)
-    elements.push(
-      { name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon }
-      // { name: 'Sair', path: '/', icon: LogoutIcon }
-    );
+  if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
+  if (props.logout) elements.push({ name: 'Sair', path: '/logout', icon: LogoutIcon });
 
   return <HeaderComponent items={elements} />;
 }
