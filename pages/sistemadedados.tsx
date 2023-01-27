@@ -118,6 +118,8 @@ const SistemaDeDados: NextPage = () => {
                 <Collapse in={expandedR} className={styles.collapse}>
                   <Autocomplete
                     value={municipio}
+                    clearIcon={false}
+                    noOptionsText="Nenhum munícipio encontrado"
                     className={styles.busca}
                     popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
                     options={[

@@ -44,7 +44,7 @@ function OpenDataVisualization({
     if (tipo === 'normais') setCampoData('normais');
     if (tipo === 'sensiveis') setCampoData('cesaria');
 
-    let dataAux: Array<TipoDadosLocais> = registros.map((reg) => {
+    let dataAux: Array<TipoDadosLocais> = registros?.map((reg) => {
       return {
         name: `${reg.mes}/${2000 + reg.ano}`,
         cesaria: reg.parto_cesaria,

@@ -85,7 +85,7 @@ export default function GraficoTorta(props: { registros: Array<Parto> }) {
 
   const onPieEnter = (_: any, index: any) => setActiveIndex(index);
 
-  const data = props.registros.reduce(
+  const data = props.registros?.reduce(
     ([normais, sensiveis], parto) => {
       normais.total += parto.parto_normais;
       sensiveis.total += parto.parto_cesaria;
