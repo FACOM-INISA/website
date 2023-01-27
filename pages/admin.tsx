@@ -100,6 +100,13 @@ export default function InsercaoDeDados() {
   const [value, setValue] = React.useState<any>('');
 
   const [buscar, setBuscar] = React.useState();
+
+  const [mes, setMes] = React.useState('');
+
+  const [anos, setAnos] = React.useState('');
+
+  const [ano, setAno] = React.useState<number[]>([]);
+
   const handleSearch = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (value) {
       // console.log(value);
@@ -107,23 +114,18 @@ export default function InsercaoDeDados() {
     }
   };
 
-  const [mes, setMes] = React.useState('');
   const handleChangeMes = (event: SelectChangeEvent) => {
     setMes(event.target.value);
   };
 
-  const [anos, setAnos] = React.useState('');
   const handleChangeAnos = (event: SelectChangeEvent) => {
     setAnos(event.target.value);
   };
 
-  const minDate = dayjs('2006');
-  const maxDate = dayjs();
-
   // useEffect para consumir e sincronizar dados da API de dados de partos.
   useEffect(() => {
     const body = { municipio: municipio?.id };
-    console.log(body);
+    // console.log(body);
 
     fetch('api/data/consulta', {
       method: 'POST',
@@ -139,37 +141,80 @@ export default function InsercaoDeDados() {
               (municipio) => element.municipio_id === municipio.id
             )?.name;
 
-            console.log(element);
+            // console.log(element);
             return element;
           })
         );
       });
   }, [municipio]);
 
+  useEffect(() => {
+    const minDate = dayjs('2006');
+    const maxDate = dayjs();
+    const diff = maxDate.diff(minDate, 'year');
+    let aux: number[] = [];
+    for (let i = 6; i < diff + 7; i++) {
+      aux.push(i);
+    }
+    setAno(aux);
+  }, []);
+
+  const autoUpdate = (municipio: typeof municipioPadrao) => {
+    const body = { municipio: municipio.id };
+
+    fetch('api/data/consulta', {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify(body),
+    })
+      .then((message) => message.json())
+      .then((data) => {
+        setRows(
+          data.partos.filter((element: any, index: number) => {
+            element.id = index;
+            element.localidade = municipios.find(
+              (municipio) => element.municipio_id === municipio.id
+            )?.name;
+
+            // console.log(element);
+            return element;
+          })
+        );
+      });
+  };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (!value) {
+      return;
+    }
     const body = {
       mes: data.get('mes'),
       ano: data.get('ano'),
-      localidade: data.get('localidade'),
-      partoNormal: data.get('qtdnormal'),
-      partoSensivel: data.get('qtdsensivel'),
+      normal: data.get('qtdnormal'),
+      cesaria: data.get('qtdnormal'),
+      total: +data.get('qtdnormal')! * 2,
+      idmunicipio: value.id,
     };
 
+    console.log(body);
     fetch('api/data/singleupdate', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/json',
       },
       body: JSON.stringify(body),
-    })
-      .then((data) => {
-        return data.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
+    }).then((response) => {
+      if (response.ok) {
+        autoUpdate(value);
+        return;
+      }
+      if (response.status === 401) {
+        alert('USUÁRIO NÃO AUTORIZADO');
+        return;
+      }
+      alert('FALHA AO INSERIR OS DADOS');
+    });
   };
 
   return (
@@ -265,7 +310,7 @@ export default function InsercaoDeDados() {
                       <MenuItem value={0o4}>Abril</MenuItem>
                       <MenuItem value={0o5}>Maio</MenuItem>
                       <MenuItem value={0o6}>Junho</MenuItem>
-                      <MenuItem value={0o7}>Julho</MenuItem>
+                      <MenuItem value={'7'}>Julho</MenuItem>
                       <MenuItem value={'08'}>Agosto</MenuItem>
                       <MenuItem value={'09'}>Setembro</MenuItem>
                       <MenuItem value={10}>Outubro</MenuItem>
@@ -283,12 +328,12 @@ export default function InsercaoDeDados() {
                       size="small"
                       required
                     >
-                      <MenuItem value={0o1}>minDate</MenuItem>
-                      <MenuItem value={0o2}>2019</MenuItem>
-                      <MenuItem value={0o3}>2020</MenuItem>
-                      <MenuItem value={0o4}>2021</MenuItem>
-                      <MenuItem value={0o5}>2022</MenuItem>
-                      <MenuItem value={0o6}>2023</MenuItem>
+                      {ano.map((element, index) => (
+                        <MenuItem key={index} value={element}>
+                          {element + 2000}
+                        </MenuItem>
+                      ))}
+                      {/* <MenuItem value={'19'}>2000</MenuItem> */}
                     </Select>
                   </Stack>
                 </Stack>
@@ -320,10 +365,11 @@ export default function InsercaoDeDados() {
                     }}
                     type="number"
                     size="small"
+                    inputProps={{ min: 0 }}
                   />
                 </Grid>
 
-                <Grid container direction="row" justifyContent="space-between">
+                {/* <Grid container direction="row" justifyContent="space-between">
                   {' '}
                   <Typography sx={{ fontSize: '1.2em', color: '#383838', alignSelf: 'center' }}>
                     Partos Sensíveis
@@ -340,7 +386,7 @@ export default function InsercaoDeDados() {
                     type="number"
                     size="small"
                   />
-                </Grid>
+                </Grid> */}
                 <Stack
                   direction="row"
                   justifyContent="space-between"
