@@ -6,9 +6,9 @@
   ascendentemente e depois um objeto contendo 3 objetos, um para cada predição também
   ordenandos ascendentemente e sendo um vetor.
 */
-
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+
+import prisma from '../../prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
@@ -21,8 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const municipio = parseInt(req.body.municipio);
-  const prisma = new PrismaClient();
-  await prisma.$connect();
 
   const partos = await prisma.parto.findMany({
     where: { municipio_id: { equals: municipio } },
@@ -33,8 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     where: { municipio_id: { equals: municipio } },
     orderBy: [{ tipo_parto: 'asc' }, { ano: 'asc' }, { mes: 'asc' }],
   });
-
-  await prisma.$disconnect();
 
   if (partos.length === 0 || predicoes.length === 0) {
     res.status(400).send({ 400: 'Data not found' });

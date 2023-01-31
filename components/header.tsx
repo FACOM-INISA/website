@@ -99,7 +99,7 @@ export default function AppHeader(props: { admin?: boolean }) {
     { name: 'Metodologia', path: '/maisinfos', icon: InfoIcon },
   ];
 
-  if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
+  if (props.admin) elements.push({ name: 'Admin', path: './logIn', icon: AdminPanelSettingsIcon });
 
   return <HeaderComponent items={elements} />;
 }

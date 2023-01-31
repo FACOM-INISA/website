@@ -14,7 +14,8 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '../../lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import prisma from '../../prisma';
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
@@ -28,7 +29,6 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { usercode, password } = await req.body;
-  const prisma = new PrismaClient();
   let checker = 'email';
 
   if (usercode.match(/(\d{7})/) || (usercode.match(/(\d{12})/) && !usercode.match(/@.*/))) {
@@ -55,7 +55,6 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       };
       req.session.user = user;
       await req.session.save();
-      await prisma.$disconnect();
       res.status(200).send({ user });
       return;
     } else {
@@ -64,12 +63,10 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     }
   } catch (error) {
     // TODO: MAKE BETTER ERROR HANDLING
-    await prisma.$disconnect();
-
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof PrismaClientKnownRequestError) {
       if (error.code == 'P2025') res.status(404).send({ message: 'USER NOT FOUND' });
     } else {
-      res.status(404).json({ message: error });
+      res.status(400).json({ 400: error });
     }
   }
 }
