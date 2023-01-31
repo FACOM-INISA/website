@@ -11,6 +11,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method != 'POST') {
+    res.status(405).send({ message: 'Only POST requests are allowed' });
+    return;
+  }
+  if (!req.body.municipio) {
+    res.status(400).send({ message: 'Wrong data sent' });
+    return;
+  }
+
   const municipio = parseInt(req.body.municipio);
 
   const partos = await prisma.parto.findMany({

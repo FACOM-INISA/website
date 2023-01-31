@@ -2,12 +2,12 @@
 
 O serviço utiliza como banco de dados o `SQLite` juntamente com o `Prisma` para comunicação com o mesmo.
 
-O banco de dados possui os seguintes *schemas* do prisma:
+O banco de dados possui os seguintes _schemas_ do prisma:
 
 ## Municipio
 
 | Nome                      | Tipo         | Extra         | Significado                          |
-|:------------------------- |:------------ |:------------- | ------------------------------------ |
+| :------------------------ | :----------- | :------------ | :----------------------------------- |
 | id                        | `Int`        | `PK`          | Principal identificação do município |
 | nome                      | `String`     |               | Nome do município                    |
 | microrregiao_id           | `Int`        |               | Id da microrregião                   |
@@ -36,7 +36,7 @@ O banco de dados possui os seguintes *schemas* do prisma:
 | municipio     | `Municipio` |            | Relação muitos para 1 com `Municipio`            |
 | municipio_id  | `Int`       | `PK`, `FK` | Id do município como estabelecido em `Municipio` |
 
-*Importante denotar que a chave primária é composta por `ano`, `mes` e `municipio_id` e é referenciada pelo nome `id`.*
+_Importante denotar que a chave primária é composta por `ano`, `mes` e `municipio_id` e é referenciada pelo nome `id`._
 
 ## Predicao
 
@@ -50,3 +50,14 @@ O banco de dados possui os seguintes *schemas* do prisma:
 | mes          | `Int`       | `PK`       | O mes da predição                                  |
 | municipio    | `Municipio` |            | Relação muitos para 1 com `Municipio`              |
 | municipio_id | `Int`       | `PK`, `FK` | Id do municipio como establecido em `Municipio`    |
+
+## Usuário
+
+| Nome       | Tipo      | Extra            | Significado                                                         |
+| ---------- | --------- | ---------------- | ------------------------------------------------------------------- |
+| email      | `String`  | `Unique`, `PK`   | Email do usuário                                                    |
+| codigo     | `String`  | `Unique`         | Código do usuário(RGA ou SIAPE)                                     |
+| hash       | `String`  |                  | Hash proveniente da senha do usuário                                |
+| nome       | `String`  |                  | Nome do usuário                                                     |
+| authorized | `Boolean` | `Default: False` | Se o usuário está autorizado para fazer certos comandos na aplicaão |
+| admin      | `Boolean` | `Default: False` | Se o usuário é admin e possui acesso irrestrito a aplicação         |

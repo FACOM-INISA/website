@@ -17,6 +17,10 @@ import bcrypt from 'bcrypt';
 import prisma from '../../prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method != 'POST') {
+    res.status(405).send({ message: 'Only POST requests are allowed' });
+    return;
+  }
   let body = req.body;
   if (
     (!body.name && !body.email && !body.senha && !body.code) ||

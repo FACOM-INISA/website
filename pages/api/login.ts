@@ -18,6 +18,16 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import prisma from '../../prisma';
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method != 'POST') {
+    res.status(405).send({ message: 'Only POST requests are allowed' });
+    return;
+  }
+
+  if (!req.body.usercode || !req.body.password) {
+    res.status(400).send({ message: 'Wrong data sent' });
+    return;
+  }
+
   const { usercode, password } = await req.body;
   let checker = 'email';
 
@@ -46,6 +56,10 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       req.session.user = user;
       await req.session.save();
       res.status(200).send({ user });
+      return;
+    } else {
+      res.status(404).send({ message: 'USER NOT FOUND' });
+      return;
     }
   } catch (error) {
     // TODO: MAKE BETTER ERROR HANDLING
