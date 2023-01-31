@@ -12,8 +12,9 @@ bcrypt, com 10 rodadas de salt, devendo ser seguro o suficiente
 */
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+
+import prisma from '../../prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
@@ -30,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).send({ message: 'Incorrect data sent' });
     return;
   }
-  const prisma = new PrismaClient();
+
   // Tenta inserir o usuário no banco de dados, caso resulte em algum erro,
   // retorna o erro + status 400
   try {
@@ -43,11 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         hash: hash,
       },
     });
-    await prisma.$disconnect();
     res.status(307).json({ message: '/logIn' });
     // res.status(201).json({ 201: 'okay' });
   } catch (err) {
-    await prisma.$disconnect();
     res.status(400).json({ message: err });
   }
 }

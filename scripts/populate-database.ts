@@ -1,4 +1,4 @@
-import axios from 'axios';
+import fetch from 'node-fetch';
 import { PrismaClient } from '@prisma/client';
 import { mapSeries } from 'bluebird';
 import consola from 'consola';
@@ -29,9 +29,9 @@ export async function cli() {
 
   try {
     consola.info('Requesting data from IBGE...');
-    const { data } = await axios.get(
+    const data = await fetch(
       'https://servicodados.ibge.gov.br/api/v1/localidades/municipios?view=nivelado'
-    );
+    ).then((res) => res.json());
 
     consola.info('Iterating over records...');
     await mapSeries(data, async (mData: MunicipiosNivelado) => {

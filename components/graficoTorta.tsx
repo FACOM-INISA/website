@@ -1,12 +1,8 @@
-import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
+import React, { PureComponent, useState } from 'react';
+import { PieChart, Pie, Sector, ResponsiveContainer, Text } from 'recharts';
+import Parto from '../lib/Parto';
 
-const data = [
-  { name: 'Partos Sensíveis', value: 400 },
-  { name: 'Partos Normais', value: 1000 },
-];
-
-const renderActiveShape = (props: {
+type ShapeProps = {
   cx: any;
   cy: any;
   midAngle: any;
@@ -18,8 +14,11 @@ const renderActiveShape = (props: {
   payload: any;
   percent: any;
   value: any;
-}) => {
+};
+
+const renderActiveShape = (props: ShapeProps) => {
   const RADIAN = Math.PI / 180;
+
   const {
     cx,
     cy,
@@ -45,9 +44,9 @@ const renderActiveShape = (props: {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      <Text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
         {payload.name}
-      </text>
+      </Text>
       <Sector
         cx={cx}
         cy={cy}
@@ -68,48 +67,53 @@ const renderActiveShape = (props: {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text
+      <Text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        fill="#333"
-      >{`Quantidade ${value}`}</text>
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        fill="#0088B7"
+      >{`Quantidade: ${value} parto(s)`}</Text>
+      {/* <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
         {`(Taxa de ${(percent * 100).toFixed(2)}%)`}
-      </text>
+      </Text> */}
     </g>
   );
 };
 
-export default class GraficoTorta extends PureComponent {
-  state = {
-    activeIndex: 0,
-  };
+export default function GraficoTorta(props: { registros: Array<Parto> }) {
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  onPieEnter = (_: any, index: any) => {
-    this.setState({
-      activeIndex: index,
-    });
-  };
+  const onPieEnter = (_: any, index: any) => setActiveIndex(index);
 
-  render() {
-    return (
-      <ResponsiveContainer width="100%" height="100%" aspect={3}>
-        <PieChart>
-          <Pie
-            activeIndex={this.state.activeIndex}
-            activeShape={renderActiveShape}
-            data={data}
-            cx="50%"
-            cy="50%"
-            innerRadius={80}
-            outerRadius={100}
-            fill="#0088B7"
-            dataKey="value"
-            onMouseEnter={this.onPieEnter}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-    );
-  }
+  const data = props.registros?.reduce(
+    ([normais /* , sensiveis */], parto) => {
+      normais.total += parto.parto_normais;
+      /* sensiveis.total += parto.parto_cesaria; */
+      return [normais /* , sensiveis */];
+    },
+    [
+      { name: 'Partos Normais', total: 0 },
+      /* { name: 'Partos Sensíveis', total: 0 }, */
+    ]
+  );
+
+  return (
+    <ResponsiveContainer aspect={3}>
+      <PieChart>
+        <Pie
+          startAngle={40}
+          endAngle={400}
+          data={data}
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
+          innerRadius={70}
+          outerRadius={90}
+          fill="#0088B7"
+          dataKey="total"
+          nameKey="name"
+          onMouseEnter={onPieEnter}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  );
 }
