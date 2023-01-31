@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InfoIcon from '@mui/icons-material/Info';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
 
 export interface HeaderProps {
@@ -92,14 +93,17 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   );
 };
 
-export default function AppHeader(props: { admin?: boolean }) {
+export default function AppHeader(props: { admin?: boolean; logout?: boolean }) {
   const elements = [
     { name: 'Inicio', path: '/', icon: HomeIcon },
     { name: 'Painel', path: '/sistemadedados', icon: InsertChartIcon },
     { name: 'Metodologia', path: '/maisinfos', icon: InfoIcon },
   ];
 
-  if (props.admin) elements.push({ name: 'Admin', path: './logIn', icon: AdminPanelSettingsIcon });
+
+  if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
+  if (props.logout) elements.push({ name: 'Sair', path: '/logout', icon: LogoutIcon });
+
 
   return <HeaderComponent items={elements} />;
 }
