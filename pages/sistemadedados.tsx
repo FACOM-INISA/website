@@ -118,7 +118,6 @@ const SistemaDeDados: NextPage = () => {
                 <Collapse in={expandedR} className={styles.collapse}>
                   <Autocomplete
                     value={municipio}
-                    clearIcon={false}
                     noOptionsText="Nenhum munícipio encontrado"
                     className={styles.busca}
                     popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
@@ -136,20 +135,14 @@ const SistemaDeDados: NextPage = () => {
                       },
                     }}
                     renderInput={(params) => <TextField {...params} label="Buscar por município" />}
-                    onChange={(_, selected) => setMunicipio(selected || fakeInput)}
+                    onChange={(_, selected) => setMunicipio(selected || null)}
                   />
-
-                  <div className={styles.botoes}>
-                    <Button variant="contained" onClick={() => setMunicipio(null)}>
-                      Limpar
-                    </Button>
-                    <Button variant="contained">Buscar</Button>
-                  </div>
                 </Collapse>
               </Paper>
             </Grid>
 
-            {/* Segundo Card */}
+            {/* Segundo Card 
+            
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
                 <Card style={{ display: 'flex', flexDirection: 'column' }}>
@@ -177,7 +170,7 @@ const SistemaDeDados: NextPage = () => {
                     {[
                       { name: 'Partos', value: 'todos' },
                       { name: 'Partos Normais', value: 'normais' },
-                      /* { name: 'Partos Sensíveis', value: 'sensiveis' }, */
+                      { name: 'Partos Sensíveis', value: 'sensiveis' },
                     ].map((dado) => {
                       const labelId = `checkbox-list-label-${dado.value}`;
                       return (
@@ -206,6 +199,7 @@ const SistemaDeDados: NextPage = () => {
                 </Collapse>
               </Paper>
             </Grid>
+            */}
           </div>
         </div>
 
@@ -236,31 +230,11 @@ const SistemaDeDados: NextPage = () => {
               }}
             >
               <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-                Percentual de partos
+                {'Total de partos:'}
               </Typography>
               <Grid item xs sx={{ display: 'flex', alignItems: 'center' }}>
                 <PieChartData registros={data} />
               </Grid>
-
-              {/* <Grid item container xs direction={'row'}>
-                <Grid item xs={6}>
-                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-                    Partos Normais:
-                  </Typography>
-                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-                    {1000}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-                    Partos Sensíveis:
-                  </Typography>
-                  <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-                    {400}
-                  </Typography>
-                </Grid>
-              </Grid> */}
             </Paper>
           </Grid>
         </Grid>

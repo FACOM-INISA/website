@@ -88,14 +88,14 @@ function OpenDataVisualization({
               type="monotone"
               dataKey={campoData}
               stroke="#0088B7"
-              name="Quantidade de partos"
+              name={'Quantidade de partos ' + tipo}
               strokeWidth={1}
             />
             <Line
               type="monotone"
               dataKey="pred"
               stroke="#B70000"
-              name="Predição de partos"
+              name={'Predição de partos ' + tipo}
               strokeWidth={2}
             />
           </LineChart>

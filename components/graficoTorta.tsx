@@ -71,11 +71,11 @@ const renderActiveShape = (props: ShapeProps) => {
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        fill="#333"
-      >{`Quantidade ${value}`}</Text>
-      <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        fill="#0088B7"
+      >{`Quantidade: ${value} parto(s)`}</Text>
+      {/* <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
         {`(Taxa de ${(percent * 100).toFixed(2)}%)`}
-      </Text>
+      </Text> */}
     </g>
   );
 };
@@ -86,14 +86,14 @@ export default function GraficoTorta(props: { registros: Array<Parto> }) {
   const onPieEnter = (_: any, index: any) => setActiveIndex(index);
 
   const data = props.registros?.reduce(
-    ([normais, sensiveis], parto) => {
+    ([normais /* , sensiveis */], parto) => {
       normais.total += parto.parto_normais;
-      sensiveis.total += parto.parto_cesaria;
-      return [normais, sensiveis];
+      /* sensiveis.total += parto.parto_cesaria; */
+      return [normais /* , sensiveis */];
     },
     [
       { name: 'Partos Normais', total: 0 },
-      { name: 'Partos Sensíveis', total: 0 },
+      /* { name: 'Partos Sensíveis', total: 0 }, */
     ]
   );
 
@@ -101,8 +101,8 @@ export default function GraficoTorta(props: { registros: Array<Parto> }) {
     <ResponsiveContainer aspect={3}>
       <PieChart>
         <Pie
-          startAngle={90}
-          endAngle={450}
+          startAngle={40}
+          endAngle={400}
           data={data}
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
