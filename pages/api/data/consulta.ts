@@ -8,7 +8,7 @@
 */
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import prisma from '../../prisma';
+import prisma from '../../../prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {

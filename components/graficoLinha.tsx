@@ -33,15 +33,15 @@ function OpenDataVisualization({
 }: {
   registros: Array<Parto>;
   predicoes: Array<Predicao>;
-  tipo: 'todos' | 'normais' | 'sensiveis';
+  tipo: 'todos' | 'normal' | 'sensiveis';
 }) {
-  const [campoData, setCampoData] = useState<'total' | 'cesaria' | 'normais'>('total');
+  const [campoData, setCampoData] = useState<'total' | 'cesaria' | 'normal'>('total');
 
   const [data, setData] = useState<TipoDadosLocais[]>();
 
   useEffect(() => {
     if (tipo === 'todos') setCampoData('total');
-    if (tipo === 'normais') setCampoData('normais');
+    if (tipo === 'normal') setCampoData('normal');
     if (tipo === 'sensiveis') setCampoData('cesaria');
 
     let dataAux: Array<TipoDadosLocais> = registros?.map((reg) => {
@@ -57,7 +57,7 @@ function OpenDataVisualization({
     dataAux.push({ name: ultimo?.name, pred: ultimo?.total }); // TODO - Alterar campo quando dados estiverem disponiveis
 
     predicoes
-      .filter((pred) => pred.tipo_parto === 'total') // TODO - Alterar campo quando dados estiverem disponiveis
+      .filter((pred) => pred.tipo_parto === 'normal') // TODO - Alterar campo quando dados estiverem disponiveis
       .forEach((predicao) => {
         dataAux.push({
           name: `${predicao.mes}/${predicao.ano + 2000}`,
@@ -88,14 +88,14 @@ function OpenDataVisualization({
               type="monotone"
               dataKey={campoData}
               stroke="#0088B7"
-              name={'Quantidade de partos ' + tipo}
+              name={'Quantidade de partos normais'}
               strokeWidth={1}
             />
             <Line
               type="monotone"
               dataKey="pred"
               stroke="#B70000"
-              name={'Predição de partos ' + tipo}
+              name={'Predição de partos normais'}
               strokeWidth={2}
             />
           </LineChart>

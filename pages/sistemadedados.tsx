@@ -50,7 +50,7 @@ const SistemaDeDados: NextPage = () => {
   useEffect(() => {
     const body = { municipio: municipio?.id };
 
-    fetch('api/consulta', {
+    fetch('api/data/consulta', {
       method: 'POST',
       headers: { 'Content-Type': 'Application/json' },
       body: JSON.stringify(body),
@@ -69,7 +69,7 @@ const SistemaDeDados: NextPage = () => {
           })
         );
         setDataPredicao(
-          data.predicoes.predicoes_total.filter((element: any, index: number) => {
+          data.predicoes.predicoes_normal.filter((element: any, index: number) => {
             element.id = index;
             element.localidade = municipios.map((municipio) => {
               if (municipio.id == element.municipio_id) {
@@ -82,7 +82,7 @@ const SistemaDeDados: NextPage = () => {
       });
   }, [municipio]);
 
-  const [tipoParto, setTipoParto] = useState<'todos' | 'normais' | 'sensiveis'>('todos');
+  const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('todos');
 
   const [expandedR, setExpandedR] = useState(true);
   const [expandedD, setExpandedD] = useState(true);
