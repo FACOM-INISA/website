@@ -9,7 +9,7 @@ ordenados por autorização ascendentemente.
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '../../lib/session';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../prisma';
 
 async function getusers(req: NextApiRequest, res: NextApiResponse) {
   // Verifica se o usuário é admin e se o metodo da requisição é GET
@@ -21,7 +21,6 @@ async function getusers(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  const prisma = new PrismaClient();
   await prisma.$connect();
 
   // Pegar todos os usuarios ordenados por autorização

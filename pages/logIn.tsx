@@ -25,7 +25,7 @@ const theme = createTheme();
 
 export default function LoginSide() {
   const { mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: '/admin',
     redirectIfFound: true,
   });
 

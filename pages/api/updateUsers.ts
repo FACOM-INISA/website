@@ -12,7 +12,7 @@
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from '../../lib/session';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../prisma';
 
 async function updateUsers(req: NextApiRequest, res: NextApiResponse) {
   // Verificar se o método de requisicao é POST e se o usário é admin
@@ -47,7 +47,6 @@ async function updateUsers(req: NextApiRequest, res: NextApiResponse) {
     }
   });
   // Atualizar o banco de dados
-  const prisma = new PrismaClient();
   for (const element of data) {
     await prisma.usuario.update({
       where: { email: element.email },

@@ -22,6 +22,7 @@ import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Parto from '../lib/Parto';
+import useUser from '../lib/useUser';
 
 const ButtonCinza = styled(Button)({
   textTransform: 'none',
@@ -80,6 +81,10 @@ const columns: GridColDef[] = [
 ];
 
 export default function InsercaoDeDados() {
+  useUser({
+    redirectTo: '/logIn',
+  });
+
   const options = municipios.map((option) => {
     const firstLetter = option.name[0].toUpperCase();
     return {
