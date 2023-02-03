@@ -116,7 +116,10 @@ export default function InsercaoDeDados() {
 
   const autoUpdate = useCallback((municipio: typeof municipioPadrao) => {
     const body = { municipio: municipio.id };
-
+    if (municipio.id === 0) {
+      return;
+    }
+    console.log(municipio);
     fetch('api/data/consulta', {
       method: 'POST',
       headers: { 'Content-Type': 'Application/json' },
@@ -228,7 +231,7 @@ export default function InsercaoDeDados() {
                       transform: 'none',
                     },
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params} label="Buscar por munícipio" />}
                   size="small"
                 />
                 <Stack
