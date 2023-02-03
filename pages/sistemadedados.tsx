@@ -82,7 +82,7 @@ const SistemaDeDados: NextPage = () => {
       });
   }, [municipio]);
 
-  const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('todos');
+  const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('normal');
 
   const [expandedR, setExpandedR] = useState(true);
   const [expandedD, setExpandedD] = useState(true);
