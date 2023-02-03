@@ -20,6 +20,7 @@ import fetchJson from '../lib/fetchJson';
 import useUser from '../lib/useUser';
 
 import NextLink from 'next/link';
+import { User } from './api/user';
 
 const theme = createTheme();
 
@@ -37,14 +38,12 @@ export default function LoginSide() {
       password: data.get('password'),
     };
     try {
-      mutateUser(
-        await fetchJson('api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        }),
-        false
-      );
+      const data = await fetchJson<User>('api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      mutateUser(data, { optimisticData: data });
     } catch (error) {
       alert(error);
     }

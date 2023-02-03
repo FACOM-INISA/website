@@ -81,7 +81,7 @@ const columns: GridColDef[] = [
 ];
 
 export default function InsercaoDeDados() {
-  useUser({
+  const { user } = useUser({
     redirectTo: '/logIn',
   });
 
@@ -193,159 +193,160 @@ export default function InsercaoDeDados() {
   };
 
   return (
-    <Layout>
-      <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
-        {/* Sidebar */}
-        <Grid component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
-          {/* Primeiro Card */}
-          <Paper elevation={3} sx={{ mb: '2em' }}>
-            <Card>
-              <Paper elevation={3}>
-                <Typography
-                  sx={{
-                    color: 'primary.main',
-                    fontSize: '1.5em',
-                    ml: '0.7em',
-                    pt: '0.3em',
-                    pb: '0.3em',
-                  }}
-                >
-                  Localidade
-                </Typography>
-              </Paper>
-              <Stack sx={{ m: '20px' }}>
-                <Typography sx={{ fontSize: '1.2em', mb: '3px' }}>Escolha o Município</Typography>
-                <Autocomplete
-                  id="localidade"
-                  popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
-                  disableClearable
-                  options={[
-                    fakeInput,
-                    ...options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter)),
-                  ]}
-                  groupBy={(option) => option.firstLetter}
-                  getOptionLabel={(option) => (option.name ? option.name : '')}
-                  value={municipio || fakeInput}
-                  onChange={(event: any, newValue) => setMunicipio(newValue)}
-                  sx={{
-                    width: 'auto',
-                    [`& .${autocompleteClasses.popupIndicator}`]: {
-                      transform: 'none',
-                    },
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                  size="small"
-                />
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  sx={{ mt: '20px', mb: '5px' }}
-                >
-                  <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
-                    Limpar
-                  </ButtonCinza>
-                  <ButtonAzul variant="contained" onClick={() => console.log('TODO')}>
-                    Buscar
-                  </ButtonAzul>
-                </Stack>
-              </Stack>
-            </Card>
-          </Paper>
-
-          {/* Segundo Card */}
-          <Paper elevation={3} sx={{ mb: '2em' }}>
-            <Card>
-              <Paper elevation={3}>
-                <Typography
-                  sx={{
-                    color: 'primary.main',
-                    fontSize: '1.5em',
-                    ml: '0.7em',
-                    pt: '0.3em',
-                    pb: '0.3em',
-                  }}
-                >
-                  Inserção de Dados
-                </Typography>
-              </Paper>
-              <Grid sx={{ p: '20px' }}>
-                <Stack direction="row" spacing={'auto'}>
-                  <Stack sx={{ width: '50%' }}>
-                    <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
-                    <Select
-                      id="mes"
-                      name="mes"
-                      value={mes}
-                      onChange={handleChangeMes}
-                      size="small"
-                      required
-                    >
-                      <MenuItem value={0o1}>Janeiro</MenuItem>
-                      <MenuItem value={0o2}>Fevereiro</MenuItem>
-                      <MenuItem value={0o3}>Março</MenuItem>
-                      <MenuItem value={0o4}>Abril</MenuItem>
-                      <MenuItem value={0o5}>Maio</MenuItem>
-                      <MenuItem value={0o6}>Junho</MenuItem>
-                      <MenuItem value={'7'}>Julho</MenuItem>
-                      <MenuItem value={'08'}>Agosto</MenuItem>
-                      <MenuItem value={'09'}>Setembro</MenuItem>
-                      <MenuItem value={10}>Outubro</MenuItem>
-                      <MenuItem value={11}>Novembro</MenuItem>
-                      <MenuItem value={12}>Dezembro</MenuItem>
-                    </Select>
-                  </Stack>
-                  <Stack sx={{ width: '40%' }}>
-                    <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
-                    <Select
-                      id="ano"
-                      name="ano"
-                      value={anos}
-                      onChange={handleChangeAnos}
-                      size="small"
-                      required
-                    >
-                      {ano.map((element, index) => (
-                        <MenuItem key={index} value={element}>
-                          {element + 2000}
-                        </MenuItem>
-                      ))}
-                      {/* <MenuItem value={'19'}>2000</MenuItem> */}
-                    </Select>
-                  </Stack>
-                </Stack>
-
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignContent="center"
-                  sx={{ m: '20px 0' }}
-                >
+    user?.isLoggedIn && (
+      <Layout>
+        <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
+          {/* Sidebar */}
+          <Grid component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
+            {/* Primeiro Card */}
+            <Paper elevation={3} sx={{ mb: '2em' }}>
+              <Card>
+                <Paper elevation={3}>
                   <Typography
                     sx={{
-                      fontSize: '1.2em',
-                      color: '#383838',
-                      alignSelf: 'center',
+                      color: 'primary.main',
+                      fontSize: '1.5em',
+                      ml: '0.7em',
+                      pt: '0.3em',
+                      pb: '0.3em',
                     }}
                   >
-                    Partos Normais
+                    Localidade
                   </Typography>
-                  <OutlinedInput
-                    id="qtdnormal"
-                    name="qtdnormal"
-                    required
+                </Paper>
+                <Stack sx={{ m: '20px' }}>
+                  <Typography sx={{ fontSize: '1.2em', mb: '3px' }}>Escolha o Município</Typography>
+                  <Autocomplete
+                    id="localidade"
+                    popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
+                    disableClearable
+                    options={[
+                      fakeInput,
+                      ...options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter)),
+                    ]}
+                    groupBy={(option) => option.firstLetter}
+                    getOptionLabel={(option) => (option.name ? option.name : '')}
+                    value={municipio || fakeInput}
+                    onChange={(event: any, newValue) => setMunicipio(newValue)}
                     sx={{
-                      color: '#383838',
-                      textAlign: 'center',
-                      width: '30%',
+                      width: 'auto',
+                      [`& .${autocompleteClasses.popupIndicator}`]: {
+                        transform: 'none',
+                      },
                     }}
-                    type="number"
+                    renderInput={(params) => <TextField {...params} />}
                     size="small"
-                    inputProps={{ min: 0 }}
                   />
-                </Grid>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ mt: '20px', mb: '5px' }}
+                  >
+                    <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
+                      Limpar
+                    </ButtonCinza>
+                    <ButtonAzul variant="contained" onClick={() => console.log('TODO')}>
+                      Buscar
+                    </ButtonAzul>
+                  </Stack>
+                </Stack>
+              </Card>
+            </Paper>
 
-                {/* <Grid container direction="row" justifyContent="space-between">
+            {/* Segundo Card */}
+            <Paper elevation={3} sx={{ mb: '2em' }}>
+              <Card>
+                <Paper elevation={3}>
+                  <Typography
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: '1.5em',
+                      ml: '0.7em',
+                      pt: '0.3em',
+                      pb: '0.3em',
+                    }}
+                  >
+                    Inserção de Dados
+                  </Typography>
+                </Paper>
+                <Grid sx={{ p: '20px' }}>
+                  <Stack direction="row" spacing={'auto'}>
+                    <Stack sx={{ width: '50%' }}>
+                      <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
+                      <Select
+                        id="mes"
+                        name="mes"
+                        value={mes}
+                        onChange={handleChangeMes}
+                        size="small"
+                        required
+                      >
+                        <MenuItem value={0o1}>Janeiro</MenuItem>
+                        <MenuItem value={0o2}>Fevereiro</MenuItem>
+                        <MenuItem value={0o3}>Março</MenuItem>
+                        <MenuItem value={0o4}>Abril</MenuItem>
+                        <MenuItem value={0o5}>Maio</MenuItem>
+                        <MenuItem value={0o6}>Junho</MenuItem>
+                        <MenuItem value={'7'}>Julho</MenuItem>
+                        <MenuItem value={'08'}>Agosto</MenuItem>
+                        <MenuItem value={'09'}>Setembro</MenuItem>
+                        <MenuItem value={10}>Outubro</MenuItem>
+                        <MenuItem value={11}>Novembro</MenuItem>
+                        <MenuItem value={12}>Dezembro</MenuItem>
+                      </Select>
+                    </Stack>
+                    <Stack sx={{ width: '40%' }}>
+                      <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
+                      <Select
+                        id="ano"
+                        name="ano"
+                        value={anos}
+                        onChange={handleChangeAnos}
+                        size="small"
+                        required
+                      >
+                        {ano.map((element, index) => (
+                          <MenuItem key={index} value={element}>
+                            {element + 2000}
+                          </MenuItem>
+                        ))}
+                        {/* <MenuItem value={'19'}>2000</MenuItem> */}
+                      </Select>
+                    </Stack>
+                  </Stack>
+
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignContent="center"
+                    sx={{ m: '20px 0' }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: '1.2em',
+                        color: '#383838',
+                        alignSelf: 'center',
+                      }}
+                    >
+                      Partos Normais
+                    </Typography>
+                    <OutlinedInput
+                      id="qtdnormal"
+                      name="qtdnormal"
+                      required
+                      sx={{
+                        color: '#383838',
+                        textAlign: 'center',
+                        width: '30%',
+                      }}
+                      type="number"
+                      size="small"
+                      inputProps={{ min: 0 }}
+                    />
+                  </Grid>
+
+                  {/* <Grid container direction="row" justifyContent="space-between">
                   {' '}
                   <Typography sx={{ fontSize: '1.2em', color: '#383838', alignSelf: 'center' }}>
                     Partos Sensíveis
@@ -363,33 +364,34 @@ export default function InsercaoDeDados() {
                     size="small"
                   />
                 </Grid> */}
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  sx={{ mt: '20px', mb: '5px' }}
-                >
-                  <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
-                    Cancelar
-                  </ButtonCinza>
-                  <ButtonAzul variant="contained" type="submit">
-                    Enviar
-                  </ButtonAzul>
-                </Stack>
-              </Grid>
-            </Card>
-          </Paper>
-        </Grid>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ mt: '20px', mb: '5px' }}
+                  >
+                    <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
+                      Cancelar
+                    </ButtonCinza>
+                    <ButtonAzul variant="contained" type="submit">
+                      Enviar
+                    </ButtonAzul>
+                  </Stack>
+                </Grid>
+              </Card>
+            </Paper>
+          </Grid>
 
-        {/* Tabela */}
-        <Grid sx={{ width: '100%', mr: '4rem' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            hideFooterSelectedRowCount
-            sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
-          />
+          {/* Tabela */}
+          <Grid sx={{ width: '100%', mr: '4rem' }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              hideFooterSelectedRowCount
+              sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    </Layout>
+      </Layout>
+    )
   );
 }
