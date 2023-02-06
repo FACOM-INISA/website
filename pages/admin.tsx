@@ -4,11 +4,19 @@ import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
 import {
+  Box,
   Button,
   Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
   FormControl,
   Grid,
   MenuItem,
+  Modal,
   OutlinedInput,
   Paper,
   Select,
@@ -22,6 +30,7 @@ import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Parto from '../lib/Parto';
+import CheckIcon from '@mui/icons-material/Check';
 
 const ButtonCinza = styled(Button)({
   textTransform: 'none',
@@ -95,15 +104,10 @@ export default function InsercaoDeDados() {
     options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
 
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
-
   const [rows, setRows] = React.useState(new Array<Parto>());
-
   const [buscar, setBuscar] = React.useState();
-
   const [mes, setMes] = React.useState('');
-
   const [anos, setAnos] = React.useState('');
-
   const [ano, setAno] = React.useState<number[]>([]);
 
   const handleChangeMes = (event: SelectChangeEvent) => {
@@ -145,6 +149,7 @@ export default function InsercaoDeDados() {
     if (municipio) autoUpdate(municipio);
   }, [autoUpdate, municipio]);
 
+  // automatização da seleção de anos
   useEffect(() => {
     const minDate = dayjs('2006');
     const maxDate = dayjs();
@@ -187,11 +192,15 @@ export default function InsercaoDeDados() {
     });
   };
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Layout>
       <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
         {/* Sidebar */}
-        <Grid component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
+        <Grid id="form" component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
           {/* Primeiro Card */}
           <Paper elevation={3} sx={{ mb: '2em' }}>
             <Card>
@@ -264,9 +273,14 @@ export default function InsercaoDeDados() {
                 </Typography>
               </Paper>
               <Grid sx={{ p: '20px' }}>
-                <Stack direction="row" spacing={'auto'}>
-                  <Stack sx={{ width: '50%' }}>
-                    <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignContent="center"
+                >
+                  <Typography sx={{ fontSize: '1.2em', alignSelf: 'center' }}>Mês</Typography>
+                  <Stack width="45%">
                     <Select
                       id="mes"
                       name="mes"
@@ -289,8 +303,16 @@ export default function InsercaoDeDados() {
                       <MenuItem value={12}>Dezembro</MenuItem>
                     </Select>
                   </Stack>
-                  <Stack sx={{ width: '40%' }}>
-                    <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignContent="center"
+                  sx={{ m: '20px 0' }}
+                >
+                  <Typography sx={{ fontSize: '1.2em', alignSelf: 'center' }}>Ano</Typography>
+                  <Stack width="45%">
                     <Select
                       id="ano"
                       name="ano"
@@ -304,10 +326,9 @@ export default function InsercaoDeDados() {
                           {element + 2000}
                         </MenuItem>
                       ))}
-                      {/* <MenuItem value={'19'}>2000</MenuItem> */}
                     </Select>
                   </Stack>
-                </Stack>
+                </Grid>
 
                 <Grid
                   container
@@ -332,7 +353,7 @@ export default function InsercaoDeDados() {
                     sx={{
                       color: '#383838',
                       textAlign: 'center',
-                      width: '30%',
+                      width: '45%',
                     }}
                     type="number"
                     size="small"
@@ -366,9 +387,39 @@ export default function InsercaoDeDados() {
                   <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
                     Cancelar
                   </ButtonCinza>
-                  <ButtonAzul variant="contained" type="submit">
-                    Enviar
-                  </ButtonAzul>
+                  <>
+                    <ButtonAzul variant="contained" onClick={handleOpen}>
+                      Enviar
+                    </ButtonAzul>
+                    <Dialog open={open} onClose={handleClose}>
+                      <Box
+                        sx={{
+                          background: '#edeceb',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyItems: 'center',
+
+                          p: 1.5,
+                        }}
+                      >
+                        <CheckIcon sx={{ mr: 0.5, pt: 0.5 }} />
+                        <Typography sx={{ fontSize: 18, color: '#383838' }}>Confirmação</Typography>
+                      </Box>
+                      <DialogContent>
+                        <DialogContentText>
+                          As informações inseridas estão corretas?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions sx={{ mr: 1, mb: 0.5 }}>
+                        <Button sx={{ color: '#383838' }} onClick={handleClose}>
+                          Cancelar
+                        </Button>
+                        <Button form="form" type="submit" onClick={handleClose}>
+                          Confirmar
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </>
                 </Stack>
               </Grid>
             </Card>
