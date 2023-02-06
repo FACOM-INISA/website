@@ -54,6 +54,7 @@ async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
         parto_normais: parseInt(req.body.normal),
         parto_cesaria: parseInt(req.body.cesaria),
         parto_total: parseInt(req.body.total),
+        predito: false,
       },
       create: {
         ano: parseInt(req.body.ano),
@@ -62,6 +63,7 @@ async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
         parto_normais: parseInt(req.body.normal),
         parto_cesaria: parseInt(req.body.cesaria),
         parto_total: parseInt(req.body.total),
+        predito: false,
       },
     });
   } catch (e) {

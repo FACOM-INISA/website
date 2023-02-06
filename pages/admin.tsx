@@ -77,6 +77,15 @@ const columns: GridColDef[] = [
     align: 'center',
     width: 270,
   },
+  {
+    field: 'predito',
+    headerName: 'Predito',
+    type: 'boolean',
+    headerAlign: 'center',
+    align: 'center',
+    width: 170,
+    // valueFormatter: (params) => (params.value ? 'Utilizado✅' : 'Não utilizado ❌'),
+  },
 ];
 
 export default function InsercaoDeDados() {
