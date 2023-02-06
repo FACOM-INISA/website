@@ -100,10 +100,8 @@ export default function AppHeader(props: { admin?: boolean; logout?: boolean }) 
     { name: 'Metodologia', path: '/maisinfos', icon: InfoIcon },
   ];
 
-
   if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
-  if (props.logout) elements.push({ name: 'Sair', path: '/logout', icon: LogoutIcon });
-
+  if (props.logout) elements.push({ name: 'Sair', path: '/api/logout', icon: LogoutIcon });
 
   return <HeaderComponent items={elements} />;
 }

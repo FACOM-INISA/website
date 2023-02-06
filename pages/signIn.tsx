@@ -99,7 +99,7 @@ export default function SignInSide() {
                 objectFit="contain"
               ></Image>
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 InputProps={{
                   startAdornment: (
@@ -108,7 +108,7 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -126,13 +126,14 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
                 label="E-mail"
                 name="email"
+                type="email"
                 autoComplete="email"
                 autoFocus
               />
@@ -144,7 +145,8 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                inputProps={{ pattern: '.{7,}' }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -162,7 +164,8 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                inputProps={{ pattern: '.{8,}' }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -180,7 +183,8 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                inputProps={{ pattern: '.{8,}' }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth

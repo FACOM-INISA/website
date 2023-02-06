@@ -13,7 +13,7 @@
 import { sessionOptions } from '../../../lib/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../prisma';
 
 async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
   // Checando se o método é POST
@@ -38,7 +38,6 @@ async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).send({ message: 'Bad request, missing parameters' });
     return;
   }
-  const prisma = new PrismaClient();
 
   await prisma.$connect();
   try {
