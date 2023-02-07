@@ -21,6 +21,7 @@ import {
   OutlinedInput,
   MenuItem,
   Select,
+  TableSortLabel,
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -51,7 +52,7 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
     align: 'center',
     width: 100,
-    valueFormatter: (params) => params.value + 2000,
+    valueFormatter: (params: { value: number }) => params.value + 2000,
   },
   {
     field: 'pred',
@@ -59,23 +60,16 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 170,
+    width: 240,
   },
-  {
-    field: 'localidade',
-    headerName: 'Localidade',
-    type: 'string',
-    headerAlign: 'center',
-    align: 'center',
-    width: 270,
-  },
+
   {
     field: 'upper',
     headerName: 'Limite Superior',
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 270,
+    width: 150,
   },
   {
     field: 'lower',
@@ -83,7 +77,7 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 270,
+    width: 150,
   },
 ];
 
@@ -216,9 +210,6 @@ export default function SistemaDeDados() {
 
   const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('normal');
 
-  const [expandedR, setExpandedR] = useState(true);
-  const [expandedD, setExpandedD] = useState(true);
-
   return (
     <Layout className={styles.sistema}>
       <Grid
@@ -270,6 +261,8 @@ export default function SistemaDeDados() {
                 />
               </Paper>
             </Grid>
+
+            {/* Filtro por data
 
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
@@ -323,15 +316,15 @@ export default function SistemaDeDados() {
                             {element + 2000}
                           </MenuItem>
                         ))}
-                        {/* <MenuItem value={'19'}>2000</MenuItem> */}
+                        <MenuItem value={'19'}>2000</MenuItem>
                       </Select>
                     </Stack>
                   </Stack>
                 </Grid>
               </Paper>
-            </Grid>
+            </Grid> */}
 
-            {/* Segundo Card 
+            {/* Filtro de Partos
             
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
@@ -396,7 +389,7 @@ export default function SistemaDeDados() {
         <Grid container id="graficos" justifyContent="center" rowGap="2rem" flexDirection="column">
           <Paper
             sx={{
-              p: 1,
+              p: 4,
               margin: 'auto',
               width: 800,
               maxWidth: 1200,
@@ -404,6 +397,10 @@ export default function SistemaDeDados() {
               backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
             }}
           >
+            <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
+              {'Dados do munícipio: ' +
+                (municipio?.name === undefined ? municipioPadrao.name : municipio.name)}
+            </Typography>
             <Grid item sx={{ borderRadius: 2 }}>
               <OpenDataVisualization registros={data} predicoes={dataPredicao} tipo={tipoParto} />
             </Grid>
@@ -419,10 +416,10 @@ export default function SistemaDeDados() {
             }}
           >
             <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-              {'Detalhamento das predições:'}
+              {'Detalhamento das predições'}
             </Typography>
 
-            <Grid sx={{ width: '100%', mr: '2rem' }}>
+            <Grid sx={{ width: '100%', mr: '2rem', paddingTop: '1rem' }}>
               <DataGrid
                 autoHeight
                 rows={rows}
