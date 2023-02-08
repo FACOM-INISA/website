@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import {
   Button,
@@ -111,6 +111,19 @@ export default function SistemaDeDados() {
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
 
   const fakeInput = { name: '', id: 0, firstLetter: '' };
+
+  //const e function que garante que os dados do munícipio permaneçam aparecendo mesmo após limpar o nome na busca do "Filtro de Localidades", até o momento que o usuário escolha outro munícipio
+
+  const municipioAnterior = usePrevious<typeof municipio>(municipio);
+
+  function usePrevious<T>(municipio: T): T {
+    const ref: any = useRef<T>();
+
+    useEffect(() => {
+      ref.current = municipio;
+    }, [municipio]);
+    return ref.current;
+  }
 
   //useEffect para consumir e sincronizar dados da API de dados de partos.
 
@@ -398,8 +411,10 @@ export default function SistemaDeDados() {
             }}
           >
             <Typography variant="h5" color="#0088B7" fontWeight={800} textAlign="center">
-              {'Dados do munícipio: ' +
-                (municipio?.name === undefined ? municipioPadrao.name : municipio.name)}
+              {
+                'Dados do munícipio: ' + municipioAnterior?.name
+                /* (municipio?.name === undefined ? municipioPadrao.name : municipio.name) */
+              }
             </Typography>
             <Grid item sx={{ borderRadius: 2 }}>
               <OpenDataVisualization registros={data} predicoes={dataPredicao} tipo={tipoParto} />
