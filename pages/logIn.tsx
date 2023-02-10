@@ -1,4 +1,4 @@
-import { InputAdornment } from '@mui/material';
+import { Alert, AlertColor, InputAdornment, Snackbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -30,6 +30,12 @@ export default function LoginSide() {
     redirectIfFound: true,
   });
 
+  const [alertSeverity, setAlertSeverity] = React.useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleCloseAlert = () => setOpenAlert(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -45,7 +51,9 @@ export default function LoginSide() {
       });
       mutateUser(data, { optimisticData: data });
     } catch (error) {
-      alert(error);
+      setAlertSeverity('error');
+      setAlertContent('Falha ao logar usuário');
+      setOpenAlert(true);
     }
   };
 
@@ -193,6 +201,11 @@ export default function LoginSide() {
           }}
         />
       </Grid>
+      <>
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+          <Alert severity={alertSeverity}>{alertContent}</Alert>
+        </Snackbar>
+      </>
     </ThemeProvider>
   );
 }

@@ -1,18 +1,25 @@
-import type { NextPage } from 'next';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
 import {
+  Alert,
+  AlertColor,
+  Box,
   Button,
   Card,
-  FormControl,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   Grid,
   MenuItem,
+  Modal,
   OutlinedInput,
   Paper,
   Select,
   SelectChangeEvent,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -20,9 +27,10 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Parto from '../lib/Parto';
 import useUser from '../lib/useUser';
+import CheckIcon from '@mui/icons-material/Check';
 
 const ButtonCinza = styled(Button)({
   textTransform: 'none',
@@ -102,30 +110,50 @@ export default function InsercaoDeDados() {
     };
   });
 
-  const [data, setData] = useState(new Array<Parto>());
-
   const fakeInput = { name: '', id: 0, firstLetter: '' };
   const municipioPadrao =
     options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
 
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
-
   const [rows, setRows] = React.useState(new Array<Parto>());
-
-  const [buscar, setBuscar] = React.useState();
-
   const [mes, setMes] = React.useState('');
-
   const [anos, setAnos] = React.useState('');
-
   const [ano, setAno] = React.useState<number[]>([]);
-
+  const [spinner, setSpinner] = useState<boolean>(false);
   const handleChangeMes = (event: SelectChangeEvent) => {
     setMes(event.target.value);
   };
-
   const handleChangeAnos = (event: SelectChangeEvent) => {
     setAnos(event.target.value);
+  };
+
+  const handlePrediction = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!municipio) {
+      return;
+    }
+    setSpinner(true);
+    fetch('api/data/singleprocess', {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify({ idmunicipio: municipio.id }),
+    }).then((response) => {
+      if (response.ok) {
+        autoUpdate(municipio);
+        setAlertSeverity('success');
+        setAlertContent('Predição realizada com sucesso!');
+        setOpenAlert(true);
+        return setSpinner(false);
+      }
+      if (response.status === 401) {
+        setAlertSeverity('error');
+        setAlertContent('Usuário não autorizado');
+        return setOpenAlert(true);
+      }
+      setAlertSeverity('warning');
+      setAlertContent('Falha interna do servidor');
+      setOpenAlert(true);
+    });
   };
 
   const autoUpdate = useCallback((municipio: typeof municipioPadrao) => {
@@ -162,6 +190,7 @@ export default function InsercaoDeDados() {
     if (municipio) autoUpdate(municipio);
   }, [autoUpdate, municipio]);
 
+  // automatização da seleção de anos
   useEffect(() => {
     const minDate = dayjs('2006');
     const maxDate = dayjs();
@@ -173,6 +202,14 @@ export default function InsercaoDeDados() {
     setAno(aux);
   }, []);
 
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const handleCloseAlert = () => setOpenAlert(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -195,12 +232,19 @@ export default function InsercaoDeDados() {
       body: JSON.stringify(body),
     }).then((response) => {
       if (response.ok) {
+        setAlertSeverity('success');
+        setAlertContent('Dados inseridos com sucesso!');
+        setOpenAlert(true);
         return autoUpdate(municipio);
+      } else if (response.status === 401) {
+        setAlertSeverity('error');
+        setAlertContent('Usuário não autorizado');
+        setOpenAlert(true);
+      } else {
+        setAlertSeverity('warning');
+        setAlertContent('Falha ao inserir dados');
+        setOpenAlert(true);
       }
-      if (response.status === 401) {
-        return alert('USUÁRIO NÃO AUTORIZADO');
-      }
-      alert('FALHA AO INSERIR OS DADOS');
     });
   };
 
@@ -209,7 +253,7 @@ export default function InsercaoDeDados() {
       <Layout>
         <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
           {/* Sidebar */}
-          <Grid component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
+          <Grid id="form" component="form" onSubmit={handleSubmit} sx={{ margin: '0 4rem' }}>
             {/* Primeiro Card */}
             <Paper elevation={3} sx={{ mb: '2em' }}>
               <Card>
@@ -249,18 +293,6 @@ export default function InsercaoDeDados() {
                     renderInput={(params) => <TextField {...params} />}
                     size="small"
                   />
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    sx={{ mt: '20px', mb: '5px' }}
-                  >
-                    <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
-                      Limpar
-                    </ButtonCinza>
-                    <ButtonAzul variant="contained" onClick={() => console.log('TODO')}>
-                      Buscar
-                    </ButtonAzul>
-                  </Stack>
                 </Stack>
               </Card>
             </Paper>
@@ -384,14 +416,66 @@ export default function InsercaoDeDados() {
                     <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
                       Cancelar
                     </ButtonCinza>
-                    <ButtonAzul variant="contained" type="submit">
-                      Enviar
-                    </ButtonAzul>
+                    <>
+                      <ButtonAzul variant="contained" onClick={handleOpen}>
+                        Enviar
+                      </ButtonAzul>
+                      <Dialog open={open} onClose={handleClose}>
+                        <Box
+                          sx={{
+                            background: '#edeceb',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyItems: 'center',
+
+                            p: 1.5,
+                          }}
+                        >
+                          <CheckIcon sx={{ mr: 0.5, pt: 0.5 }} />
+                          <Typography sx={{ fontSize: 18, color: '#383838' }}>
+                            Confirmação
+                          </Typography>
+                        </Box>
+                        <DialogContent>
+                          <DialogContentText>
+                            As informações inseridas estão corretas?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions sx={{ mr: 1, mb: 0.5 }}>
+                          <Button sx={{ color: '#383838' }} onClick={handleClose}>
+                            Cancelar
+                          </Button>
+                          <Button form="form" type="submit" onClick={handleClose}>
+                            Confirmar
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </>
                   </Stack>
                 </Grid>
               </Card>
             </Paper>
+            <ButtonAzul
+              variant="contained"
+              sx={{
+                width: '100%',
+                ml: '0px',
+                pt: '0.3em',
+                pb: '0.3em',
+                height: '3rem',
+                fontSize: '1.2rem',
+              }}
+              onClick={handlePrediction}
+            >
+              {spinner ? 'Carregando...' : 'Realizar predição'}
+            </ButtonAzul>
           </Grid>
+
+          <>
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+              <Alert severity={alertSeverity}>{alertContent}</Alert>
+            </Snackbar>
+          </>
 
           {/* Tabela */}
           <Grid sx={{ width: '100%', mr: '4rem' }}>

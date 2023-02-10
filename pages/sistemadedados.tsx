@@ -248,7 +248,6 @@ export default function SistemaDeDados() {
                     }
                   />
                 </Card>
-
                 <Autocomplete
                   value={municipio || fakeInput}
                   noOptionsText="Nenhum munícipio encontrado"
