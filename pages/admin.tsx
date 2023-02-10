@@ -126,7 +126,7 @@ export default function InsercaoDeDados() {
   const handleChangeAnos = (event: SelectChangeEvent) => {
     setAnos(event.target.value);
   };
-  
+
   const handlePrediction = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!municipio) {
@@ -195,8 +195,8 @@ export default function InsercaoDeDados() {
   const [alertContent, setAlertContent] = React.useState('');
   const [openAlert, setOpenAlert] = React.useState(false);
   const handleCloseAlert = () => setOpenAlert(false);
-
   const [open, setOpen] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -236,10 +236,6 @@ export default function InsercaoDeDados() {
       }
     });
   };
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
     user?.isLoggedIn && (
@@ -456,7 +452,6 @@ export default function InsercaoDeDados() {
               {spinner ? 'Carregando' : 'Realizar predição'}
             </ButtonAzul>
           </Grid>
-          
 
           <>
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>

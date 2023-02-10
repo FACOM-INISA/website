@@ -1,3 +1,4 @@
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -25,9 +26,22 @@ const theme = createTheme();
 
 export default function SignInSide() {
   const router = useRouter();
+
+  const [alertSeverity, setAlertSeverity] = React.useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleCloseAlert = () => setOpenAlert(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (data.get('password') !== data.get('confirmPassword')) {
+      setAlertSeverity('warning');
+      setAlertContent('As senhas não são iguais');
+      setOpenAlert(true);
+      return;
+    }
     const body = {
       email: data.get('email'),
       senha: data.get('password'),
@@ -244,6 +258,11 @@ export default function SignInSide() {
           }}
         />
       </Grid>
+      <>
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+          <Alert severity={alertSeverity}>{alertContent}</Alert>
+        </Snackbar>
+      </>
     </ThemeProvider>
   );
 }
