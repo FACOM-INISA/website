@@ -82,7 +82,7 @@ const SistemaDeDados: NextPage = () => {
       });
   }, [municipio]);
 
-  const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('todos');
+  const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('normal');
 
   const [expandedR, setExpandedR] = useState(true);
   const [expandedD, setExpandedD] = useState(true);
@@ -116,6 +116,9 @@ const SistemaDeDados: NextPage = () => {
                   />
                 </Card>
                 <Collapse in={expandedR} className={styles.collapse}>
+                  <Typography sx={{ fontSize: '1.3em', ml: '20px', mt: '15px' }}>
+                    Escolha o Município
+                  </Typography>
                   <Autocomplete
                     value={municipio}
                     noOptionsText="Nenhum munícipio encontrado"
@@ -134,7 +137,7 @@ const SistemaDeDados: NextPage = () => {
                         transform: 'none',
                       },
                     }}
-                    renderInput={(params) => <TextField {...params} label="Buscar por município" />}
+                    renderInput={(params) => <TextField {...params} />}
                     onChange={(_, selected) => setMunicipio(selected || null)}
                   />
                 </Collapse>

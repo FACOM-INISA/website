@@ -35,13 +35,13 @@ function OpenDataVisualization({
   predicoes: Array<Predicao>;
   tipo: 'todos' | 'normal' | 'sensiveis';
 }) {
-  const [campoData, setCampoData] = useState<'total' | 'cesaria' | 'normal'>('total');
+  const [campoData, setCampoData] = useState<'total' | 'cesaria' | 'normais'>('normais');
 
   const [data, setData] = useState<TipoDadosLocais[]>();
 
   useEffect(() => {
     if (tipo === 'todos') setCampoData('total');
-    if (tipo === 'normal') setCampoData('normal');
+    if (tipo === 'normal') setCampoData('normais');
     if (tipo === 'sensiveis') setCampoData('cesaria');
 
     let dataAux: Array<TipoDadosLocais> = registros?.map((reg) => {
@@ -54,7 +54,7 @@ function OpenDataVisualization({
     });
 
     const ultimo = dataAux[dataAux.length - 1];
-    dataAux.push({ name: ultimo?.name, pred: ultimo?.total }); // TODO - Alterar campo quando dados estiverem disponiveis
+    dataAux.push({ name: ultimo?.name, pred: ultimo?.normais }); // TODO - Alterar campo quando dados estiverem disponiveis
 
     predicoes
       .filter((pred) => pred.tipo_parto === 'normal') // TODO - Alterar campo quando dados estiverem disponiveis
