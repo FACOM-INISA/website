@@ -35,14 +35,14 @@ function OpenDataVisualization({
   predicoes: Array<Predicao>;
   tipo: 'todos' | 'normal' | 'sensiveis';
 }) {
-  const [campoData, setCampoData] = useState<'total' | 'cesaria' | 'normais'>('normais');
+  const [campoData, setCampoData] = useState<'totais' | 'cesarias' | 'normais'>('normais');
 
   const [data, setData] = useState<TipoDadosLocais[]>();
 
   useEffect(() => {
-    if (tipo === 'todos') setCampoData('total');
+    if (tipo === 'todos') setCampoData('totais');
     if (tipo === 'normal') setCampoData('normais');
-    if (tipo === 'sensiveis') setCampoData('cesaria');
+    if (tipo === 'sensiveis') setCampoData('cesarias');
 
     let dataAux: Array<TipoDadosLocais> = registros?.map((reg) => {
       return {
