@@ -97,25 +97,43 @@ export default function InsercaoDeDados() {
     };
   });
 
-  const [data, setData] = useState(new Array<Parto>());
-
   const fakeInput = { name: '', id: 0, firstLetter: '' };
   const municipioPadrao =
     options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
 
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
   const [rows, setRows] = React.useState(new Array<Parto>());
-  const [buscar, setBuscar] = React.useState();
   const [mes, setMes] = React.useState('');
   const [anos, setAnos] = React.useState('');
   const [ano, setAno] = React.useState<number[]>([]);
+  const [spinner, setSpinner] = useState<boolean>(false);
 
   const handleChangeMes = (event: SelectChangeEvent) => {
     setMes(event.target.value);
   };
-
   const handleChangeAnos = (event: SelectChangeEvent) => {
     setAnos(event.target.value);
+  };
+
+  const handlePrediction = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!municipio) {
+      return;
+    }
+    setSpinner(true);
+    fetch('api/data/singleprocess', {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify({ idmunicipio: municipio.id }),
+    }).then((response) => {
+      if (response.ok) {
+        return setSpinner(false);
+      }
+      if (response.status === 401) {
+        return alert('USUÁRIO NÃO AUTORIZADO');
+      }
+      alert('ERRO INTERNO NO SERVIDOR');
+    });
   };
 
   const autoUpdate = useCallback((municipio: typeof municipioPadrao) => {
@@ -244,14 +262,7 @@ export default function InsercaoDeDados() {
                   direction="row"
                   justifyContent="space-between"
                   sx={{ mt: '20px', mb: '5px' }}
-                >
-                  <ButtonCinza variant="contained" onClick={() => setMunicipio(fakeInput)}>
-                    Limpar
-                  </ButtonCinza>
-                  <ButtonAzul variant="contained" onClick={() => console.log('TODO')}>
-                    Buscar
-                  </ButtonAzul>
-                </Stack>
+                ></Stack>
               </Stack>
             </Card>
           </Paper>
@@ -424,6 +435,13 @@ export default function InsercaoDeDados() {
               </Grid>
             </Card>
           </Paper>
+          <ButtonAzul
+            variant="contained"
+            sx={{ width: '100%', ml: '0px', pt: '0.3em', pb: '0.3em' }}
+            onClick={handlePrediction}
+          >
+            {spinner ? 'Carregando' : 'Realizar predição'}
+          </ButtonAzul>
         </Grid>
 
         {/* Tabela */}
