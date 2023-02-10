@@ -139,12 +139,20 @@ export default function InsercaoDeDados() {
       body: JSON.stringify({ idmunicipio: municipio.id }),
     }).then((response) => {
       if (response.ok) {
+        autoUpdate(municipio);
+        setAlertSeverity('success');
+        setAlertContent('Predição realizada com sucesso!');
+        setOpenAlert(true);
         return setSpinner(false);
       }
       if (response.status === 401) {
-        return alert('USUÁRIO NÃO AUTORIZADO');
+        setAlertSeverity('error');
+        setAlertContent('Usuário não autorizado');
+        return setOpenAlert(true);
       }
-      alert('ERRO INTERNO NO SERVIDOR');
+      setAlertSeverity('warning');
+      setAlertContent('Falha interna do servidor');
+      setOpenAlert(true);
     });
   };
 
@@ -446,10 +454,17 @@ export default function InsercaoDeDados() {
             </Paper>
             <ButtonAzul
               variant="contained"
-              sx={{ width: '100%', ml: '0px', pt: '0.3em', pb: '0.3em' }}
+              sx={{
+                width: '100%',
+                ml: '0px',
+                pt: '0.3em',
+                pb: '0.3em',
+                height: '3rem',
+                fontSize: '1.2rem',
+              }}
               onClick={handlePrediction}
             >
-              {spinner ? 'Carregando' : 'Realizar predição'}
+              {spinner ? 'Carregando...' : 'Realizar predição'}
             </ButtonAzul>
           </Grid>
 
