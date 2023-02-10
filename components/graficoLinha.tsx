@@ -53,8 +53,8 @@ function OpenDataVisualization({
       };
     });
 
-    const ultimo = dataAux[dataAux.length - 1];
-    dataAux.push({ name: ultimo?.name, pred: ultimo?.normais }); // TODO - Alterar campo quando dados estiverem disponiveis
+    // const ultimo = dataAux[dataAux.length - 1];
+    // dataAux.push({ name: ultimo?.name, pred: ultimo?.normais }); // TODO - Alterar campo quando dados estiverem disponiveis
 
     predicoes
       .filter((pred) => pred.tipo_parto === 'normal') // TODO - Alterar campo quando dados estiverem disponiveis

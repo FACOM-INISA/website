@@ -36,7 +36,7 @@ export default function SignInSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (data.get('password') !== data.get('confirmPassword')) {
+    if (data.get('password') !== data.get('passwordConfirm')) {
       setAlertSeverity('warning');
       setAlertContent('As senhas não são iguais');
       setOpenAlert(true);
