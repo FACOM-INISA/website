@@ -50,6 +50,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       const user: User = {
         isLoggedIn: true,
         name: data.nome,
+        email: data.email,
         isAdmin: data.admin,
         isAuthorized: data.authorized,
       };
