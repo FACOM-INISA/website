@@ -38,6 +38,7 @@ model Parto {
   parto_total   Int
   municipio     Municipio @relation(fields: [municipio_id], references: [id])
   municipio_id  Int
+  predito       Boolean @default(true)
 
   @@id([ano, mes, municipio_id], name: "id")
   @@map("partos")
