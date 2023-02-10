@@ -14,6 +14,7 @@ import {
   DialogContentText,
   Grid,
   MenuItem,
+  Modal,
   OutlinedInput,
   Paper,
   Select,
@@ -96,12 +97,6 @@ const columns: GridColDef[] = [
   },
 ];
 
-// interface AlertProps {
-//   type: string;
-//   message: string;
-//   alert: (type: string, message: string) => void;
-// }
-
 export default function InsercaoDeDados() {
   const { user } = useUser({
     redirectTo: '/logIn',
@@ -115,7 +110,6 @@ export default function InsercaoDeDados() {
     };
   });
 
-  const [data, setData] = useState(new Array<Parto>());
   const fakeInput = { name: '', id: 0, firstLetter: '' };
   const municipioPadrao =
     options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
@@ -125,12 +119,35 @@ export default function InsercaoDeDados() {
   const [mes, setMes] = React.useState('');
   const [anos, setAnos] = React.useState('');
   const [ano, setAno] = React.useState<number[]>([]);
+  const [spinner, setSpinner] = useState<boolean>(false);
   const handleChangeMes = (event: SelectChangeEvent) => {
     setMes(event.target.value);
   };
   const handleChangeAnos = (event: SelectChangeEvent) => {
     setAnos(event.target.value);
   };
+  
+  const handlePrediction = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!municipio) {
+      return;
+    }
+    setSpinner(true);
+    fetch('api/data/singleprocess', {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json' },
+      body: JSON.stringify({ idmunicipio: municipio.id }),
+    }).then((response) => {
+      if (response.ok) {
+        return setSpinner(false);
+      }
+      if (response.status === 401) {
+        return alert('USUÁRIO NÃO AUTORIZADO');
+      }
+      alert('ERRO INTERNO NO SERVIDOR');
+    });
+  };
+
   const autoUpdate = useCallback((municipio: typeof municipioPadrao) => {
     const body = { municipio: municipio.id };
 
@@ -162,6 +179,7 @@ export default function InsercaoDeDados() {
     if (municipio) autoUpdate(municipio);
   }, [autoUpdate, municipio]);
 
+  // automatização da seleção de anos
   useEffect(() => {
     const minDate = dayjs('2006');
     const maxDate = dayjs();
@@ -175,19 +193,6 @@ export default function InsercaoDeDados() {
 
   const [alertSeverity, setAlertSeverity] = useState<AlertColor>('info');
   const [alertContent, setAlertContent] = React.useState('');
-
-  // const {severity, message} = props;
-  // const [detail, setDetail] = useState({
-  //   severityError: "error",
-  //   messageError: "Usuário não autorizado",
-
-  //   severityWarning: "warning",
-  //   messageWarning: "Falha ao inserir dados",
-
-  //   severitySuccess: "success",
-  //   messageSuccess: "Dados inseridos com sucesso!"
-  // });
-
   const [openAlert, setOpenAlert] = React.useState(false);
   const handleCloseAlert = () => setOpenAlert(false);
 
@@ -219,22 +224,22 @@ export default function InsercaoDeDados() {
         setAlertSeverity('success');
         setAlertContent('Dados inseridos com sucesso!');
         setOpenAlert(true);
-        console.log('OK');
         return autoUpdate(municipio);
       } else if (response.status === 401) {
         setAlertSeverity('error');
         setAlertContent('Usuário não autorizado');
         setOpenAlert(true);
-        console.log('USER');
-        // return <Alert severity="error">Usuário não autorizado</Alert>;
       } else {
         setAlertSeverity('warning');
         setAlertContent('Falha ao inserir dados');
-        console.log('DADOS');
-        // <Alert severity="warning">Falha ao inserir dados</Alert>;
+        setOpenAlert(true);
       }
     });
   };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     user?.isLoggedIn && (
@@ -443,16 +448,17 @@ export default function InsercaoDeDados() {
                 </Grid>
               </Card>
             </Paper>
+            <ButtonAzul
+              variant="contained"
+              sx={{ width: '100%', ml: '0px', pt: '0.3em', pb: '0.3em' }}
+              onClick={handlePrediction}
+            >
+              {spinner ? 'Carregando' : 'Realizar predição'}
+            </ButtonAzul>
           </Grid>
+          
 
           <>
-            {/* {alerta ? (
-                              <Alert severity="error">Usuário não autorizado</Alert>
-                              <Alert severity="warning">Falha ao inserir dados</Alert>;
-                              <Alert severity="success">Dados inseridos com sucesso!</Alert>
-                            ) : (
-                              <></>
-                            )} */}
             <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
               <Alert severity={alertSeverity}>{alertContent}</Alert>
             </Snackbar>

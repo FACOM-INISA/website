@@ -5,7 +5,7 @@
  *  Responde com status 200 e Prediction done em caso de sucesso
  */
 
-import { withIronSessionApiRoute } from 'iron-session/next/dist';
+import { withIronSessionApiRoute } from 'iron-session/next';
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { sessionOptions } from '../../../lib/session';
 import { processing } from '../../../scripts/process-municipio';
@@ -30,6 +30,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     await processing([municipio, 'cesaria']);
     await processing([municipio, 'total']);
   } catch (e) {
+    console.log(e);
     res.status(500).send({ message: 'Internal Server Error' });
     return;
   }
