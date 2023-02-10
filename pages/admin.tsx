@@ -4,6 +4,7 @@ import Layout from '../components/layouts/default';
 import municipios from '../data/municipios.json';
 import {
   Alert,
+  AlertColor,
   Box,
   Button,
   Card,
@@ -95,11 +96,11 @@ const columns: GridColDef[] = [
   },
 ];
 
-interface AlertProps{
-  type: string,
-  message: string,
-  alert: (type: string, message: string) => void;
-}
+// interface AlertProps {
+//   type: string;
+//   message: string;
+//   alert: (type: string, message: string) => void;
+// }
 
 export default function InsercaoDeDados() {
   const { user } = useUser({
@@ -172,9 +173,8 @@ export default function InsercaoDeDados() {
     setAno(aux);
   }, []);
 
-  const [alerta, setAlerta] = React.useState(false);
-  // const [alertSeverity, setAlertSeverity] = useState('info');
-  // const [alertContent, setAlertContent] = React.useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
 
   // const {severity, message} = props;
   // const [detail, setDetail] = useState({
@@ -188,6 +188,8 @@ export default function InsercaoDeDados() {
   //   messageSuccess: "Dados inseridos com sucesso!"
   // });
 
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const handleCloseAlert = () => setOpenAlert(false);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -214,21 +216,21 @@ export default function InsercaoDeDados() {
       body: JSON.stringify(body),
     }).then((response) => {
       if (response.ok) {
+        setAlertSeverity('success');
+        setAlertContent('Dados inseridos com sucesso!');
+        setOpenAlert(true);
+        console.log('OK');
         return autoUpdate(municipio);
-        // setAlerta(true);
-        // setAlertSeverity("success")
-        // setAlertContent("Dados inseridos com sucesso!");
       } else if (response.status === 401) {
-        setAlerta(true);
-        // setErrorDetail();
-        // setAlertSeverity('error');
-        // setAlertContent('Usuário não autorizado');
-        console.log('EI');
+        setAlertSeverity('error');
+        setAlertContent('Usuário não autorizado');
+        setOpenAlert(true);
+        console.log('USER');
         // return <Alert severity="error">Usuário não autorizado</Alert>;
       } else {
-        setAlerta(true);
-        // setAlertSeverity('warning');
-        // setAlertContent('Falha ao inserir dados');
+        setAlertSeverity('warning');
+        setAlertContent('Falha ao inserir dados');
+        console.log('DADOS');
         // <Alert severity="warning">Falha ao inserir dados</Alert>;
       }
     });
@@ -434,19 +436,6 @@ export default function InsercaoDeDados() {
                           <Button form="form" type="submit" onClick={handleClose}>
                             Confirmar
                           </Button>
-                          <>
-                            {/* {alerta ? (
-                              <Alert severity="error">Usuário não autorizado</Alert>
-                              <Alert severity="warning">Falha ao inserir dados</Alert>;
-                              <Alert severity="success">Dados inseridos com sucesso!</Alert>
-                            ) : (
-                              <></>
-                            )} */}
-                            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                              
-                              {alerta ? <Alert severity="info">"Teste"</Alert> : <></>}
-                            </Snackbar>
-                          </>
                         </DialogActions>
                       </Dialog>
                     </>
@@ -455,6 +444,19 @@ export default function InsercaoDeDados() {
               </Card>
             </Paper>
           </Grid>
+
+          <>
+            {/* {alerta ? (
+                              <Alert severity="error">Usuário não autorizado</Alert>
+                              <Alert severity="warning">Falha ao inserir dados</Alert>;
+                              <Alert severity="success">Dados inseridos com sucesso!</Alert>
+                            ) : (
+                              <></>
+                            )} */}
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+              <Alert severity={alertSeverity}>{alertContent}</Alert>
+            </Snackbar>
+          </>
 
           {/* Tabela */}
           <Grid sx={{ width: '100%', mr: '4rem' }}>
