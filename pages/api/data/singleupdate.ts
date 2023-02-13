@@ -12,8 +12,9 @@
 
 import { sessionOptions } from '../../../lib/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../prisma';
+import authenticate from '../../../lib/authenticateUser';
 
 async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
   // Checando se o método é POST
@@ -22,7 +23,13 @@ async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
   // Checando se o usuário é autorizado
-  if (!req.session.user?.isAuthorized) {
+  if (!req.session.user) {
+    res.status(401).send({ message: 'Not Logged In' });
+    return;
+  }
+
+  // Checando se o usuário está autenticado
+  if (!(await authenticate(req.session.user))) {
     res.status(401).send({ message: 'Not Authorized' });
     return;
   }

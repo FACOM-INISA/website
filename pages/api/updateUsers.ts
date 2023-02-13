@@ -11,6 +11,7 @@
 
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
+import authenticate from '../../lib/authenticateUser';
 import { sessionOptions } from '../../lib/session';
 import prisma from '../../prisma';
 
@@ -19,7 +20,13 @@ async function updateUsers(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
     res.status(405).send({ message: 'Only POST requests are allowed' });
     return;
-  } else if (!req.session.user?.isAdmin) {
+  } else if (!req.session.user) {
+    res.status(401).send({ message: 'Not Logged In' });
+    return;
+  }
+
+  // Checando se o usuário está autenticado
+  if (!(await authenticate(req.session.user, true))) {
     res.status(401).send({ message: 'Not Authorized' });
     return;
   }

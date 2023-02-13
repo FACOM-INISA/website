@@ -10,13 +10,20 @@ import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { sessionOptions } from '../../../lib/session';
 import { processing } from '../../../scripts/process-municipio';
 import prisma from '../../../prisma';
+import authenticate from '../../../lib/authenticateUser';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
     res.status(405).send({ message: 'Only POST requests are allowed' });
     return;
   }
-  if (!req.session.user?.isAuthorized) {
+  if (!req.session.user) {
+    res.status(401).send({ message: 'Not Logged In' });
+    return;
+  }
+
+  // Checando se o usuário está autenticado
+  if (!(await authenticate(req.session.user))) {
     res.status(401).send({ message: 'Not Authorized' });
     return;
   }
@@ -24,7 +31,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).send({ message: 'Wrong data sent' });
     return;
   }
-  await prisma.$connect();
   const municipio = req.body.idmunicipio;
 
   // Pega o ultimo ano e último mes
@@ -45,8 +51,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const data = await prisma.parto.updateMany({
+    await prisma.parto.updateMany({
       where: {
+        municipio_id: +municipio,
         predito: false,
       },
       data: {
