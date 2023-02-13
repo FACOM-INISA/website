@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../public/images/ufms.png';
@@ -11,6 +11,9 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
 
+import painel from '../pages/sistemadedados';
+import municipios from '../data/municipios.json';
+
 export interface HeaderProps {
   items: Array<{
     name: string;
@@ -22,6 +25,12 @@ export interface HeaderProps {
 
 const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   const { asPath } = useRouter();
+
+  // const router = useRouter();
+  // useEffect(() => {
+  //   if ((painel() ? municipios) == ())
+  //     router.push('/?'), {nome_municipio}, { shallow: true }
+  // }, [])
 
   return (
     <Box
