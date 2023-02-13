@@ -42,6 +42,7 @@ export default function SignInSide() {
       setOpenAlert(true);
       return;
     }
+
     const body = {
       email: data.get('email'),
       senha: data.get('password'),
@@ -60,7 +61,11 @@ export default function SignInSide() {
       if (response.status == 307) {
         router.push(message.message);
       } else {
-        alert(message.message);
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}></Snackbar>;
+        setAlertSeverity('warning');
+        setAlertContent(message.message);
+        setOpenAlert(true);
+        return;
       }
     });
   };

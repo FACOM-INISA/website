@@ -15,6 +15,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
 
 import prisma from '../../prisma';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
@@ -47,6 +48,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(307).json({ message: '/logIn' });
     // res.status(201).json({ 201: 'okay' });
   } catch (err) {
-    res.status(400).json({ message: err });
+    if (err instanceof PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        return res.status(400).json({ message: 'Usuário já cadastrado' });
+      }
+    }
+    res.status(500).json({ message: 'Erro interno do servidor' });
   }
 }
