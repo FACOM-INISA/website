@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import {
@@ -35,6 +35,7 @@ import municipios from '../data/municipios.json';
 import Parto, { Predicao } from '../lib/Parto';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 
 const columns: GridColDef[] = [
   {
@@ -81,7 +82,9 @@ const columns: GridColDef[] = [
   },
 ];
 
-export default function SistemaDeDados() {
+export default function SistemaDeDados(props: { municipio?: string }) {
+  const router = useRouter();
+
   const options = municipios.map((option) => {
     const firstLetter = option.name[0].toUpperCase();
     return {
@@ -106,7 +109,8 @@ export default function SistemaDeDados() {
   };
 
   const municipioPadrao =
-    options.find((municipio) => municipio.name === 'Campo Grande') || options[0];
+    options.find((municipio) => municipio.name === (props.municipio || 'Campo Grande')) ||
+    options[0];
 
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
 
@@ -139,10 +143,9 @@ export default function SistemaDeDados() {
   }, []);
 
   useEffect(() => {
+    if (!municipio) return;
+
     const body = { municipio: municipio?.id };
-    if (!municipio) {
-      return;
-    }
 
     fetch('api/data/consulta', {
       method: 'POST',
@@ -186,8 +189,11 @@ export default function SistemaDeDados() {
             })
             .sort((a: Parto, b: Parto) => b.ano - a.ano || b.mes - a.mes)
         );
+
+        router.push({ query: { municipio: municipio?.name } }, undefined, {
+          shallow: true,
+        });
       });
-    console.log(rows);
   }, [municipio]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -337,7 +343,7 @@ export default function SistemaDeDados() {
             </Grid> */}
 
             {/* Filtro de Partos
-            
+
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
                 <Card style={{ display: 'flex', flexDirection: 'column' }}>
@@ -454,3 +460,7 @@ export default function SistemaDeDados() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return { props: context.query.municipio ? { municipio: context.query.municipio } : {} };
+};
