@@ -314,9 +314,14 @@ export default function InsercaoDeDados() {
                   </Typography>
                 </Paper>
                 <Grid sx={{ p: '20px' }}>
-                  <Stack direction="row" spacing={'auto'}>
-                    <Stack sx={{ width: '50%' }}>
-                      <Typography sx={{ fontSize: '1.2em' }}>Mês</Typography>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignContent="center"
+                  >
+                    <Typography sx={{ fontSize: '1.2em', alignSelf: 'center' }}>Mês</Typography>
+                    <Stack sx={{ width: '45%' }}>
                       <Select
                         id="mes"
                         name="mes"
@@ -339,8 +344,16 @@ export default function InsercaoDeDados() {
                         <MenuItem value={12}>Dezembro</MenuItem>
                       </Select>
                     </Stack>
-                    <Stack sx={{ width: '40%' }}>
-                      <Typography sx={{ fontSize: '1.2em' }}>Ano</Typography>
+                  </Grid>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignContent="center"
+                    sx={{ m: '20px 0' }}
+                  >
+                    <Typography sx={{ fontSize: '1.2em', alignSelf: 'center' }}>Ano</Typography>
+                    <Stack sx={{ width: '45%' }}>
                       <Select
                         id="ano"
                         name="ano"
@@ -357,7 +370,7 @@ export default function InsercaoDeDados() {
                         {/* <MenuItem value={'19'}>2000</MenuItem> */}
                       </Select>
                     </Stack>
-                  </Stack>
+                  </Grid>
 
                   <Grid
                     container
@@ -382,7 +395,7 @@ export default function InsercaoDeDados() {
                       sx={{
                         color: '#383838',
                         textAlign: 'center',
-                        width: '30%',
+                        width: '45%',
                       }}
                       type="number"
                       size="small"
