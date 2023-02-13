@@ -90,6 +90,7 @@ function OpenDataVisualization({
               stroke="#0088B7"
               name={'Quantidade de partos normais'}
               strokeWidth={1}
+              dot={false}
             />
             <Line
               type="monotone"
@@ -97,6 +98,7 @@ function OpenDataVisualization({
               stroke="#B70000"
               name={'Predição de partos normais'}
               strokeWidth={2}
+              dot={false}
             />
           </LineChart>
         </ResponsiveContainer>
