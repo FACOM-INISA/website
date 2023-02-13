@@ -11,6 +11,7 @@ import { Fields, File } from 'formidable';
 import fs from 'fs';
 import { parse } from 'csv-parse';
 import { populateAndProcess } from '../../../scripts/populate-municipio';
+import authenticate from '../../../lib/authenticateUser';
 
 const checker = async (csv: string) => {
   // ler o arquivo
@@ -71,8 +72,15 @@ async function update(req: NextApiRequest, res: NextApiResponse) {
     res.status(405).send({ message: 'Only POST requests are allowed' });
   }
   // Checando se é um usuário autorizado
-  else if (!req.session.user?.isAuthorized) {
+  if (!req.session.user) {
+    res.status(401).send({ message: 'Not Logged In' });
+    return;
+  }
+
+  // Checando se o usuário está autenticado
+  if (!(await authenticate(req.session.user))) {
     res.status(401).send({ message: 'Not Authorized' });
+    return;
   } else {
     // Tentando fazer o parse do request usando o parseForm
     // Cria um arquivo com o nome do municipio e o timestamp da inserção do arquivo
