@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../public/images/ufms.png';
@@ -8,7 +8,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InfoIcon from '@mui/icons-material/Info';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
+
+import painel from '../pages/sistemadedados';
+import municipios from '../data/municipios.json';
 
 export interface HeaderProps {
   items: Array<{
@@ -21,6 +25,12 @@ export interface HeaderProps {
 
 const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   const { asPath } = useRouter();
+
+  // const router = useRouter();
+  // useEffect(() => {
+  //   if ((painel() ? municipios) == ())
+  //     router.push('/?'), {nome_municipio}, { shallow: true }
+  // }, [])
 
   return (
     <Box
@@ -92,7 +102,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   );
 };
 
-export default function AppHeader(props: { admin?: boolean }) {
+export default function AppHeader(props: { admin?: boolean; logout?: boolean }) {
   const elements = [
     { name: 'Inicio', path: '/', icon: HomeIcon },
     { name: 'Painel', path: '/sistemadedados', icon: InsertChartIcon },
@@ -100,6 +110,7 @@ export default function AppHeader(props: { admin?: boolean }) {
   ];
 
   if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
+  if (props.logout) elements.push({ name: 'Sair', path: '/api/logout', icon: LogoutIcon });
 
   return <HeaderComponent items={elements} />;
 }

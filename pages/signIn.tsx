@@ -1,3 +1,4 @@
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -25,9 +26,23 @@ const theme = createTheme();
 
 export default function SignInSide() {
   const router = useRouter();
+
+  const [alertSeverity, setAlertSeverity] = React.useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleCloseAlert = () => setOpenAlert(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (data.get('password') !== data.get('passwordConfirm')) {
+      setAlertSeverity('warning');
+      setAlertContent('As senhas não são iguais');
+      setOpenAlert(true);
+      return;
+    }
+
     const body = {
       email: data.get('email'),
       senha: data.get('password'),
@@ -46,7 +61,11 @@ export default function SignInSide() {
       if (response.status == 307) {
         router.push(message.message);
       } else {
-        alert(message.message);
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}></Snackbar>;
+        setAlertSeverity('warning');
+        setAlertContent(message.message);
+        setOpenAlert(true);
+        return;
       }
     });
   };
@@ -99,7 +118,7 @@ export default function SignInSide() {
                 objectFit="contain"
               ></Image>
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 InputProps={{
                   startAdornment: (
@@ -108,7 +127,7 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -126,13 +145,14 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
                 label="E-mail"
                 name="email"
+                type="email"
                 autoComplete="email"
                 autoFocus
               />
@@ -144,7 +164,8 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                inputProps={{ pattern: '.{7,}' }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -162,7 +183,8 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                inputProps={{ pattern: '.{8,}' }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -180,7 +202,8 @@ export default function SignInSide() {
                     </InputAdornment>
                   ),
                 }}
-                InputLabelProps={{ required: false }}
+                inputProps={{ pattern: '.{8,}' }}
+                InputLabelProps={{ required: true }}
                 margin="normal"
                 required
                 fullWidth
@@ -240,6 +263,11 @@ export default function SignInSide() {
           }}
         />
       </Grid>
+      <>
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+          <Alert severity={alertSeverity}>{alertContent}</Alert>
+        </Snackbar>
+      </>
     </ThemeProvider>
   );
 }

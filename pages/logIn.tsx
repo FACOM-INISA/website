@@ -1,4 +1,4 @@
-import { InputAdornment } from '@mui/material';
+import { Alert, AlertColor, InputAdornment, Snackbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -20,14 +20,21 @@ import fetchJson from '../lib/fetchJson';
 import useUser from '../lib/useUser';
 
 import NextLink from 'next/link';
+import { User } from './api/user';
 
 const theme = createTheme();
 
 export default function LoginSide() {
   const { mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: '/admin',
     redirectIfFound: true,
   });
+
+  const [alertSeverity, setAlertSeverity] = React.useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleCloseAlert = () => setOpenAlert(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,16 +44,16 @@ export default function LoginSide() {
       password: data.get('password'),
     };
     try {
-      mutateUser(
-        await fetchJson('api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        }),
-        false
-      );
+      const data = await fetchJson<User>('api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      mutateUser(data, { optimisticData: data });
     } catch (error) {
-      alert(error);
+      setAlertSeverity('error');
+      setAlertContent('Falha ao logar usuário');
+      setOpenAlert(true);
     }
   };
 
@@ -194,6 +201,11 @@ export default function LoginSide() {
           }}
         />
       </Grid>
+      <>
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+          <Alert severity={alertSeverity}>{alertContent}</Alert>
+        </Snackbar>
+      </>
     </ThemeProvider>
   );
 }

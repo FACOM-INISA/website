@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import {
   LineChart,
@@ -15,58 +15,59 @@ import {
   Sector,
 } from 'recharts';
 import { Grid } from '@mui/material';
+import { any } from 'bluebird';
+import Parto, { Predicao } from '../lib/Parto';
 
-const data = [
-  {
-    name: '2017',
-    uv: 34,
-    pv: 100,
-    amt: 4224,
-  },
-  {
-    name: '2018',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: '2019',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: '2020',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: '2021',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: '2022',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-];
+type TipoDadosLocais = {
+  name: string;
+  cesaria?: number;
+  normais?: number;
+  total?: number;
+  pred?: number;
+};
 
-const OpenDataVisualization: NextPage = (props) => {
-  /* const RADIAN = Math.PI / 180;
-  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
-  const sin = Math.sin(-RADIAN * midAngle);
-  const cos = Math.cos(-RADIAN * midAngle);
-  const sx = cx + (outerRadius + 10) * cos;
-  const sy = cy + (outerRadius + 10) * sin;
-  const mx = cx + (outerRadius + 30) * cos;
-  const my = cy + (outerRadius + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? 'start' : 'end'; */
+function OpenDataVisualization({
+  registros,
+  predicoes,
+  tipo,
+}: {
+  registros: Array<Parto>;
+  predicoes: Array<Predicao>;
+  tipo: 'todos' | 'normal' | 'sensiveis';
+}) {
+  const [campoData, setCampoData] = useState<'totais' | 'cesarias' | 'normais'>('normais');
+
+  const [data, setData] = useState<TipoDadosLocais[]>();
+
+  useEffect(() => {
+    if (tipo === 'todos') setCampoData('totais');
+    if (tipo === 'normal') setCampoData('normais');
+    if (tipo === 'sensiveis') setCampoData('cesarias');
+
+    let dataAux: Array<TipoDadosLocais> = registros?.map((reg) => {
+      return {
+        name: `${reg.mes}/${2000 + reg.ano}`,
+        cesaria: reg.parto_cesaria,
+        normais: reg.parto_normais,
+        total: reg.parto_total,
+      };
+    });
+
+    // const ultimo = dataAux[dataAux.length - 1];
+    // dataAux.push({ name: ultimo?.name, pred: ultimo?.normais }); // TODO - Alterar campo quando dados estiverem disponiveis
+
+    predicoes
+      .filter((pred) => pred.tipo_parto === 'normal') // TODO - Alterar campo quando dados estiverem disponiveis
+      .forEach((predicao) => {
+        dataAux.push({
+          name: `${predicao.mes}/${predicao.ano + 2000}`,
+          pred: predicao.pred,
+        });
+      });
+
+    setData(dataAux);
+  }, [tipo, predicoes, registros]);
+
   return (
     <Grid>
       <Grid>
@@ -75,12 +76,7 @@ const OpenDataVisualization: NextPage = (props) => {
             width={500}
             height={300}
             data={data}
-            margin={{
-              top: 20,
-              right: 50,
-              left: 20,
-              bottom: 5,
-            }}
+            margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -88,54 +84,27 @@ const OpenDataVisualization: NextPage = (props) => {
             <Tooltip />
             <Legend />
 
-            <Line type="monotone" dataKey="pv" stroke="#0088B7" name="Quantidade" />
+            <Line
+              type="monotone"
+              dataKey={campoData}
+              stroke="#0088B7"
+              name={'Quantidade de partos normais'}
+              strokeWidth={1}
+              dot={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="pred"
+              stroke="#B70000"
+              name={'Predição de partos normais'}
+              strokeWidth={2}
+              dot={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </Grid>
-      <Grid>
-        {/* <g>
-          <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-            {payload.name}
-          </text>
-          <Sector
-            cx={cx}
-            cy={cy}
-            innerRadius={innerRadius}
-            outerRadius={outerRadius}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            fill={fill}
-          />
-          <Sector
-            cx={cx}
-            cy={cy}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            innerRadius={outerRadius + 6}
-            outerRadius={outerRadius + 10}
-            fill={fill}
-          />
-          <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-          <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-          <text
-            x={ex + (cos >= 0 ? 1 : -1) * 12}
-            y={ey}
-            textAnchor={textAnchor}
-            fill="#333"
-          >{`PV ${value}`}</text>
-          <text
-            x={ex + (cos >= 0 ? 1 : -1) * 12}
-            y={ey}
-            dy={18}
-            textAnchor={textAnchor}
-            fill="#999"
-          >
-            {`(Rate ${(percent * 100).toFixed(2)}%)`}
-          </text>
-        </g> */}
-      </Grid>
     </Grid>
   );
-};
+}
 
 export default OpenDataVisualization;

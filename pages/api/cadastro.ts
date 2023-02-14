@@ -12,21 +12,27 @@ bcrypt, com 10 rodadas de salt, devendo ser seguro o suficiente
 */
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
+import prisma from '../../prisma';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let body = req.body;
-  if (!body.name && !body.email && !body.senha && !body.code
-    ||
-    body.code.length != 7 && body.code.length != 12
-    ||
-    !body.code.match(/(\d{7})/) && !body.code.match(/(\d{12})/)
-    || body.senha.length < 8) {
-    res.status(400).send({ message: "Incorrect data sent" });
+  if (req.method != 'POST') {
+    res.status(405).send({ message: 'Only POST requests are allowed' });
     return;
   }
-  const prisma = new PrismaClient();
+  let body = req.body;
+  if (
+    (!body.name && !body.email && !body.senha && !body.code) ||
+    (body.code.length != 7 && body.code.length != 12) ||
+    (!body.code.match(/(\d{7})/) && !body.code.match(/(\d{12})/)) ||
+    body.senha.length < 8
+  ) {
+    res.status(400).send({ message: 'Incorrect data sent' });
+    return;
+  }
+
   // Tenta inserir o usuário no banco de dados, caso resulte em algum erro,
   // retorna o erro + status 400
   try {
@@ -36,15 +42,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email: body.email,
         nome: body.name,
         codigo: body.code,
-        hash: hash
-      }
+        hash: hash,
+      },
     });
-    await prisma.$disconnect();
     res.status(307).json({ message: '/logIn' });
     // res.status(201).json({ 201: 'okay' });
-
   } catch (err) {
-    await prisma.$disconnect();
-    res.status(400).json({ message: err });
+    if (err instanceof PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        return res.status(400).json({ message: 'Usuário já cadastrado' });
+      }
+    }
+    res.status(500).json({ message: 'Erro interno do servidor' });
   }
 }
