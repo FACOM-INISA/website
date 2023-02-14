@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-inisa-ufms}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inisa-ufms}
+      POSTGRES_DB: ${POSTGRES_DB:-inisa-db}
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432

@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Municipio {
-  id                        Int     @id
+  id                        Int        @id
   nome                      String
   microrregiao_id           Int
   microrregiao_nome         String
@@ -38,41 +38,39 @@ model Parto {
   parto_total   Int
   municipio     Municipio @relation(fields: [municipio_id], references: [id])
   municipio_id  Int
-  predito       Boolean @default(true)
+  predito       Boolean   @default(true)
 
   @@id([ano, mes, municipio_id], name: "id")
   @@map("partos")
-
 }
 
 model Predicao {
-
   // Colocar o tipo de parto que a predição se refere (normal, cesária, total)
-  tipo_parto                String
+  tipo_parto String
 
-  lower                     Int
-  upper                     Int
-  pred                      Int
+  lower Int
+  upper Int
+  pred  Int
 
   // Mês da predição relativo ao mês atual
   // eg.: Mês atual = Maio, prox_mes = 1 = Junho, prox_mes = 3 = Setembro
-  ano                       Int
-  mes                       Int
+  ano Int
+  mes Int
 
-  municipio                 Municipio   @relation(fields: [municipio_id], references: [id])
-  municipio_id              Int
+  municipio    Municipio @relation(fields: [municipio_id], references: [id])
+  municipio_id Int
 
-  @@id([tipo_parto,ano, mes, municipio_id], name: "id")
+  @@id([tipo_parto, ano, mes, municipio_id], name: "id")
   @@map("predicoes")
 }
 
 model Usuario {
-  email       String  @unique @id
-  codigo      String     @unique
-  hash        String
-  nome        String
-  authorized  Boolean @default(false)
-  admin       Boolean @default(false)
+  email      String  @id @unique
+  codigo     String  @unique
+  hash       String
+  nome       String
+  authorized Boolean @default(false)
+  admin      Boolean @default(false)
 
   @@map("usuarios")
 }
