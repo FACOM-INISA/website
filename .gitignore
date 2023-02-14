@@ -38,4 +38,5 @@ next-env.d.ts
 # ignore local databases
 prisma/*.db
 prisma/*.sqlite
+!prisma/prod.db
 /upload
