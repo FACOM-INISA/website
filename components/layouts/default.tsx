@@ -21,7 +21,7 @@ export default function DefaultLayout(props: HTMLAttributes<HTMLDivElement>) {
       {/* header */}
 
       <HeaderComponent
-        admin={asPath.includes('/sistemadedados') || asPath === '/maisinfos'}
+        admin={asPath.startsWith('/sistemadedados') || asPath === '/maisinfos'}
         logout={asPath === '/admin'}
       />
 
