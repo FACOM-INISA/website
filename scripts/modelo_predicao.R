@@ -12,11 +12,8 @@ library(compiler)
 enableJIT(3)
 
 library(forecast)
-library(fpp2)
-library(acp)
 library(tscount)
 library(ggplot2)
-library(car)
 
 #######################
 ##### Leitura dos dados

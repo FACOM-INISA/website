@@ -1,0 +1,12 @@
+# syntax = edrevo/dockerfile-plus
+INCLUDE+ Dockerfile.image
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+VOLUME /usr/src/app
+
+ENV DATABASE_URL=
+ENV PORT=80
+
+CMD yarn install && yarn prisma generate && yarn dev

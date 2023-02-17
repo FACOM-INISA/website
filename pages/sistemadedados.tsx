@@ -194,7 +194,7 @@ export default function SistemaDeDados(props: { municipio?: string }) {
           shallow: true,
         });
       });
-  }, [municipio]);
+  }, [municipio, router]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
