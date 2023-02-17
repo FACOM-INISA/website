@@ -1,0 +1,100 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "INISA/FACOM - Painel Saude",
+    "description": "Definição das APIs disponiveis",
+    "version": "0.0.1"
+  },
+  "servers": [{ "url": "/api" }],
+  "tags": [
+    {
+      "name": "Data",
+      "description": "Funções para consulta de dados publicos"
+    }
+  ],
+  "paths": {
+    "/data/consulta/{municipio}": {
+      "get": {
+        "summary": "Retorna dados historicos dos partos e predições futuras",
+        "tags": ["Data"],
+        "parameters": [
+          { "name": "municipio", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados existem para o municipio informado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "partos": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Parto"
+                      }
+                    },
+                    "predicoes": {
+                      "type": "object",
+                      "properties": {
+                        "cesaria": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Predicao"
+                          }
+                        },
+                        "normais": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Predicao"
+                          }
+                        },
+                        "total": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Predicao"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Sem dados para o municipio informado"
+          },
+          "404": {
+            "description": "Municipio inexistente"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Parto": {
+        "type": "object",
+        "properties": {
+          "ano": { "type": "integer" },
+          "mes": { "type": "integer" },
+          "normais": { "type": "integer" },
+          "cesaria": { "type": "integer" },
+          "total": { "type": "integer" },
+          "predito": { "type": "boolean" }
+        }
+      },
+      "Predicao": {
+        "type": "object",
+        "properties": {
+          "ano": { "type": "integer" },
+          "mes": { "type": "integer" },
+          "lower": { "type": "integer" },
+          "upper": { "type": "integer" },
+          "pred": { "type": "integer" }
+        }
+      }
+    }
+  }
+}
