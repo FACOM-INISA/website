@@ -5,6 +5,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 VOLUME /usr/src/app
+VOLUME /usr/src/app/.next
+VOLUME /usr/src/app/node_modules
 
 ENV DATABASE_URL=
 ENV PORT=80
