@@ -44,7 +44,7 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 90,
+    flex: 1.3,
   },
   {
     field: 'ano',
@@ -52,7 +52,7 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 100,
+    flex: 1.5,
     valueFormatter: (params: { value: number }) => params.value + 2000,
   },
   {
@@ -61,7 +61,7 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 240,
+    flex: 5,
   },
 
   {
@@ -70,7 +70,7 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 150,
+    flex: 3,
   },
   {
     field: 'lower',
@@ -78,7 +78,7 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 150,
+    flex: 3,
   },
 ];
 
@@ -230,18 +230,57 @@ export default function SistemaDeDados(props: { municipio?: string }) {
   const [tipoParto, setTipoParto] = useState<'todos' | 'normal' | 'sensiveis'>('normal');
 
   return (
-    <Layout className={styles.sistema}>
+    <Layout>
       <Grid
         container
         display="flex"
         onSubmit={handleSubmit}
         flexDirection="row"
         flexWrap="nowrap"
-        margin="2em auto"
+        margin="4em auto"
         component="form"
-        width={'100%'}
       >
-        <div className={styles.main}>
+        {/* Sidebar */}
+        <Grid m="0 4rem" width="30%">
+          <Paper elevation={3}>
+            <Card style={{ display: 'flex', flexDirection: 'column' }}>
+              <CardHeader
+                title={
+                  <span style={{ textAlign: 'center', color: '#0088B7', fontWeight: 'bolder' }}>
+                    Filtro por Região
+                  </span>
+                }
+              />
+            </Card>
+            <Stack>
+              <Autocomplete
+                value={municipio || fakeInput}
+                noOptionsText="Nenhum munícipio encontrado"
+                className={styles.busca}
+                popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
+                options={[
+                  fakeInput,
+                  ...options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter)),
+                ]}
+                groupBy={(option) => option.firstLetter}
+                getOptionLabel={(option) => option.name}
+                sx={{
+                  width: '90%',
+                  bgColor: '#D4D5D6',
+                  [`& .${autocompleteClasses.popupIndicator}`]: {
+                    transform: 'none',
+                  },
+                  paddingBottom: '20px',
+                }}
+                renderInput={(params) => <TextField {...params} label="Buscar por município" />}
+                /* onChange={(_, selected) => setMunicipio(fakeInput || selected)} */
+                onChange={(event: any, newValue) => setMunicipio(newValue)}
+              />
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/*<div className={styles.main}>
           <Grid className={styles.sidebar}>
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
@@ -274,14 +313,13 @@ export default function SistemaDeDados(props: { municipio?: string }) {
                     paddingBottom: '20px',
                   }}
                   renderInput={(params) => <TextField {...params} label="Buscar por município" />}
-                  /* onChange={(_, selected) => setMunicipio(fakeInput || selected)} */
+                  // onChange={(_, selected) => setMunicipio(fakeInput || selected)}
                   onChange={(event: any, newValue) => setMunicipio(newValue)}
                 />
               </Paper>
             </Grid>
 
-            {/* Filtro por data
-
+            // Filtro por data
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
                 <Card style={{ display: 'flex', flexDirection: 'column' }}>
@@ -340,10 +378,9 @@ export default function SistemaDeDados(props: { municipio?: string }) {
                   </Stack>
                 </Grid>
               </Paper>
-            </Grid> */}
-
-            {/* Filtro de Partos
-
+            </Grid> 
+            
+            // Filtro de Partos
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
                 <Card style={{ display: 'flex', flexDirection: 'column' }}>
@@ -400,17 +437,18 @@ export default function SistemaDeDados(props: { municipio?: string }) {
                 </Collapse>
               </Paper>
             </Grid>
-            */}
+            
           </Grid>
         </div>
+        */}
 
         <Grid container id="graficos" justifyContent="center" rowGap="2rem" flexDirection="column">
           <Paper
             sx={{
               p: 4,
               margin: 'auto',
-              width: 800,
-              maxWidth: 1200,
+              width: '85%',
+              maxWidth: 2500,
               flexGrow: 1,
               backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
             }}
@@ -430,8 +468,8 @@ export default function SistemaDeDados(props: { municipio?: string }) {
             sx={{
               p: 4,
               margin: 'auto',
-              width: 800,
-              maxWidth: 1200,
+              width: '85%',
+              maxWidth: 2500,
               backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff'),
             }}
           >
