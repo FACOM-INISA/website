@@ -45,7 +45,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
         color: 'primary.contrastText',
       })}
     >
-      {/* container esquerdo */}
+      {/* Logo e Inisa */}
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <Link href="/" passHref>
@@ -67,7 +67,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
         </Grid>
       </Grid>
 
-      {/* container direito */}
+      {/* Opções de rota */}
       <Grid container alignItems="center" justifyContent="end" spacing={3}>
         {items.map((item, index) => {
           const Icon = item.icon;
