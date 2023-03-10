@@ -50,7 +50,7 @@ export default function SignInSide() {
       name: data.get('nome'),
     };
 
-    fetch('api/cadastro', {
+    fetch('api/user/cadastro', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/json',

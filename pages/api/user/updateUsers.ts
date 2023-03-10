@@ -11,9 +11,9 @@
 
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
-import authenticate from '../../lib/authenticateUser';
-import { sessionOptions } from '../../lib/session';
-import prisma from '../../prisma';
+import authenticate from '../../../lib/authenticateUser';
+import { sessionOptions } from '../../../lib/session';
+import prisma from '../../../prisma';
 
 async function updateUsers(req: NextApiRequest, res: NextApiResponse) {
   // Verificar se o método de requisicao é POST e se o usário é admin

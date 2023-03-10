@@ -133,10 +133,9 @@ export default function InsercaoDeDados() {
       return;
     }
     setSpinner(true);
-    fetch('api/data/singleprocess', {
+    fetch(`api/data/process/${municipio.id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'Application/json' },
-      body: JSON.stringify({ idmunicipio: municipio.id }),
     }).then((response) => {
       if (response.ok) {
         autoUpdate(municipio);
@@ -157,15 +156,13 @@ export default function InsercaoDeDados() {
   };
 
   const autoUpdate = useCallback((municipio: typeof municipioPadrao) => {
-    const body = { municipio: municipio.id };
     if (municipio.id === 0) {
       return;
     }
     console.log(municipio);
-    fetch('api/data/consulta', {
-      method: 'POST',
+    fetch(`api/data/consulta/${municipio.id}`, {
+      method: 'GET',
       headers: { 'Content-Type': 'Application/json' },
-      body: JSON.stringify(body),
     })
       .then((message) => message.json())
       .then((data) => {

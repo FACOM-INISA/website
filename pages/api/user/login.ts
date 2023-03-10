@@ -11,20 +11,26 @@ redirecionar o usuário.
 
 import { User } from './user';
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { sessionOptions } from '../../lib/session';
+import { sessionOptions } from '../../../lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import prisma from '../../prisma';
+import prisma from '../../../prisma';
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
-    res.status(405).send({ message: 'Only POST requests are allowed' });
+    res.status(405).send({
+      status: 'fail',
+      message: 'Only POST requests are allowed',
+    });
     return;
   }
 
   if (!req.body.usercode || !req.body.password) {
-    res.status(400).send({ message: 'Wrong data sent' });
+    res.status(400).send({
+      status: 'fail',
+      message: 'Wrong data sent',
+    });
     return;
   }
 
@@ -56,18 +62,28 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       };
       req.session.user = user;
       await req.session.save();
-      res.status(200).send({ user });
+      res.status(200).json({ user });
       return;
     } else {
-      res.status(404).send({ message: 'USER NOT FOUND' });
+      res.status(404).send({
+        status: 'fail',
+        message: 'USER NOT FOUND',
+      });
       return;
     }
   } catch (error) {
     // TODO: MAKE BETTER ERROR HANDLING
     if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code == 'P2025') res.status(404).send({ message: 'USER NOT FOUND' });
+      if (error.code == 'P2025')
+        res.status(404).send({
+          status: 'fail',
+          message: 'USER NOT FOUND',
+        });
     } else {
-      res.status(400).json({ 400: error });
+      res.status(500).json({
+        status: 'fail',
+        message: 'Erro interno do servidor',
+      });
     }
   }
 }

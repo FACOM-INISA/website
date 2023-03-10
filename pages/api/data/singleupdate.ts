@@ -19,18 +19,27 @@ import authenticate from '../../../lib/authenticateUser';
 async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
   // Checando se o método é POST
   if (req.method != 'POST') {
-    res.status(405).send({ message: 'Only POST requests are allowed' });
+    res.status(405).send({
+      status: 'fail',
+      message: 'Only POST requests are allowed',
+    });
     return;
   }
   // Checando se o usuário é autorizado
   if (!req.session.user) {
-    res.status(401).send({ message: 'Not Logged In' });
+    res.status(401).send({
+      status: 'fail',
+      message: 'Not Logged In',
+    });
     return;
   }
 
   // Checando se o usuário está autenticado
   if (!(await authenticate(req.session.user))) {
-    res.status(401).send({ message: 'Not Authorized' });
+    res.status(401).send({
+      status: 'fail',
+      message: 'Not Authorized',
+    });
     return;
   }
   // Checando se possui todos os parametros
@@ -42,11 +51,13 @@ async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
     !req.body.total &&
     !req.body.idmunicipio
   ) {
-    res.status(400).send({ message: 'Bad request, missing parameters' });
+    res.status(400).send({
+      status: 'fail',
+      message: 'Bad request, missing parameters',
+    });
     return;
   }
 
-  await prisma.$connect();
   try {
     await prisma.parto.upsert({
       where: {
@@ -73,10 +84,15 @@ async function singleUpdate(req: NextApiRequest, res: NextApiResponse) {
       },
     });
   } catch (e) {
-    res.status(500).send({ message: 'Internal server error' });
+    res.status(500).send({
+      status: 'error',
+      message: 'Erro interno do servidor',
+    });
   }
-  await prisma.$disconnect();
-  res.status(200).send({ message: 'Data upserted' });
+  res.status(200).send({
+    status: 'success',
+    message: 'Data upserted',
+  });
   return;
 }
 
