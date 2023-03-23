@@ -15,7 +15,7 @@ export type User = {
 };
 
 async function userRoute(req: NextApiRequest, res: NextApiResponse) {
-  if (!(req.method !== 'GET')) {
+  if (req.method !== 'GET') {
     return res.status(405).json({
       status: 'fail',
       message: 'Only GET requests are allowed',
