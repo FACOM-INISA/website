@@ -13,7 +13,7 @@
     },
     {
       "name": "User",
-      "description": "Funções relacionados a usuáriosa"
+      "description": "Funções relacionados a usuários"
     }
   ],
   "paths": {
@@ -120,6 +120,11 @@
       "post": {
         "summary": "Processa e prediz um município.",
         "tags": ["Data"],
+        "security": [
+          {
+            "ironSessionAuth": []
+          }
+        ],
         "parameters": [
           { "name": "municipio", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
@@ -231,6 +236,11 @@
       "post": {
         "summary": "Atualiza ou insere dados de um município",
         "tags": ["Data"],
+        "security": [
+          {
+            "ironSessionAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Dados inseridos ou atualizados com sucesso",
@@ -322,6 +332,139 @@
                     "status": {
                       "type": "string",
                       "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/update": {
+      "post": {
+        "summary": "Recebe um csv com os dados de um municipio e faz as suas predições",
+        "tags": ["Data"],
+        "security": [
+          {
+            "ironSessionAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "csv_file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Csv contendo as seguintes colunas: ano, mês, normal, cesaria, total, idmunicipio"
+                  },
+                  "idmunicipio": {
+                    "type": "string",
+                    "description": "id do municipío"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Municipio processado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Municipio processado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados incorretos enviados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado ou não logado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not Logged In"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método HTTP incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Only POST requests are allowed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
                     },
                     "message": {
                       "type": "string",
@@ -465,6 +608,14 @@
         "responses": {
           "200": {
             "description": "Usuário logado com sucesso, salva sessão",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Cookie do iron-session"
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -561,6 +712,100 @@
         }
       }
     },
+    "/user/updateUsers": {
+      "post": {
+        "summary": "Atualiza uma quantidade de X de usuários.",
+        "tags": ["User"],
+        "security": [
+          {
+            "ironSessionAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Todos usuários foram atualizados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Okay"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados incorretos enviados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Wrong data sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Não autorizado ou não logado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not Logged In"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método HTTP incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Only POST requests are allowed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/logout": {
       "get": {
         "description": "Endpoint para deslogar um usuário",
@@ -636,6 +881,11 @@
       "get": {
         "summary": "Pega todos os usuários do banco de dados",
         "tags": ["User"],
+        "security": [
+          {
+            "ironSessionAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Todos usuários pegos com sucesso",
@@ -704,6 +954,14 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "ironSessionAuth": {
+        "type": "apiKey",
+        "name": "Cookie",
+        "in": "cookie",
+        "description": "Autenticação via 'iron-session'"
+      }
+    },
     "schemas": {
       "Parto": {
         "type": "object",

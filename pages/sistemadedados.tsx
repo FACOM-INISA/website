@@ -191,7 +191,8 @@ export default function SistemaDeDados(props: { municipio?: string }) {
           shallow: true,
         });
       });
-  }, [municipio, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [municipio]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
