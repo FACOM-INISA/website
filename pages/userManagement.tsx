@@ -1,6 +1,10 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import Layout from '../components/layouts/default';
+import { IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 /* import municipios from '../data/municipios.json'; */
 import {
   Alert,
@@ -36,7 +40,75 @@ import { Usuario } from '../lib/User';
 import { any } from 'bluebird';
 import getusers from './api/getusers';
 import styles from '../styles/components/SistemaDeDados.module.css';
+
+
+export default function GerenciadorUsuarios() {
+  const { user } = useUser({
+    redirectTo: '/logIn',
+  });
+
+  /* const options = municipios.map((option) => {
+    const firstLetter = option.name[0].toUpperCase();
+    return {
+      firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+      ...option,
+    };
+  }); */
+
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('info');
+  const [alertContent, setAlertContent] = React.useState('');
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const handleCloseAlert = () => setOpenAlert(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
+  const [rows, setRows] = React.useState(new Array<Usuario>());
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  
+  const handleEdit = (user: Usuario) => {
+    setSelectedUser(user);
+    setEditDialogOpen(true);
+  };
+  
+  const handleDelete = useCallback((id: number) => {
+    fetch(`/api/deleteuser?id=${id}`, { method: 'DELETE' })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+          setAlertSeverity('success');
+          setAlertContent('Usuário deletado com sucesso!');
+          setOpenAlert(true);''
+        } else {
+          setAlertSeverity('error');
+          setAlertContent('Erro ao deletar usuário!');
+          setOpenAlert(true);
+        }
+      });
+  }, [user]);
+
 const columns: GridColDef[] = [
+  {
+    field: 'actions',
+    headerName: 'Ações',
+    sortable: false,
+    width: 120,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => ( params.value?
+      <div>
+        <IconButton aria-label="Editar" onClick={() => handleEdit(params.row)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="Excluir" onClick={() => handleDelete(params.row.id)}>
+          <DeleteIcon />
+        </IconButton>
+      </div> : null
+    ),
+  },
   {
     field: 'id',
     headerName: 'ID',
@@ -79,21 +151,6 @@ const columns: GridColDef[] = [
   },
 ];
 
-export default function GerenciadorUsuarios() {
-  const { user } = useUser({
-    redirectTo: '/logIn',
-  });
-
-  /* const options = municipios.map((option) => {
-    const firstLetter = option.name[0].toUpperCase();
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-      ...option,
-    };
-  }); */
-
-  const [rows, setRows] = React.useState(new Array<Usuario>());
-
   useEffect(() => {
     fetch('/api/getusers', { headers: { 'Content-Type': 'Application/json' } })
       .then((message) => message.json())
@@ -109,15 +166,114 @@ export default function GerenciadorUsuarios() {
       });
   }, []);
 
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('info');
-  const [alertContent, setAlertContent] = React.useState('');
-  const [openAlert, setOpenAlert] = React.useState(false);
-  const handleCloseAlert = () => setOpenAlert(false);
-  const [open, setOpen] = React.useState(false);
+  
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
+
+
+  const handleSave = (user: Usuario) => {
+    fetch(`/api/users/${selectedUser?.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => {
+        if (res.ok) {
+          setRows(rows.map((u) => (u.id === selectedUser?.id ? user : u)));
+          setAlertSeverity('success');
+          setAlertContent('Usuário atualizado com sucesso.');
+          setOpenAlert(true);
+        } else {
+          throw new Error('Falha ao atualizar usuário.');
+        }
+      })
+      .catch((error) => {
+        setAlertSeverity('error');
+        setAlertContent(error.message);
+        setOpenAlert(true);
+      })
+      .finally(() => {
+        setEditDialogOpen(false);
+      });
+  };
+
+
+  const handleConfirmDelete = () => {
+    fetch(`/api/users/${selectedUser?.id}`, { method: 'DELETE' })
+      .then((res) => {
+        if (res.ok) {
+          setRows(rows.filter((user) => user.id !== selectedUser?.id));
+          setAlertSeverity('success');
+          setAlertContent('Usuário excluído com sucesso.');
+          setOpenAlert(true);
+        } else {
+          throw new Error('Falha ao excluir usuário.');
+        }
+      })
+      .catch((error) => {
+        setAlertSeverity('error');
+        setAlertContent(error.message);
+        setOpenAlert(true);
+      })
+      .finally(() => {
+        setDeleteDialogOpen(false);
+      });
+  };
+
+  const handleUpdateUser = useCallback(
+    (updatedUser: Usuario) => {
+      fetch(`/api/users/${updatedUser.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedUser),
+      })
+        .then((res) => {
+          if (res.ok) {
+            const updatedRows = rows.map((user) =>
+              user.id === updatedUser.id ? updatedUser : user
+            );
+            setRows(updatedRows);
+            setAlertSeverity('success');
+            setAlertContent('Usuário atualizado com sucesso.');
+            setOpenAlert(true);
+          } else {
+            throw new Error('Falha ao atualizar usuário.');
+          }
+        })
+        .catch((error) => {
+          setAlertSeverity('error');
+          const handleToggleAuthorization = useCallback((id: number, isAuthorized: boolean) => {
+            fetch(`/api/updateuser?id=${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ isAuthorized: !isAuthorized }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  setRows((prevRows) =>
+                    prevRows.map((row) => {
+                      if (row.id === id) {
+                        row.isAuthorized = !isAuthorized;
+                      }
+                      return row;
+                    })
+                  );
+                  setAlertSeverity('success');
+                  setAlertContent(`Usuário ${isAuthorized ? 'des' : ''}autorizado com sucesso!`);
+                  setOpenAlert(true);
+                } else {
+                  setAlertSeverity('error');
+                  setAlertContent('Erro ao atualizar usuário!');
+                  setOpenAlert(true);
+                }
+              });
+          }, []);
+        });
+    },
+    [rows]
+  );
 
   return (
     user?.isLoggedIn && (
@@ -145,7 +301,7 @@ export default function GerenciadorUsuarios() {
                       }
                     />
                   </Card>
-                  <Stack sx={{ m: '1.25rem' }}>
+                  {/* <Stack sx={{ m: '1.25rem' }}>
                     <Autocomplete
                       id="localidade"
                       popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
@@ -161,7 +317,7 @@ export default function GerenciadorUsuarios() {
                       renderInput={(params) => <TextField {...params} />}
                       size="small"
                     />
-                  </Stack>
+                  </Stack> */}
                 </Card>
               </Paper>
             </Grid>
