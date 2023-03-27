@@ -1,10 +1,9 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import Layout from '../components/layouts/default';
-import { IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Checkbox, DialogTitle, FormControlLabel, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-
+/* import DeleteIcon from '@mui/icons-material/Delete'; */
 /* import municipios from '../data/municipios.json'; */
 import {
   Alert,
@@ -41,7 +40,6 @@ import { any } from 'bluebird';
 import getusers from './api/getusers';
 import styles from '../styles/components/SistemaDeDados.module.css';
 
-
 export default function GerenciadorUsuarios() {
   const { user } = useUser({
     redirectTo: '/logIn',
@@ -55,25 +53,25 @@ export default function GerenciadorUsuarios() {
     };
   }); */
 
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('info');
-  const [alertContent, setAlertContent] = React.useState('');
-  const [openAlert, setOpenAlert] = React.useState(false);
-  const handleCloseAlert = () => setOpenAlert(false);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+
   const handleClose = () => setOpen(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
   const [rows, setRows] = React.useState(new Array<Usuario>());
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  /* const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); */
   const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  
-  const handleEdit = (user: Usuario) => {
-    setSelectedUser(user);
-    setEditDialogOpen(true);
+
+  const handleAuthorizationChange = (user: Usuario) => {
+    const updatedUser = { ...user, isAuthorized: !user.isAuthorized };
+
+    const newRows = rows.map((row) => (row.id === user.id ? updatedUser : row));
+
+    setSelectedUser(updatedUser); // Save the updated user for the confirmation dialog
+
+    setOpen(true); // Open the confirmation dialog
+    setRows(newRows);
   };
-  
-  const handleDelete = useCallback((id: number) => {
+  /* const handleDelete = useCallback((id: number) => {
     fetch(`/api/deleteuser?id=${id}`, { method: 'DELETE' })
       .then((response) => response.json())
       .then((data) => {
@@ -88,68 +86,76 @@ export default function GerenciadorUsuarios() {
           setOpenAlert(true);
         }
       });
-  }, [user]);
+  }, [user]); */
 
-const columns: GridColDef[] = [
-  {
-    field: 'actions',
-    headerName: 'Ações',
-    sortable: false,
-    width: 120,
-    headerAlign: 'center',
-    align: 'center',
-    renderCell: (params) => ( params.value?
-      <div>
-        <IconButton aria-label="Editar" onClick={() => handleEdit(params.row)}>
-          <EditIcon />
-        </IconButton>
-        <IconButton aria-label="Excluir" onClick={() => handleDelete(params.row.id)}>
+  const columns: GridColDef[] = [
+    /*{
+      field: 'actions',
+      headerName: 'Ações',
+      sortable: false,
+      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => (
+        <div>
+          <IconButton aria-label="Editar" onClick={() => handleEdit(params.row)}>
+            <EditIcon />
+            <h6>Editar</h6>
+          </IconButton>
+          { <IconButton aria-label="Excluir" onClick={() => handleDelete(params.row.id)}>
           <DeleteIcon />
-        </IconButton>
-      </div> : null
-    ),
-  },
-  {
-    field: 'id',
-    headerName: 'ID',
-    type: 'number',
-    headerAlign: 'center',
-    align: 'center',
-    width: 90,
-  },
-  {
-    field: 'nome',
-    headerName: 'Nome',
-    type: 'string',
-    headerAlign: 'center',
-    align: 'center',
-    width: 200,
-  },
-  {
-    field: 'email',
-    headerName: 'E-mail',
-    type: 'string',
-    headerAlign: 'center',
-    align: 'center',
-    width: 180,
-  },
-  {
-    field: 'isAuthorized',
-    headerName: 'Autorizado',
-    type: 'boolean',
-    headerAlign: 'center',
-    align: 'center',
-    width: 150,
-  },
-  {
-    field: 'admin',
-    headerName: 'Administrador',
-    type: 'boolean',
-    headerAlign: 'center',
-    align: 'center',
-    width: 150,
-  },
-];
+        </IconButton> }
+        </div>
+      ),
+    },*/
+    {
+      field: 'id',
+      headerName: 'ID',
+      type: 'number',
+      headerAlign: 'center',
+      align: 'center',
+      width: 90,
+    },
+    {
+      field: 'nome',
+      headerName: 'Nome',
+      type: 'string',
+      headerAlign: 'center',
+      align: 'center',
+      width: 200,
+    },
+    {
+      field: 'email',
+      headerName: 'E-mail',
+      type: 'string',
+      headerAlign: 'center',
+      align: 'center',
+      width: 180,
+    },
+    {
+      field: 'isAuthorized',
+      headerName: 'Autorizado',
+      headerAlign: 'center',
+      align: 'center',
+      width: 150,
+      renderCell: (params) => (
+        <Checkbox
+          checked={params.row.isAuthorized}
+          onChange={() => handleAuthorizationChange(params.row as Usuario)}
+          color="primary"
+        />
+      ),
+    },
+
+    {
+      field: 'admin',
+      headerName: 'Administrador',
+      type: 'boolean',
+      headerAlign: 'center',
+      align: 'center',
+      width: 150,
+    },
+  ];
 
   useEffect(() => {
     fetch('/api/getusers', { headers: { 'Content-Type': 'Application/json' } })
@@ -166,40 +172,7 @@ const columns: GridColDef[] = [
       });
   }, []);
 
-  
-
-
-
-  const handleSave = (user: Usuario) => {
-    fetch(`/api/users/${selectedUser?.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => {
-        if (res.ok) {
-          setRows(rows.map((u) => (u.id === selectedUser?.id ? user : u)));
-          setAlertSeverity('success');
-          setAlertContent('Usuário atualizado com sucesso.');
-          setOpenAlert(true);
-        } else {
-          throw new Error('Falha ao atualizar usuário.');
-        }
-      })
-      .catch((error) => {
-        setAlertSeverity('error');
-        setAlertContent(error.message);
-        setOpenAlert(true);
-      })
-      .finally(() => {
-        setEditDialogOpen(false);
-      });
-  };
-
-
-  const handleConfirmDelete = () => {
+  /* const handleConfirmDelete = () => {
     fetch(`/api/users/${selectedUser?.id}`, { method: 'DELETE' })
       .then((res) => {
         if (res.ok) {
@@ -220,88 +193,35 @@ const columns: GridColDef[] = [
         setDeleteDialogOpen(false);
       });
   };
-
-  const handleUpdateUser = useCallback(
-    (updatedUser: Usuario) => {
-      fetch(`/api/users/${updatedUser.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedUser),
-      })
-        .then((res) => {
-          if (res.ok) {
-            const updatedRows = rows.map((user) =>
-              user.id === updatedUser.id ? updatedUser : user
-            );
-            setRows(updatedRows);
-            setAlertSeverity('success');
-            setAlertContent('Usuário atualizado com sucesso.');
-            setOpenAlert(true);
-          } else {
-            throw new Error('Falha ao atualizar usuário.');
-          }
-        })
-        .catch((error) => {
-          setAlertSeverity('error');
-          const handleToggleAuthorization = useCallback((id: number, isAuthorized: boolean) => {
-            fetch(`/api/updateuser?id=${id}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ isAuthorized: !isAuthorized }),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.success) {
-                  setRows((prevRows) =>
-                    prevRows.map((row) => {
-                      if (row.id === id) {
-                        row.isAuthorized = !isAuthorized;
-                      }
-                      return row;
-                    })
-                  );
-                  setAlertSeverity('success');
-                  setAlertContent(`Usuário ${isAuthorized ? 'des' : ''}autorizado com sucesso!`);
-                  setOpenAlert(true);
-                } else {
-                  setAlertSeverity('error');
-                  setAlertContent('Erro ao atualizar usuário!');
-                  setOpenAlert(true);
-                }
-              });
-          }, []);
-        });
-    },
-    [rows]
-  );
-
+ */
   return (
     user?.isLoggedIn && (
-      <Layout>
-        <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
-          {/* Sidebar */}
-          <Grid className={styles.sidebar}>
-            <Grid
-              id="form"
-              className={styles.grid}
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{ margin: '0 4rem' }}
-            >
-              <Paper elevation={3} sx={{ mb: '2rem' }}>
-                <Card>
-                  <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                    <CardHeader
-                      title={
-                        <span
-                          style={{ textAlign: 'center', color: '#0088B7', fontWeight: 'bolder' }}
-                        >
-                          Buscar usuário
-                        </span>
-                      }
-                    />
-                  </Card>
-                  {/* <Stack sx={{ m: '1.25rem' }}>
+      <>
+        <Layout>
+          <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
+            {/* Sidebar */}
+            <Grid className={styles.sidebar}>
+              <Grid
+                id="form"
+                className={styles.grid}
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{ margin: '0 4rem' }}
+              >
+                <Paper elevation={3} sx={{ mb: '2rem' }}>
+                  <Card>
+                    <Card style={{ display: 'flex', flexDirection: 'column' }}>
+                      <CardHeader
+                        title={
+                          <span
+                            style={{ textAlign: 'center', color: '#0088B7', fontWeight: 'bolder' }}
+                          >
+                            Buscar usuário
+                          </span>
+                        }
+                      />
+                    </Card>
+                    {/* <Stack sx={{ m: '1.25rem' }}>
                     <Autocomplete
                       id="localidade"
                       popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
@@ -318,29 +238,70 @@ const columns: GridColDef[] = [
                       size="small"
                     />
                   </Stack> */}
-                </Card>
-              </Paper>
+                  </Card>
+                </Paper>
+              </Grid>
             </Grid>
-          </Grid>
 
-          {/*  <>
+            {/*  <>
               <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
                 <Alert severity={alertSeverity}>{alertContent}</Alert>
               </Snackbar>
             </>
               */}
-          {/* Tabela */}
-          <Grid sx={{ width: '60%', mr: '4rem', justifyContent: 'center', justifyItems: 'center' }}>
-            <DataGrid
-              autoHeight
-              rows={rows}
-              columns={columns}
-              hideFooterSelectedRowCount
-              sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
-            />
+            {/* Tabela */}
+            <Grid
+              sx={{ width: '60%', mr: '4rem', justifyContent: 'center', justifyItems: 'center' }}
+            >
+              <DataGrid
+                autoHeight
+                rows={rows}
+                columns={columns}
+                hideFooterSelectedRowCount
+                sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </Layout>
+        </Layout>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>
+            {selectedUser?.isAuthorized ? 'Desautorizar usuário' : 'Autorizar usuário'}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Tem certeza que deseja {selectedUser?.isAuthorized ? 'desautorizar' : 'autorizar'} o
+              usuário {selectedUser?.name}?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                const { id, isAuthorized } = selectedUser as Usuario;
+                const url = '/api/updateUsers';
+                const data = {
+                  data: [{ email: selectedUser?.email, authorized: !isAuthorized }],
+                };
+                fetch(url, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then(() => handleClose())
+
+                  .catch((error) => console.error(error));
+                console.log(user);
+              }}
+            >
+              Confirmar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     )
   );
 }
