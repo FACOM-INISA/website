@@ -1,14 +1,9 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/layouts/default';
-import { Checkbox, DialogTitle, FormControlLabel, IconButton } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Checkbox, DialogTitle } from '@mui/material';
 /* import DeleteIcon from '@mui/icons-material/Delete'; */
 /* import municipios from '../data/municipios.json'; */
 import {
-  Alert,
-  AlertColor,
-  Box,
   Button,
   Card,
   CardHeader,
@@ -17,27 +12,11 @@ import {
   DialogContent,
   DialogContentText,
   Grid,
-  MenuItem,
-  Modal,
-  OutlinedInput,
   Paper,
-  Select,
-  SelectChangeEvent,
-  Snackbar,
-  Stack,
-  TextField,
-  Typography,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import { styled } from '@mui/material/styles';
-import dayjs from 'dayjs';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Parto from '../lib/Parto';
 import useUser from '../lib/useUser';
-import CheckIcon from '@mui/icons-material/Check';
 import { Usuario } from '../lib/User';
-import { any } from 'bluebird';
-import getusers from './api/getusers';
 import styles from '../styles/components/SistemaDeDados.module.css';
 
 export default function GerenciadorUsuarios() {
@@ -140,7 +119,7 @@ export default function GerenciadorUsuarios() {
       width: 150,
       renderCell: (params) => (
         <Checkbox
-          checked={params.row.isAuthorized}
+          checked={params.row?.isAuthorized}
           onChange={() => handleAuthorizationChange(params.row as Usuario)}
           color="primary"
         />
@@ -158,7 +137,7 @@ export default function GerenciadorUsuarios() {
   ];
 
   useEffect(() => {
-    fetch('/api/getusers', { headers: { 'Content-Type': 'Application/json' } })
+    fetch('/api/user/users', { headers: { 'Content-Type': 'Application/json' } })
       .then((message) => message.json())
       .then((data) => {
         setRows(
@@ -195,7 +174,7 @@ export default function GerenciadorUsuarios() {
   };
  */
   return (
-    user?.isLoggedIn && (
+    user?.isAdmin && (
       <>
         <Layout>
           <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
@@ -280,7 +259,7 @@ export default function GerenciadorUsuarios() {
               color="primary"
               onClick={() => {
                 const { id, isAuthorized } = selectedUser as Usuario;
-                const url = '/api/updateUsers';
+                const url = '/api/user/updateUsers';
                 const data = {
                   data: [{ email: selectedUser?.email, authorized: !isAuthorized }],
                 };
@@ -294,7 +273,6 @@ export default function GerenciadorUsuarios() {
                   .then(() => handleClose())
 
                   .catch((error) => console.error(error));
-                console.log(user);
               }}
             >
               Confirmar
