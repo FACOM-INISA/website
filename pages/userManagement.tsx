@@ -18,8 +18,11 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useUser from '../lib/useUser';
 import { Usuario } from '../lib/User';
 import styles from '../styles/components/SistemaDeDados.module.css';
+import { useRouter } from 'next/router';
 
 export default function GerenciadorUsuarios() {
+  const router = useRouter();
+
   const { user } = useUser({
     redirectTo: '/logIn',
   });
@@ -150,6 +153,12 @@ export default function GerenciadorUsuarios() {
         console.log(data);
       });
   }, []);
+
+  useEffect(() => {
+    if (user && !user.isAdmin) {
+      router.push('/');
+    }
+  }, [user]);
 
   /* const handleConfirmDelete = () => {
     fetch(`/api/users/${selectedUser?.id}`, { method: 'DELETE' })
