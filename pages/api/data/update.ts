@@ -69,17 +69,26 @@ const checker = async (csv: string) => {
 async function update(req: NextApiRequest, res: NextApiResponse) {
   // Checando se o método é POST
   if (req.method != 'POST') {
-    res.status(405).send({ message: 'Only POST requests are allowed' });
+    res.status(405).send({
+      status: 'fail',
+      message: 'Only POST requests are allowed',
+    });
   }
   // Checando se é um usuário autorizado
   if (!req.session.user) {
-    res.status(401).send({ message: 'Not Logged In' });
+    res.status(401).send({
+      status: 'fail',
+      message: 'Not Logged In',
+    });
     return;
   }
 
   // Checando se o usuário está autenticado
   if (!(await authenticate(req.session.user))) {
-    res.status(401).send({ message: 'Not Authorized' });
+    res.status(401).send({
+      status: 'fail',
+      message: 'Not Authorized',
+    });
     return;
   } else {
     // Tentando fazer o parse do request usando o parseForm
@@ -95,10 +104,16 @@ async function update(req: NextApiRequest, res: NextApiResponse) {
       File = undefined;
       Fields = undefined;
       if (e instanceof FormidableError) {
-        res.status(e.httpCode || 400).send({ error: e.message });
+        res.status(e.httpCode || 400).send({
+          status: 'fail',
+          message: e.message,
+        });
       } else {
         console.error(e);
-        res.status(500).send({ error: 'Internal Server Error' });
+        res.status(500).send({
+          status: 'error',
+          message: 'Erro interno do servidor',
+        });
       }
     }
 
@@ -107,12 +122,19 @@ async function update(req: NextApiRequest, res: NextApiResponse) {
 
     // Checar o arquivo
     if (!checker(csv)) {
-      res.status(400).send({ message: 'Bad Request', filename: csv });
+      res.status(400).send({
+        status: 'fail',
+        message: 'Bad Request',
+        filename: csv,
+      });
     }
 
     await populateAndProcess([idmunicipio, csv]);
 
-    res.status(200).send({ message: 'Processing' });
+    res.status(200).send({
+      status: 'success',
+      message: 'Municipio processado',
+    });
   }
 }
 

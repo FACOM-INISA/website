@@ -14,12 +14,15 @@ bcrypt, com 10 rodadas de salt, devendo ser seguro o suficiente
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
 
-import prisma from '../../prisma';
+import prisma from '../../../prisma';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'POST') {
-    res.status(405).send({ message: 'Only POST requests are allowed' });
+    res.status(405).json({
+      status: 'fail',
+      message: 'Only POST requests are allowed',
+    });
     return;
   }
   let body = req.body;
@@ -29,7 +32,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     (!body.code.match(/(\d{7})/) && !body.code.match(/(\d{12})/)) ||
     body.senha.length < 8
   ) {
-    res.status(400).send({ message: 'Incorrect data sent' });
+    res.status(400).send({
+      status: 'fail',
+      message: 'Incorrect data sent',
+    });
     return;
   }
 
@@ -50,9 +56,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
-        return res.status(400).json({ message: 'Usuário já cadastrado' });
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Usuário já cadastrado',
+        });
       }
     }
-    res.status(500).json({ message: 'Erro interno do servidor' });
+    res.status(500).json({
+      status: 'error',
+      message: 'Erro interno do servidor',
+    });
   }
 }

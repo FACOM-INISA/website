@@ -6,34 +6,47 @@
   ascendentemente e depois um objeto contendo 3 objetos, um para cada predição também
   ordenandos ascendentemente e sendo um vetor.
 */
+import { Prisma } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import prisma from '../../../prisma';
+import prisma from '../../../../prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method != 'POST') {
-    res.status(405).send({ message: 'Only POST requests are allowed' });
+  if (req.method != 'GET') {
+    res.status(405).json({
+      status: 'fail',
+      message: 'Only GET requests are allowed',
+    });
     return;
   }
-  if (!req.body.municipio) {
-    res.status(400).send({ message: 'Wrong data sent' });
-    return;
+
+  const municipio = parseInt(req.query.municipio as string);
+
+  let partos: any[] = [];
+  let predicoes: any[] = [];
+
+  try {
+    partos = await prisma.parto.findMany({
+      where: { municipio_id: { equals: municipio } },
+      orderBy: [{ ano: 'asc' }, { mes: 'asc' }],
+    });
+
+    predicoes = await prisma.predicao.findMany({
+      where: { municipio_id: { equals: municipio } },
+      orderBy: [{ tipo_parto: 'asc' }, { ano: 'asc' }, { mes: 'asc' }],
+    });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2001') {
+        res.status(404).json({
+          status: 'fail',
+          message: 'Municipio not found',
+        });
+      }
+    }
   }
-
-  const municipio = parseInt(req.body.municipio);
-
-  const partos = await prisma.parto.findMany({
-    where: { municipio_id: { equals: municipio } },
-    orderBy: [{ ano: 'asc' }, { mes: 'asc' }],
-  });
-
-  const predicoes = await prisma.predicao.findMany({
-    where: { municipio_id: { equals: municipio } },
-    orderBy: [{ tipo_parto: 'asc' }, { ano: 'asc' }, { mes: 'asc' }],
-  });
-
   if (partos.length === 0 || predicoes.length === 0) {
-    res.status(400).send({ 400: 'Data not found' });
+    res.status(204);
     return;
   }
 
@@ -47,7 +60,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (element.tipo_parto == 'total') return element;
   });
 
-  res.status(200).send({
+  res.status(200).json({
+    status: 'success',
     partos: partos,
     predicoes: {
       predicoes_cesaria: predicoes_cesaria,

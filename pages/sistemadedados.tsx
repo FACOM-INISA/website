@@ -145,12 +145,9 @@ export default function SistemaDeDados(props: { municipio?: string }) {
   useEffect(() => {
     if (!municipio) return;
 
-    const body = { municipio: municipio?.id };
-
-    fetch('api/data/consulta', {
-      method: 'POST',
+    fetch(`api/data/consulta/${municipio.id}`, {
+      method: 'GET',
       headers: { 'Content-Type': 'Application/json' },
-      body: JSON.stringify(body),
     })
       .then((message) => message.json())
       .then((data) => {
@@ -194,6 +191,7 @@ export default function SistemaDeDados(props: { municipio?: string }) {
           shallow: true,
         });
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [municipio]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

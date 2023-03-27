@@ -20,7 +20,7 @@ import fetchJson from '../lib/fetchJson';
 import useUser from '../lib/useUser';
 
 import NextLink from 'next/link';
-import { User } from './api/user';
+import { User } from './api/user/user';
 
 const theme = createTheme();
 
@@ -44,7 +44,7 @@ export default function LoginSide() {
       password: data.get('password'),
     };
     try {
-      const data = await fetchJson<User>('api/login', {
+      const data = await fetchJson<User>('api/user/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
