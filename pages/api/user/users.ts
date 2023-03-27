@@ -7,24 +7,33 @@ ordenados por autorização ascendentemente.
 */
 
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { sessionOptions } from '../../lib/session';
+import { sessionOptions } from '../../../lib/session';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../prisma';
-import authenticate from '../../lib/authenticateUser';
+import prisma from '../../../prisma';
+import authenticate from '../../../lib/authenticateUser';
 
 async function getusers(req: NextApiRequest, res: NextApiResponse) {
   // Verifica se o usuário é admin e se o metodo da requisição é GET
   if (!req.session.user) {
-    res.status(401).send({ message: 'Not Logged In' });
+    res.status(401).send({
+      status: 'fail',
+      message: 'Not Logged In',
+    });
     return;
   } else if (req.method != 'GET') {
-    res.status(405).send({ message: 'Only GET requests are allowed' });
+    res.status(405).send({
+      status: 'fail',
+      message: 'Only GET requests are allowed',
+    });
     return;
   }
 
   // Checando se o usuário está autenticado
   if (!(await authenticate(req.session.user, true))) {
-    res.status(401).send({ message: 'Not Authorized' });
+    res.status(401).send({
+      status: 'fail',
+      message: 'Not Authorized',
+    });
     return;
   }
 
@@ -32,6 +41,13 @@ async function getusers(req: NextApiRequest, res: NextApiResponse) {
 
   // Pegar todos os usuarios ordenados por autorização
   const data = await prisma.usuario.findMany({
+    select: {
+      nome: true,
+      email: true,
+      codigo: true,
+      authorized: true,
+      admin: true,
+    },
     orderBy: [
       {
         authorized: 'asc',
@@ -40,7 +56,10 @@ async function getusers(req: NextApiRequest, res: NextApiResponse) {
   });
 
   await prisma.$disconnect();
-  res.status(200).send({ data });
+  res.status(200).send({
+    status: 'success',
+    data,
+  });
 }
 
 export default withIronSessionApiRoute(getusers, sessionOptions);

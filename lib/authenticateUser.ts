@@ -1,4 +1,4 @@
-import { User } from '../pages/api/user';
+import { User } from '../pages/api/user/user';
 import prisma from '../prisma';
 
 export default async function authenticate(cookie: User, admin?: boolean): Promise<boolean> {

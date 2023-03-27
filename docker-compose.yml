@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-inisa-ufms}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inisa-ufms}
+      POSTGRES_DB: ${POSTGRES_DB:-inisa-db}
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+    volumes:
+      - inisa_data:/var/lib/postgresql/data
+
+  website:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-inisa-ufms}:${POSTGRES_PASSWORD:-inisa-ufms}@db:5432/${POSTGRES_DB:-inisa-db}
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+
+  website.dev:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-inisa-ufms}:${POSTGRES_PASSWORD:-inisa-ufms}@db:5432/${POSTGRES_DB:-inisa-db}
+    ports:
+      - ${PORT:-3000}:80
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/.next
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+
+volumes:
+  inisa_data:
