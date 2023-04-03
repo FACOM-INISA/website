@@ -1,31 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/layouts/default';
-import {
-  Autocomplete,
-  Checkbox,
-  DialogTitle,
-  Stack,
-  TextField,
-  autocompleteClasses,
-} from '@mui/material';
-/* import DeleteIcon from '@mui/icons-material/Delete'; */
-/* import municipios from '../data/municipios.json'; */
-import {
-  Button,
-  Card,
-  CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Grid,
-  Paper,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Button, Grid } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useUser from '../lib/useUser';
 import { Usuario } from '../lib/User';
-import styles from '../styles/components/SistemaDeDados.module.css';
 import { useRouter } from 'next/router';
 
 export default function GerenciadorUsuarios() {
@@ -38,24 +16,23 @@ export default function GerenciadorUsuarios() {
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => setOpen(false);
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
   const [rows, setRows] = React.useState(new Array<Usuario>());
-  const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
 
   const handleAuthorizationChange = (user: Usuario) => {
-    const updatedUser = { ...user, isAuthorized: !user.isAuthorized };
-
-    const newRows = rows.map((row) => (row.id === user.id ? updatedUser : row));
-
-    setSelectedUser(updatedUser);
-
+    const newRows = rows.map((row) => {
+      if (row.id === user.id) {
+        user.authorized = !user.authorized;
+        return user;
+      }
+      return row;
+    });
     setRows(newRows);
 
-    console.log('User:', updatedUser);
+    console.log('User:', user);
 
     const url = '/api/user/updateUsers';
     const data = {
-      data: [{ email: updatedUser.email, authorized: !updatedUser.isAuthorized }],
+      data: [{ email: user.email, authorized: !user.authorized }],
     };
     fetch(url, {
       method: 'POST',
@@ -66,7 +43,6 @@ export default function GerenciadorUsuarios() {
     })
       .then(() => {
         handleClose();
-        setIsUserAuthorized(!isUserAuthorized); // Update the local state variable with the new authorization status
       })
       .catch((error) => console.error(error));
   };
@@ -97,7 +73,7 @@ export default function GerenciadorUsuarios() {
       width: 180,
     },
     {
-      field: 'isAuthorized',
+      field: 'authorized',
       headerName: 'Autorizado',
       headerAlign: 'center',
       align: 'center',
@@ -105,11 +81,11 @@ export default function GerenciadorUsuarios() {
       renderCell: (params) => (
         <Button
           variant="contained"
-          color={params.row?.isAuthorized ? 'primary' : 'secondary'}
+          color={params.row?.authorized ? 'secondary' : 'primary'}
           onClick={() => handleAuthorizationChange(params.row as Usuario)}
           sx={{ width: '100%' }}
         >
-          {params.row?.isAuthorized ? 'Autorizar' : 'Desautorizar'}
+          {params.row?.authorized ? 'Desautorizar' : 'Autorizar'}
         </Button>
       ),
     },
@@ -139,26 +115,14 @@ export default function GerenciadorUsuarios() {
           return element;
         });
         setRows(updatedRows);
-        setIsUserAuthorized(updatedRows[0].isAuthorized);
       });
   }, []);
-
-  const [isUserAuthorized, setIsUserAuthorized] = useState<boolean>(false);
-
-  const options = rows.map((user) => ({
-    value: user.name,
-    label: user.email,
-    firstLetter: user.name[0].toUpperCase(),
-  }));
 
   return (
     user?.isAdmin && (
       <>
         <Layout>
           <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
-            
-            
-
             <Grid
               sx={{ width: '60%', mr: '4rem', justifyContent: 'center', justifyItems: 'center' }}
             >
