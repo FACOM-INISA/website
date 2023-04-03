@@ -32,7 +32,7 @@ export default function GerenciadorUsuarios() {
 
     const url = '/api/user/updateUsers';
     const data = {
-      data: [{ email: user.email, authorized: !user.authorized }],
+      data: [{ email: user.email, authorized: user.authorized }],
     };
     fetch(url, {
       method: 'POST',
@@ -49,20 +49,12 @@ export default function GerenciadorUsuarios() {
 
   const columns: GridColDef[] = [
     {
-      field: 'id',
-      headerName: 'ID',
-      type: 'number',
-      headerAlign: 'center',
-      align: 'center',
-      width: 90,
-    },
-    {
       field: 'nome',
       headerName: 'Nome',
       type: 'string',
       headerAlign: 'center',
       align: 'center',
-      width: 200,
+      width: 250,
     },
     {
       field: 'email',
@@ -70,7 +62,7 @@ export default function GerenciadorUsuarios() {
       type: 'string',
       headerAlign: 'center',
       align: 'center',
-      width: 180,
+      width: 250,
     },
     {
       field: 'authorized',
@@ -108,8 +100,17 @@ export default function GerenciadorUsuarios() {
 
   useEffect(() => {
     fetch('/api/user/users', { headers: { 'Content-Type': 'Application/json' } })
-      .then((message) => message.json())
+      .then((message) => {
+        if (!message.ok) {
+           return router.push("/")
+        } else {
+          return message.json()
+        }
+      })
       .then((data) => {
+        if(typeof data === 'boolean') {
+          return
+        }
         const updatedRows = data.data.map((element: Usuario, index: number) => {
           element.id = index;
           return element;
@@ -122,18 +123,18 @@ export default function GerenciadorUsuarios() {
     user?.isAdmin && (
       <>
         <Layout>
-          <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
-            <Grid
-              sx={{ width: '60%', mr: '4rem', justifyContent: 'center', justifyItems: 'center' }}
-            >
+          <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto" padding="1.25rem 18rem" >
+           
               <DataGrid
                 autoHeight
                 rows={rows}
                 columns={columns}
+                disableColumnMenu
+                disableColumnFilter
                 hideFooterSelectedRowCount
                 sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
               />
-            </Grid>
+            
           </Grid>
         </Layout>
       </>
