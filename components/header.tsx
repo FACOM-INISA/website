@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InfoIcon from '@mui/icons-material/Info';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
 
@@ -110,6 +111,8 @@ export default function AppHeader(props: { admin?: boolean; logout?: boolean }) 
   ];
 
   if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
+  if(props.admin) elements.push({name: 'Gerenciar Usuários', path: '/userManagement', icon: ManageAccountsIcon});
+  if(props.logout) elements.push({name: 'Gerenciar Usuários', path: '/userManagement', icon: ManageAccountsIcon});
   if (props.logout) elements.push({ name: 'Sair', path: '/api/logout', icon: LogoutIcon });
 
   return <HeaderComponent items={elements} />;

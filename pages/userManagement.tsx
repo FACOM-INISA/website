@@ -156,7 +156,7 @@ export default function GerenciadorUsuarios() {
       <>
         <Layout>
           <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
-            {/* Sidebar */}
+            
             
 
             <Grid
