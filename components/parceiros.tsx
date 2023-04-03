@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import { Card, CardMedia, CardActionArea, Grid } from '@mui/material';
+import { Card, CardMedia, CardActionArea, Grid, styled } from '@mui/material';
 import styles from '../styles/components/Parceiros.module.css';
 interface CardItem {
   img: string;
@@ -26,29 +26,54 @@ const cardItems: CardItem[] = [
   },
 ];
 
+const StyledCardActionArea = styled(CardActionArea)(
+  ({ theme }) => `
+    .MuiCardActionArea-focusHighlight {
+        background: transparent;
+    }
+`
+);
+
 const ParceiroComponent: NextPage = () => {
   return (
-    <Grid container justifyContent="space-around">
+    <Grid container justifyContent="space-around" spacing={5}>
       {cardItems.map((card, index) => (
-        <Grid item key={index}>
-          <Card className={styles.parceiros} key={index}>
-            <CardActionArea
-              href={card.url}
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <CardMedia
+        <Grid item key={index} xs>
+          <Card
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              height: '270px',
+              width: '270px',
+              backgroundColor: 'primary.contrastText',
+              border: '2px solid #a8a8a8',
+              borderRadius: '500px',
+              margin: '0 10px',
+            }}
+            key={index}
+          >
+            <StyledCardActionArea>
+              <CardActionArea
+                href={card.url}
+                target="_blank"
                 style={{
-                  width: 'auto',
-                  maxHeight: '7em',
+                  display: 'flex',
+                  justifyContent: 'center',
                 }}
-                component="img"
-                image={card.img}
-                alt={card.name}
-              />
-            </CardActionArea>
+              >
+                <CardMedia
+                  style={{
+                    width: 'auto',
+                    maxHeight: '7em',
+                  }}
+                  component="img"
+                  image={card.img}
+                  alt={card.name}
+                />
+              </CardActionArea>
+            </StyledCardActionArea>
           </Card>
         </Grid>
       ))}

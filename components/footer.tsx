@@ -12,7 +12,7 @@ const FooterComponent: NextPage = () => {
   return (
     <Box
       sx={{
-        padding: '0 10em',
+        padding: '0 5em',
         height: 170,
         display: 'flex',
         flexDirection: 'row',
@@ -21,7 +21,7 @@ const FooterComponent: NextPage = () => {
         color: 'primary.contrastText',
       }}
     >
-      {/* container esquerdo */}
+      {/* Logo UFMS */}
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <Link href="/">
@@ -30,26 +30,10 @@ const FooterComponent: NextPage = () => {
             </a>
           </Link>
         </Grid>
-        <Grid item>
-          <Divider
-            sx={{
-              height: 80,
-              width: 3,
-              backgroundColor: 'primary.contrastText',
-              borderRadius: '2px',
-            }}
-            orientation="vertical"
-            flexItem
-          />
-        </Grid>
-        <Grid item>
-          <Typography variant="h6">INISA</Typography>
-          <Typography>Instituto Integrado de Saúde</Typography>
-        </Grid>
       </Grid>
 
-      {/* container direito */}
-      <Grid container direction="column" sx={{ textAlign: 'right' }}>
+      {/* Informações de Contato */}
+      <Grid container direction="column" spacing={0} sx={{ textAlign: 'right' }}>
         <Grid item>
           <IconButton>
             <TelIcon sx={{ color: 'primary.contrastText' }} />
@@ -57,7 +41,7 @@ const FooterComponent: NextPage = () => {
               sx={{
                 fontSize: '0.6em',
                 color: 'primary.contrastText',
-                paddingLeft: '10px',
+                paddingLeft: '7px',
               }}
             >
               (67) 3345-7774 / (67) 3345-7826
@@ -73,7 +57,7 @@ const FooterComponent: NextPage = () => {
               sx={{
                 fontSize: '0.6em',
                 color: 'primary.contrastText',
-                paddingLeft: '10px',
+                paddingLeft: '7px',
               }}
             >
               Cidade Universitária, Caixa Postal 549, CEP 79070-900. Campo Grande - MS
@@ -89,7 +73,7 @@ const FooterComponent: NextPage = () => {
           >
             <EditalIcon sx={{ color: 'primary.contrastText' }} />
             <Typography
-              sx={{ fontSize: '0.6em', color: 'primary.contrastText', paddingLeft: '10px' }}
+              sx={{ fontSize: '0.6em', color: 'primary.contrastText', paddingLeft: '7px' }}
             >
               Edital: CHAMADA FUNDECT Nº 08/2020 - PPSUS
             </Typography>

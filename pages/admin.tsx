@@ -59,7 +59,10 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 90,
+    flex: 2,
+    // width: 90,
+    // maxWidth: 100,
+    // width: 90,
   },
   {
     field: 'ano',
@@ -67,7 +70,8 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 100,
+    flex: 2.5,
+    // width: 100,
     valueFormatter: (params) => params.value + 2000,
   },
   {
@@ -76,7 +80,8 @@ const columns: GridColDef[] = [
     type: 'number',
     headerAlign: 'center',
     align: 'center',
-    width: 170,
+    flex: 5,
+    // width: 170,
   },
   {
     field: 'localidade',
@@ -84,7 +89,8 @@ const columns: GridColDef[] = [
     type: 'string',
     headerAlign: 'center',
     align: 'center',
-    width: 270,
+    flex: 8,
+    // width: 270,
   },
   {
     field: 'predito',
@@ -92,7 +98,8 @@ const columns: GridColDef[] = [
     type: 'boolean',
     headerAlign: 'center',
     align: 'center',
-    width: 170,
+    flex: 5,
+    // width: 170,
     // valueFormatter: (params) => (params.value ? 'Utilizado✅' : 'Não utilizado ❌'),
   },
 ];

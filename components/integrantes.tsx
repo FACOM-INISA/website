@@ -10,7 +10,7 @@ import {
   Divider,
   Typography,
   Grid,
-  Container,
+  styled,
 } from '@mui/material';
 import styles from '../styles/components/Integrantes.module.css';
 import Lattes from '../public/images/lattes.svg';
@@ -27,7 +27,7 @@ interface CardItem {
 
 const cardItems: CardItem[] = [
   {
-    img: 'https://media.licdn.com/dms/image/C4E03AQGXsLmfbsyI7w/profile-displayphoto-shrink_800_800/0/1517635728863?e=2147483647&v=beta&t=bRUOwsQRW-KeJdPO6fpF0_xNsuIfbT_m-iotT16n6Xc',
+    img: 'https://media.licdn.com/dms/image/D4E03AQFDOA6xi9ZhJg/profile-displayphoto-shrink_200_200/0/1676489374920?e=1683158400&v=beta&t=aRL2Osj790vzxBaO974badFNbN1cB_rt9_TCwbeANOU',
     name: 'Nathan Aratani',
     desc: 'Docente pesquisador e Coordenador no Instituto Integrado de Saúde',
     linkedin: 'https://br.linkedin.com/in/nathan-aratani-838360b4',
@@ -56,13 +56,21 @@ const cardItems: CardItem[] = [
     lattes: ' http://lattes.cnpq.br/7507601980536823',
   },
   {
-    img: 'https://media-exp1.licdn.com/dms/image/C4D03AQGqtC9rnwtBhA/profile-displayphoto-shrink_200_200/0/1649345833817?e=1676505600&v=beta&t=o4WZuF1aGWV5df_qikWdKV06orRdHgQdy2bIXyfDaH4',
+    img: 'https://media.licdn.com/dms/image/C4D03AQGqtC9rnwtBhA/profile-displayphoto-shrink_200_200/0/1649345833817?e=1683158400&v=beta&t=Q4rVU-AYv1wN9GYxfWaTL44X2v2ZrLNIwYBmphgYaxE',
     name: 'Letícia Yurie',
     desc: 'Estudante de Engenharia de Software',
     linkedin: 'https://www.linkedin.com/in/leticiayurie',
     lattes: 'https://lattes.cnpq.br/0779495231797028',
   },
 ];
+
+const StyledCardActionArea = styled(CardActionArea)(
+  ({ theme }) => `
+    .MuiCardActionArea-focusHighlight {
+        background: transparent;
+    }
+`
+);
 
 export const IntegranteComponent: NextPage = () => {
   return (
@@ -89,29 +97,33 @@ export const IntegranteComponent: NextPage = () => {
             </CardContent>
 
             <CardContent className={styles.portfolios}>
-              <CardActionArea href={card.linkedin}>
-                <CardMedia>
-                  <Image
-                    src={Linkedin}
-                    alt="Linkedin Logo"
-                    width={40}
-                    height={40}
-                    objectFit="contain"
-                  />
-                </CardMedia>
-              </CardActionArea>
+              <StyledCardActionArea>
+                <CardActionArea href={card.linkedin}>
+                  <CardMedia>
+                    <Image
+                      src={Linkedin}
+                      alt="Linkedin Logo"
+                      width={40}
+                      height={40}
+                      objectFit="contain"
+                    />
+                  </CardMedia>
+                </CardActionArea>
+              </StyledCardActionArea>
 
-              <CardActionArea href={card.lattes}>
-                <CardMedia>
-                  <Image
-                    src={Lattes}
-                    alt="Lattes Logo"
-                    width={45}
-                    height={45}
-                    objectFit="contain"
-                  />
-                </CardMedia>
-              </CardActionArea>
+              <StyledCardActionArea>
+                <CardActionArea href={card.lattes}>
+                  <CardMedia>
+                    <Image
+                      src={Lattes}
+                      alt="Lattes Logo"
+                      width={45}
+                      height={45}
+                      objectFit="contain"
+                    />
+                  </CardMedia>
+                </CardActionArea>
+              </StyledCardActionArea>
             </CardContent>
           </Card>
         </Grid>
