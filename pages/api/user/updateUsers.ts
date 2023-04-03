@@ -70,10 +70,11 @@ async function updateUsers(req: NextApiRequest, res: NextApiResponse) {
   // Atualizar o banco de dados
   for (const element of data) {
     try {
-      await prisma.usuario.update({
+      let data = await prisma.usuario.update({
         where: { email: element.email },
         data: { authorized: element.authorized },
       });
+      console.log(data);
     } catch (e) {
       res.status(500).send({
         status: 'fail',
@@ -84,7 +85,6 @@ async function updateUsers(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // Retornar
-  await prisma.$disconnect();
   res.status(200).send({
     status: 'success',
     message: 'Okay',
