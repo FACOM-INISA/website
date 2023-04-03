@@ -157,56 +157,7 @@ export default function GerenciadorUsuarios() {
         <Layout>
           <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto">
             {/* Sidebar */}
-            <Grid className={styles.sidebar}>
-              <Grid
-                id="form"
-                className={styles.grid}
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{ margin: '0 4rem' }}
-              >
-                <Paper elevation={3} sx={{ mb: '2rem' }}>
-                  <Card>
-                    <Card style={{ display: 'flex', flexDirection: 'column' }}>
-                      <CardHeader
-                        title={
-                          <span
-                            style={{ textAlign: 'center', color: '#0088B7', fontWeight: 'bolder' }}
-                          >
-                            Buscar usuário
-                          </span>
-                        }
-                      />
-                    </Card>
-                    <Stack sx={{ m: '1.25rem' }}>
-                      <Autocomplete
-                        id="localidade"
-                        popupIcon={<SearchIcon style={{ color: 'primary.main' }} />}
-                        disableClearable
-                        groupBy={(option) => option.firstLetter}
-                        getOptionLabel={(option) => option.label}
-                        filterOptions={(options, { inputValue }) =>
-                          options.filter(
-                            (option) =>
-                              option.label.toLowerCase().includes(inputValue.toLowerCase()) ||
-                              option.value.toLowerCase().includes(inputValue.toLowerCase())
-                          )
-                        }
-                        sx={{
-                          width: 'auto',
-                          [`& .${autocompleteClasses.popupIndicator}`]: {
-                            transform: 'none',
-                          },
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                        size="small"
-                        options={options}
-                      />
-                    </Stack>
-                  </Card>
-                </Paper>
-              </Grid>
-            </Grid>
+            
 
             <Grid
               sx={{ width: '60%', mr: '4rem', justifyContent: 'center', justifyItems: 'center' }}
