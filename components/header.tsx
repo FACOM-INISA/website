@@ -72,7 +72,8 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
       <Grid container alignItems="center" justifyContent="end" spacing={3}>
         {items.map((item, index) => {
           const Icon = item.icon;
-          const active = asPath === item.path;
+          const active =
+            item.path.length === 1 ? asPath === item.path : asPath.startsWith(item.path);
 
           return (
             <Grid item key={index}>
@@ -103,7 +104,11 @@ const HeaderComponent: React.FC<HeaderProps> = ({ items }: HeaderProps) => {
   );
 };
 
-export default function AppHeader(props: { admin?: boolean; logout?: boolean }) {
+export default function AppHeader(props: {
+  admin?: boolean;
+  userManagement?: boolean;
+  logout?: boolean;
+}) {
   const elements = [
     { name: 'Inicio', path: '/', icon: HomeIcon },
     { name: 'Painel', path: '/sistemadedados', icon: InsertChartIcon },
@@ -111,9 +116,11 @@ export default function AppHeader(props: { admin?: boolean; logout?: boolean }) 
   ];
 
   if (props.admin) elements.push({ name: 'Admin', path: '/admin', icon: AdminPanelSettingsIcon });
-  if(props.admin) elements.push({name: 'Gerenciar Usuários', path: '/userManagement', icon: ManageAccountsIcon});
-  if(props.logout) elements.push({name: 'Gerenciar Usuários', path: '/userManagement', icon: ManageAccountsIcon});
-  if (props.logout) elements.push({ name: 'Sair', path: '/api/logout', icon: LogoutIcon });
+
+  if (props.userManagement)
+    elements.push({ name: 'Usuários', path: '/userManagement', icon: ManageAccountsIcon });
+
+  if (props.logout) elements.push(...[{ name: 'Sair', path: '/api/logout', icon: LogoutIcon }]);
 
   return <HeaderComponent items={elements} />;
 }

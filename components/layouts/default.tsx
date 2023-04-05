@@ -19,10 +19,10 @@ export default function DefaultLayout(props: HTMLAttributes<HTMLDivElement>) {
       </Head>
 
       {/* header */}
-
       <HeaderComponent
-        admin={asPath.startsWith('/sistemadedados') || asPath === '/maisinfos'}
-        logout={asPath === '/admin'}
+        admin={asPath.startsWith('/sistemadedados') || asPath.startsWith('/userManagement')}
+        userManagement={asPath.startsWith('/admin')}
+        logout={asPath === '/admin' || asPath.startsWith('/userManagement')}
       />
 
       <Box {...props} sx={{ flexGrow: 1 }}>
