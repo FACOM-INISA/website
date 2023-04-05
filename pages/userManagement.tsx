@@ -19,27 +19,24 @@ export default function GerenciadorUsuarios() {
   const [rows, setRows] = React.useState(new Array<Usuario>());
 
   const handleAuthorizationChange = (user: Usuario) => {
-    const newRows = rows.map((row) => {
-      if (row.id === user.id) {
-        user.authorized = !user.authorized;
-        return user;
-      }
-      return row;
-    });
-    setRows(newRows);
+    setRows(
+      rows.map((row) => {
+        if (row.id === user.id) {
+          user.authorized = !user.authorized;
+          return user;
+        }
+        return row;
+      })
+    );
 
-    console.log('User:', user);
-
-    const url = '/api/user/updateUsers';
-    const data = {
-      data: [{ email: user.email, authorized: user.authorized }],
-    };
-    fetch(url, {
+    fetch('/api/user/updateUsers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        data: [{ email: user.email, authorized: user.authorized }],
+      }),
     })
       .then(() => {
         handleClose();
@@ -74,6 +71,7 @@ export default function GerenciadorUsuarios() {
         <Button
           variant="contained"
           color={params.row?.authorized ? 'secondary' : 'primary'}
+          disabled={params.row?.admin}
           onClick={() => handleAuthorizationChange(params.row as Usuario)}
           sx={{ width: '100%' }}
         >
@@ -81,7 +79,6 @@ export default function GerenciadorUsuarios() {
         </Button>
       ),
     },
-
     {
       field: 'admin',
       headerName: 'Administrador',
@@ -93,23 +90,21 @@ export default function GerenciadorUsuarios() {
   ];
 
   useEffect(() => {
-    if (user && !user.isAdmin) {
-      router.push('/');
-    }
+    if (user && !user.isAdmin) router.push('/');
   }, [user]);
 
   useEffect(() => {
     fetch('/api/user/users', { headers: { 'Content-Type': 'Application/json' } })
       .then((message) => {
         if (!message.ok) {
-           return router.push("/")
+          return router.push('/');
         } else {
-          return message.json()
+          return message.json();
         }
       })
       .then((data) => {
-        if(typeof data === 'boolean') {
-          return
+        if (typeof data === 'boolean') {
+          return;
         }
         const updatedRows = data.data.map((element: Usuario, index: number) => {
           element.id = index;
@@ -123,18 +118,23 @@ export default function GerenciadorUsuarios() {
     user?.isAdmin && (
       <>
         <Layout>
-          <Grid container display="flex" flexDirection="row" flexWrap="nowrap" margin="4em auto" padding="1.25rem 18rem" >
-           
-              <DataGrid
-                autoHeight
-                rows={rows}
-                columns={columns}
-                disableColumnMenu
-                disableColumnFilter
-                hideFooterSelectedRowCount
-                sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
-              />
-            
+          <Grid
+            container
+            display="flex"
+            flexDirection="row"
+            flexWrap="nowrap"
+            margin="4em auto"
+            padding="1.25rem 18rem"
+          >
+            <DataGrid
+              autoHeight
+              rows={rows}
+              columns={columns}
+              disableColumnMenu
+              disableColumnFilter
+              hideFooterSelectedRowCount
+              sx={{ background: '#FFFFFF', color: 'primary.main', boxShadow: 3, fontSize: '1em' }}
+            />
           </Grid>
         </Layout>
       </>
