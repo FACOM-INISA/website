@@ -120,7 +120,8 @@ export default function AppHeader(props: {
   if (props.userManagement)
     elements.push({ name: 'Usuários', path: '/userManagement', icon: ManageAccountsIcon });
 
-  if (props.logout) elements.push(...[{ name: 'Sair', path: '/api/logout', icon: LogoutIcon }]);
+  if (props.logout)
+    elements.push(...[{ name: 'Sair', path: '/api/user/logout', icon: LogoutIcon }]);
 
   return <HeaderComponent items={elements} />;
 }
