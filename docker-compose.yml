@@ -42,9 +42,6 @@ services:
       - '--providers.docker.exposedByDefault=false'
       # The entrypoints we ant to expose
       - '--entrypoints.web.address=:80'
-      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
-      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
-      - '--entrypoints.web.http.redirections.entrypoint.permanent=true'
       - '--entrypoints.websecure.address=:443'
       # Enable ACME (Let's Encrypt): automatic SSL.
       - '--certificatesresolvers.letsencrypt.acme.httpchallenge=true'
@@ -53,6 +50,12 @@ services:
       - '--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json'
       # LetsEncrypt Staging Server - uncomment when testing
       # - '--certificatesresolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory'
+    labels:
+      # Redirect all HTTP traffic to HTTPS
+      - 'traefik.http.routers.to-https.rule=HostRegexp(`{host:.+}`)'
+      - 'traefik.http.routers.to-https.entrypoints=http'
+      - 'traefik.http.routers.to-https.middlewares=to-https'
+      - 'traefik.http.middlewares.to-https.redirectscheme.scheme=https'
     ports:
       - '80:80'
       - '443:443'
