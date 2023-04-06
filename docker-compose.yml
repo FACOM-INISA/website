@@ -21,43 +21,23 @@ services:
     environment:
       SECRET_PASSWORD: ${SECRET_PASSWORD:-8FYgqpsZZK2WQu0y1bDhwLtkU2VSIR47}
       DATABASE_URL: postgresql://${POSTGRES_USER:-inisa-ufms}:${POSTGRES_PASSWORD:-inisa-ufms}@db:5432/${POSTGRES_DB:-inisa-db}
-    labels:
-      - 'traefik.enable=true'
-      # https
-      - 'traefik.http.routers.website.rule=Host(`${DNS_NAME:-painel-sus.localhost}`)'
-      - 'traefik.http.routers.website.entrypoints=https'
-      - 'traefik.http.routers.website.tls=true'
-      - 'traefik.http.routers.website.tls.certresolver=letsencrypt'
     ports:
       - 80
     depends_on:
       - db
 
-  traefik:
-    image: traefik:2.9
-    restart: always
-    command:
-      # - '--log.level=DEBUG'
-      # - '--api.insecure=true'
-      - '--providers.docker=true'
-      - '--providers.docker.exposedByDefault=false'
-      # The entrypoints we ant to expose
-      - '--entrypoints.http.address=:80'
-      - '--entrypoints.https.address=:443'
-      # Enable ACME (Let's Encrypt): automatic SSL.
-      - '--certificatesresolvers.letsencrypt.acme.httpchallenge=true'
-      - '--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http'
-      - '--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-painel-sus.inisa@ufms.br}'
-      - '--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json'
-      # LetsEncrypt Staging Server - uncomment when testing
-      # - '--certificatesresolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory'
+  caddy:
+    image: caddy
     ports:
       - '80:80'
       - '443:443'
-      # - '8080:8080'
+    environment:
+      EMAIL: ${EMAIL}
+      DOMAIN: ${DOMAIN:-painel-sus.localhost}
     volumes:
-      - ./letsencrypt:/etc/traefik/acme
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - website
 
@@ -79,3 +59,5 @@ services:
 
 volumes:
   inisa_data:
+  caddy_data:
+  caddy_config:
