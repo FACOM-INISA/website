@@ -24,7 +24,7 @@ services:
     labels:
       - 'traefik.enable=true'
       # https
-      - 'traefik.http.routers.inisa-website.rule=Host(`painel-sus.localhost`) || Host(`${DNS_NAME:-painel-sus.facom.ufms.br}`)'
+      - 'traefik.http.routers.inisa-website.rule=Host(`${DNS_NAME:-painel-sus.localhost}`)'
       - 'traefik.http.routers.inisa-website.entrypoints=websecure'
       - 'traefik.http.routers.inisa-website.tls.certresolver=letsencrypt'
       - 'traefik.http.services.inisa-website.loadbalancer.server.port=80'
