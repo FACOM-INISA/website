@@ -24,11 +24,12 @@ services:
     labels:
       - 'traefik.enable=true'
       # https
-      - 'traefik.http.routers.inisa-website.rule=Host(`${DNS_NAME:-painel-sus.localhost}`)'
-      - 'traefik.http.routers.inisa-website.entrypoints=websecure'
-      - 'traefik.http.routers.inisa-website.tls=true'
-      - 'traefik.http.routers.inisa-website.tls.certresolver=letsencrypt'
-      - 'traefik.http.services.inisa-website.loadbalancer.server.port=80'
+      - 'traefik.http.routers.website.rule=Host(`${DNS_NAME:-painel-sus.localhost}`)'
+      - 'traefik.http.routers.website.entrypoints=https'
+      - 'traefik.http.routers.website.tls=true'
+      - 'traefik.http.routers.website.tls.certresolver=letsencrypt'
+    ports:
+      - 80
     depends_on:
       - db
 
@@ -41,28 +42,22 @@ services:
       - '--providers.docker=true'
       - '--providers.docker.exposedByDefault=false'
       # The entrypoints we ant to expose
-      - '--entrypoints.web.address=:80'
-      - '--entrypoints.websecure.address=:443'
+      - '--entrypoints.http.address=:80'
+      - '--entrypoints.https.address=:443'
       # Enable ACME (Let's Encrypt): automatic SSL.
       - '--certificatesresolvers.letsencrypt.acme.httpchallenge=true'
-      - '--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web'
+      - '--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http'
       - '--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-painel-sus.inisa@ufms.br}'
       - '--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json'
       # LetsEncrypt Staging Server - uncomment when testing
       # - '--certificatesresolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory'
-    labels:
-      # Redirect all HTTP traffic to HTTPS
-      - 'traefik.http.routers.to-https.rule=HostRegexp(`{host:.+}`)'
-      - 'traefik.http.routers.to-https.entrypoints=http'
-      - 'traefik.http.routers.to-https.middlewares=to-https'
-      - 'traefik.http.middlewares.to-https.redirectscheme.scheme=https'
     ports:
       - '80:80'
       - '443:443'
-      - '8080:8080'
+      # - '8080:8080'
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/etc/traefik/acme
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - website
 
