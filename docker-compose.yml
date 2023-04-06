@@ -21,10 +21,45 @@ services:
     environment:
       SECRET_PASSWORD: ${SECRET_PASSWORD:-8FYgqpsZZK2WQu0y1bDhwLtkU2VSIR47}
       DATABASE_URL: postgresql://${POSTGRES_USER:-inisa-ufms}:${POSTGRES_PASSWORD:-inisa-ufms}@db:5432/${POSTGRES_DB:-inisa-db}
-    ports:
-      - ${PORT:-8080}:80
+    labels:
+      - 'traefik.enable=true'
+      # https
+      - 'traefik.http.routers.inisa-website.rule=Host(`painel-sus.localhost`) || Host(`painel-sus.facom.ufms.br`)'
+      - 'traefik.http.routers.inisa-website.entrypoints=websecure'
+      - 'traefik.http.routers.inisa-website.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.inisa-website.loadbalancer.server.port=80'
     depends_on:
       - db
+
+  traefik:
+    image: traefik:2.9
+    restart: always
+    command:
+      # - '--log.level=DEBUG'
+      # - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedByDefault=false'
+      # The entrypoints we ant to expose
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
+      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
+      - '--entrypoints.web.http.redirections.entrypoint.permanent=true'
+      - '--entrypoints.websecure.address=:443'
+      # Enable ACME (Let's Encrypt): automatic SSL.
+      - '--certificatesresolvers.letsencrypt.acme.httpchallenge=true'
+      - '--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web'
+      - '--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory'
+      - '--certificatesresolvers.letsencrypt.acme.email=hudson.borges@ufms.br'
+      - '--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/etc/traefik/acme
+    depends_on:
+      - website
 
   website.dev:
     build:
