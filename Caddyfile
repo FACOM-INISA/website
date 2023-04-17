@@ -1,4 +1,0 @@
-{$DOMAIN} {
-    tls {$EMAIL}
-    reverse_proxy website:80
-}

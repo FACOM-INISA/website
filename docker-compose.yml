@@ -65,14 +65,11 @@ services:
 
   caddy:
     image: caddy
+    command: caddy reverse-proxy --from ${DOMAIN:-painel-sus.localhost} --to website:80
     ports:
       - '80:80'
       - '443:443'
-    environment:
-      EMAIL: ${EMAIL}
-      DOMAIN: ${DOMAIN:-painel-sus.localhost}
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
