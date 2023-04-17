@@ -25,6 +25,32 @@ services:
       - 80
     depends_on:
       - db
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.website.rule=Host(`${DOMAIN:-painel-sus.localhost}`)'
+      - 'traefik.http.routers.website.entrypoints=websecure'
+      - 'traefik.http.routers.website.tls.certresolver=letsencrypt'
+
+  traefik:
+    image: traefik:latest
+    command:
+      #- "--log.level=DEBUG"
+      # - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.letsencrypt.acme.tlschallenge=true'
+      # - '--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory'
+      - '--certificatesresolvers.letsencrypt.acme.email=${EMAIL}'
+      - '--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json'
+    ports:
+      - '443:443'
+      # - '8080:8080'
+    volumes:
+      - 'letsencrypt:/letsencrypt'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    depends_on:
+      - website
 
   caddy:
     image: caddy
@@ -61,3 +87,4 @@ volumes:
   inisa_data:
   caddy_data:
   caddy_config:
+  letsencrypt:
