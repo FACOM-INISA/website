@@ -109,8 +109,9 @@ export default function SistemaDeDados(props: { municipio?: string }) {
   };
 
   const municipioPadrao =
-    options.find((municipio) => municipio.name === (props.municipio || 'Campo Grande')) ||
-    options[0];
+    options.find(
+      (municipio) => municipio.name === (props.municipio || 'Mato Grosso do Sul' || 'Campo Grande')
+    ) || options[0];
 
   const [municipio, setMunicipio] = useState<typeof municipioPadrao | null>(municipioPadrao);
 
@@ -270,7 +271,9 @@ export default function SistemaDeDados(props: { municipio?: string }) {
                   },
                   paddingBottom: '20px',
                 }}
-                renderInput={(params) => <TextField {...params} label="Buscar por município" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Buscar por município ou estado" />
+                )}
                 /* onChange={(_, selected) => setMunicipio(fakeInput || selected)} */
                 onChange={(event: any, newValue) => setMunicipio(newValue)}
               />
@@ -376,8 +379,8 @@ export default function SistemaDeDados(props: { municipio?: string }) {
                   </Stack>
                 </Grid>
               </Paper>
-            </Grid> 
-            
+            </Grid>
+
             // Filtro de Partos
             <Grid className={styles.grid} alignItems="center">
               <Paper elevation={3}>
@@ -435,7 +438,7 @@ export default function SistemaDeDados(props: { municipio?: string }) {
                 </Collapse>
               </Paper>
             </Grid>
-            
+
           </Grid>
         </div>
         */}
